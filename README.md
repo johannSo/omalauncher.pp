@@ -88,12 +88,6 @@ has the themes, wallpapers, Android apps and the widgets that don't run commands
   which it opens to a "time's up" screen. Widgets get today's screen time
 - **Quick settings tiles**: Linux (running or off, a tap starts or shuts it
   down), Terminal and Ask agent, added from settings › quick settings tiles
-- **Tiling desktop**: plug the phone into a monitor and Linux windows open side
-  by side on it in Hyprland's dwindle layout, with Omarchy's gaps, borders and
-  a bar, while the phone keeps working. Super+1–9, Super+arrows, Super+F and
-  Super+V work as in Hyprland, and unplugging gives every window its own task
-  again. On tablets and foldables, `desktop.large-screens` opens windows in
-  the desktop on the device's own screen
 - **Linux notifications**: `notify-send`, GTK apps and build tools post Android
   notifications with their app's name and icon, formatted text, images and
   buttons; a tap brings the app's window back. The launcher runs the guest's

@@ -15,8 +15,6 @@ when they were uploaded to Play.
 - Focus mode hides what a profile leaves out and can turn on Do Not Disturb, by hand, by schedule or with
   `focus work` in the bar; app timers give apps a daily limit; widgets get `android.usage` and `android.focus`.
 - Quick settings tiles: Linux, Terminal and Ask agent.
-- A tiling desktop for Linux windows on a monitor, Hyprland's dwindle layout with its keys, and on tablets and
-  foldables if `desktop.large-screens` is on.
 - Linux apps' notifications are Android notifications, with their icon, text, images and buttons; the guest has a
   D-Bus session bus for it.
 - Snapshots of Linux before each system update, and restoring one to roll back (settings › linux › snapshots).

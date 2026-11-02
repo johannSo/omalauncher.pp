@@ -19,7 +19,6 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import dev.omalauncher.pp.Runtime
-import dev.omalauncher.pp.desktop.DesktopSettingsScreen
 import dev.omalauncher.pp.linux.LinuxState
 
 /** The screens of the settings activity; each can also be opened on its own, from home or a widget. */
@@ -47,8 +46,6 @@ enum class SettingsPage {
     Licenses,
     Gestures,
 
-    /** The tiling desktop for Linux windows (desktop/). */
-    Desktop,
     /** What the bar finds besides apps. */
     Search,
     /** Apps hidden and renamed (apps.toml). */
@@ -134,7 +131,6 @@ private fun SettingsPage(
                 onLinux = { stack.push(SettingsPage.Linux) },
                 onLicenses = { stack.push(SettingsPage.Licenses) },
                 onGestures = { stack.push(SettingsPage.Gestures) },
-                onDesktop = { stack.push(SettingsPage.Desktop) },
                 onSearch = { stack.push(SettingsPage.Search) },
                 onHiddenApps = { stack.push(SettingsPage.HiddenApps) },
                 onQuickTiles = { stack.push(SettingsPage.QuickTiles) },
@@ -188,7 +184,6 @@ private fun SettingsPage(
         SettingsPage.Ssh -> SshScreen(runtime, onDismiss = close)
         SettingsPage.Licenses -> LicensesScreen(onDismiss = close)
         SettingsPage.Gestures -> GesturesScreen(runtime, onDismiss = close, onAgent = ::agent)
-        SettingsPage.Desktop -> DesktopSettingsScreen(runtime, onDismiss = close)
         SettingsPage.Search -> SearchScreen(runtime, onDismiss = close)
         SettingsPage.HiddenApps -> HiddenAppsScreen(runtime, onDismiss = close)
         SettingsPage.QuickTiles -> QuickTilesScreen(runtime, onDismiss = close)

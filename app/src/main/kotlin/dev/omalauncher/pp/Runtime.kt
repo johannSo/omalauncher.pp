@@ -16,7 +16,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.toArgb
-import dev.omalauncher.pp.desktop.Desktop
 import dev.omalauncher.pp.jobs.Jobs
 import dev.omalauncher.pp.linux.AGENTS
 import dev.omalauncher.pp.linux.Agent
@@ -143,9 +142,6 @@ class Runtime(
     val updates: SystemUpdates = SystemUpdates(proot, pacman, agents, snapshots::beforeUpdate)
     val gpu = Gpu(context, proot, pacman)
 
-    /** The tiling desktop Linux windows open in on a monitor or a large screen; see [Desktop]. */
-    val desktop = Desktop(context, this)
-
     /** The SSH server into Linux and its local servers on the LAN; settings › linux › ssh. */
     val ssh = Ssh(context, proot, pacman)
 
@@ -267,7 +263,6 @@ class Runtime(
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT or Intent.FLAG_ACTIVITY_MULTIPLE_TASK),
             )
         }
-        desktop.install()
     }
 
     /** The launcher first (it never waits for Linux), then Linux if it's installed or an install was started. */
@@ -730,9 +725,8 @@ class Runtime(
         launch(app)
     }
 
-    /** Shows [window]: in the tiling desktop if it's there, else by moving its Android task to the front; false if it has none (yet). */
+    /** Moves [window]'s Android task to the front; false if it has none (yet). */
     fun bringToFront(window: XdgToplevel): Boolean {
-        if (desktop.bringToFront(window)) return true
         val handle = wm.handleOf(window) ?: return false
         val task =
             context.getSystemService(ActivityManager::class.java).appTasks.firstOrNull {
