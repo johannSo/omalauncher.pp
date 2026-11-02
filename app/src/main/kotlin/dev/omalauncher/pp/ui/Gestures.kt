@@ -12,12 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.IntRect
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.PopupPositionProvider
 import dev.omalauncher.pp.LauncherData
 import dev.omalauncher.pp.R
 import dev.omalauncher.pp.Runtime
@@ -281,18 +276,5 @@ internal fun Modifier.pullSwipe(state: LauncherState): Modifier {
         state = rememberDraggableState { dy -> state.pullBy(dy / screenHeight) },
         onDragStarted = { state.startPull() },
         onDragStopped = { velocity -> state.settlePull(velocity) },
-    )
-}
-
-/** Just under the anchor, lined up with its end, and kept on screen. */
-internal object BelowAnchorEnd : PopupPositionProvider {
-    override fun calculatePosition(
-        anchorBounds: IntRect,
-        windowSize: IntSize,
-        layoutDirection: LayoutDirection,
-        popupContentSize: IntSize,
-    ) = IntOffset(
-        (anchorBounds.right - popupContentSize.width).coerceIn(0, (windowSize.width - popupContentSize.width).coerceAtLeast(0)),
-        (anchorBounds.bottom + 8).coerceAtMost((windowSize.height - popupContentSize.height).coerceAtLeast(0)),
     )
 }

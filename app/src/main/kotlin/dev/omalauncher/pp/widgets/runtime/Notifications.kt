@@ -18,6 +18,7 @@ import dev.omalauncher.pp.widgets.lang.Str
 import dev.omalauncher.pp.widgets.lang.Value
 import dev.omalauncher.pp.widgets.lang.bool
 import dev.omalauncher.pp.widgets.lang.num
+import dev.omalauncher.pp.AppLabels
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -39,8 +40,7 @@ class Notifications(
     /** Where [value] runs: reading the shade is a binder call with every notification's extras; one at a time, for [labels]. */
     private val worker = Dispatchers.Default.limitedParallelism(1)
 
-    /** App labels by package; the lookup is a binder call. */
-    private val labels = HashMap<String, String>()
+    private val labels = AppLabels(context)
 
     /** What a widget lists: not ongoing ones (music, downloads, the launcher's own service) or group headers. */
     private fun shown(): List<StatusBarNotification> {
@@ -54,14 +54,6 @@ class Notifications(
 
     private fun text(sbn: StatusBarNotification) = sbn.notification.extras.getCharSequence(Notification.EXTRA_TEXT)?.toString()?.takeIf { it.isNotBlank() }
 
-    private fun label(pkg: String) =
-        labels.getOrPut(pkg) {
-            runCatching {
-                val pm = context.packageManager
-                pm.getApplicationLabel(pm.getApplicationInfo(pkg, 0)).toString()
-            }.getOrDefault(pkg)
-        }
-
     fun value(): Value {
         val available = media.granted && MediaListener.connected != null
         val shown = if (available) shown() else emptyList()
@@ -71,7 +63,7 @@ class Notifications(
                 Obj(
                     mapOf(
                         "key" to Str(sbn.key),
-                        "app" to Str(label(sbn.packageName)),
+                        "app" to Str(labels[sbn.packageName]),
                         "package" to Str(sbn.packageName),
                         // From a work profile, a cloned app or the private space (which Android silences while it's locked); icon is the app's icon from that profile, badge included.
                         "profile" to (kind?.let(::Str) ?: Null),

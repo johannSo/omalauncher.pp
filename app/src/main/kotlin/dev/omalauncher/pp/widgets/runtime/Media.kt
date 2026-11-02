@@ -28,6 +28,7 @@ import dev.omalauncher.pp.widgets.lang.Obj
 import dev.omalauncher.pp.widgets.lang.Str
 import dev.omalauncher.pp.widgets.lang.Value
 import dev.omalauncher.pp.widgets.lang.bool
+import dev.omalauncher.pp.AppLabels
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
@@ -164,13 +165,7 @@ class Media(
             art = bitmap?.let { "media:art:${++artSerial}" to it }
         }
         val artSrc = art?.first
-        val app =
-            labels.getOrPut(c.packageName) {
-                runCatching {
-                    val pm = context.packageManager
-                    pm.getApplicationLabel(pm.getApplicationInfo(c.packageName, 0)).toString()
-                }.getOrDefault(c.packageName)
-            }
+        val app = labels[c.packageName]
         return Obj(
             mapOf(
                 "available" to bool(true),
@@ -369,6 +364,6 @@ class Media(
         runCatching { context.startActivity(detail) }.onFailure { context.startActivity(list) }
     }
 
-    /** App labels by package: the lookup is a binder call, and value() runs every second while playing. */
-    private val labels = HashMap<String, String>()
+    /** Looked up once each, since value() runs every second while playing. */
+    private val labels = AppLabels(context)
 }
