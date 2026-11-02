@@ -41,6 +41,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -238,6 +239,7 @@ private fun ConnectCard(ssh: Ssh) {
 @Composable
 private fun KeysCard(ssh: Ssh) {
     val context = LocalContext.current
+    val resources = LocalResources.current
     val scope = rememberCoroutineScope()
     var message by remember { mutableStateOf<String?>(null) }
     var pasting by remember { mutableStateOf(false) }
@@ -248,10 +250,10 @@ private fun KeysCard(ssh: Ssh) {
             val (result, count) = ssh.addKeys(text)
             message =
                 when (result) {
-                    Ssh.Added.Some -> context.resources.getQuantityString(R.plurals.ssh_keys_added, count, count)
-                    Ssh.Added.AlreadyThere -> context.getString(R.string.ssh_key_there)
-                    Ssh.Added.PrivateKey -> context.getString(R.string.ssh_key_private)
-                    Ssh.Added.NoKey -> context.getString(R.string.ssh_key_none)
+                    Ssh.Added.Some -> resources.getQuantityString(R.plurals.ssh_keys_added, count, count)
+                    Ssh.Added.AlreadyThere -> resources.getString(R.string.ssh_key_there)
+                    Ssh.Added.PrivateKey -> resources.getString(R.string.ssh_key_private)
+                    Ssh.Added.NoKey -> resources.getString(R.string.ssh_key_none)
                 }
         }
     val pick =
@@ -259,7 +261,7 @@ private fun KeysCard(ssh: Ssh) {
             if (uri != null) {
                 scope.launch {
                     val text = withContext(Dispatchers.IO) { readSmallText(context, uri) }
-                    if (text != null) add(text) else message = context.getString(R.string.ssh_key_none)
+                    if (text != null) add(text) else message = resources.getString(R.string.ssh_key_none)
                 }
             }
         }

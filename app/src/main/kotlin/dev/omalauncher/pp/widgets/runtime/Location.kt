@@ -1,5 +1,6 @@
 package dev.omalauncher.pp.widgets.runtime
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.IntentFilter
 import android.location.Address
@@ -54,7 +55,10 @@ private const val GEOCODE_TIMEOUT_MS = 10_000L
  * `permission("location")`, and the place's name where the phone has a geocoder. Battery first: it takes the fixes other
  * apps get, and asks for one of its own only when the last is over half an hour old, from the network rather than GPS where
  * it can. Only while a widget shows it; never in the background.
+ *
+ * Every call to the location manager comes after [granted] and inside runCatching, which lint can't follow.
  */
+@SuppressLint("MissingPermission")
 class Location(
     private val context: Context,
 ) {

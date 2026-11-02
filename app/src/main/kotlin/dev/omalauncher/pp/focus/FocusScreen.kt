@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
@@ -367,11 +368,12 @@ private fun ScheduleOptions(
         onChange(if (i == 0) null else schedule ?: WeeklySchedule(DayOfWeek.entries.take(5).toSet(), LocalTime.of(9, 0), LocalTime.of(17, 0)))
     }
     val s = schedule ?: return
+    val locale = LocalConfiguration.current.locales[0]
     Row(Modifier.padding(start = 96.dp).horizontalScroll(rememberScrollState())) {
         for (day in DayOfWeek.entries) {
             val on = day in s.days
             BasicText(
-                day.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
+                day.getDisplayName(TextStyle.SHORT, locale),
                 Modifier
                     .background(if (on) Palette.accent else Color.Transparent)
                     .clickable { onChange(s.copy(days = if (on) s.days - day else s.days + day)) }
