@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Linux apps' notifications (LinuxNotifications.kt, linux/NotificationServer.kt). -->
+<resources>
+    <!-- Android's notification channels, as its notification settings list them. -->
+    <string name="linux_notifications_channel">Linux 应用</string>
+    <string name="linux_notifications_channel_urgent">Linux 应用：紧急</string>
+    <string name="linux_notifications_channel_quiet">Linux 应用：低优先级</string>
+    <!-- A setup step; D-Bus is the message bus Linux apps send notifications on. -->
+    <string name="linux_step_dbus">安装 D-Bus</string>
+</resources>

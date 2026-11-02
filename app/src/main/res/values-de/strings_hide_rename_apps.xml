@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hiding and renaming apps (AppTweakStore, ui/HiddenAppsScreen.kt): settings › hidden apps, and the apps' long-press menus. -->
+<resources>
+    <!-- Long-press menu entries of an app in the drawer, the recent apps and on home. -->
+    <string name="app_tweaks_rename">umbenennen</string>
+    <string name="app_tweaks_hide">ausblenden</string>
+    <string name="app_tweaks_unhide">einblenden</string>
+
+    <string name="app_tweaks_settings">ausgeblendete apps</string>
+    <plurals name="app_tweaks_settings_subtitle">
+        <item quantity="one">%1$d ausgeblendet · apps ausblenden und umbenennen</item>
+        <item quantity="other">%1$d ausgeblendet · apps ausblenden und umbenennen</item>
+    </plurals>
+    <string name="app_tweaks_settings_none">apps ausblenden und umbenennen</string>
+
+    <string name="app_tweaks_title">ausgeblendete apps</string>
+    <string name="app_tweaks_search">apps suchen</string>
+    <string name="app_tweaks_intro">Ausgeblendete Apps tauchen nicht in der App-Übersicht, den letzten Apps und der Suche der Leiste auf; eine auf dem Startbildschirm bleibt dort. Eine umbenannte App heißt überall nur noch so. Agenten können beides in ~/.config/omalauncher/apps/apps.toml ändern.</string>
+    <!-- Whether typing a hidden app's whole name in the bar still finds it. -->
+    <string name="app_tweaks_find_hidden">ausgeblendete per vollem namen finden</string>
+    <string name="app_tweaks_on">an</string>
+    <string name="app_tweaks_off">aus</string>
+    <string name="app_tweaks_hidden_section">ausgeblendet</string>
+    <string name="app_tweaks_shown_section">sichtbar</string>
+    <string name="app_tweaks_show">einblenden</string>
+    <string name="app_tweaks_none">keine app passt</string>
+    <!-- Under a renamed app's name: the name it has of its own. -->
+    <string name="app_tweaks_own_name">war %1$s</string>
+    <string name="app_tweaks_kind_linux">linux</string>
+    <string name="app_tweaks_kind_owl">owl-app</string>
+    <string name="app_tweaks_kind_shortcut">verknüpfung</string>
+    <string name="app_tweaks_kind_work">arbeit</string>
+    <string name="app_tweaks_kind_clone">klon</string>
+
+    <!-- %1$s is the app's own name. -->
+    <string name="app_tweaks_rename_title">%1$s umbenennen</string>
+    <string name="app_tweaks_rename_hint">gilt überall: startbildschirm, app-übersicht, letzte apps und suche</string>
+    <string name="app_tweaks_rename_confirm">umbenennen</string>
+    <string name="app_tweaks_rename_reset">eigener name</string>
+</resources>

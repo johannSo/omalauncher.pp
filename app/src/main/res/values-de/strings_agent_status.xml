@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Coding agents reporting to Android (AgentStatus.kt): their notifications, and the switch in settings › agents. -->
+<resources>
+    <string name="agent_status_channel">Coding-Agenten</string>
+    <string name="agent_status_channel_description">Was jeder Coding-Agent in einem Terminal gerade macht: fertig, wartet auf dich oder fragt nach Erlaubnis</string>
+    <!-- A notification's title: the agent, then the folder it works in. -->
+    <string name="agent_status_title">%1$s · %2$s</string>
+    <!-- A notification's text: the status, then what it's about (the prompt, the tool, the last message). -->
+    <string name="agent_status_line">%1$s · %2$s</string>
+    <string name="agent_status_running">Arbeitet</string>
+    <string name="agent_status_input">Wartet auf dich</string>
+    <string name="agent_status_permission">Fragt nach Erlaubnis</string>
+    <string name="agent_status_permission_terminal">Fragt im Terminal nach Erlaubnis</string>
+    <string name="agent_status_done">Fertig</string>
+    <string name="agent_status_allow">Erlauben</string>
+    <string name="agent_status_deny">Ablehnen</string>
+    <string name="agent_status_setting">benachrichtigungen</string>
+    <string name="agent_status_setting_description">Jede Sitzung in einem Terminal bekommt eine Benachrichtigung, wenn sie fertig ist oder auf dich wartet; eine Frage nach Erlaubnis kannst du direkt dort beantworten. Wie sie klingen, entscheiden deine Benachrichtigungseinstellungen.</string>
+    <string name="agent_status_on">an</string>
+    <string name="agent_status_off">aus</string>
+</resources>

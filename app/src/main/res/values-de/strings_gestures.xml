@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Home's gestures beyond swiping up and down, their actions, and the accessibility service (ui/GesturesScreen.kt, ui/HomeGestures.kt, GestureAccessibility.kt). -->
+<resources>
+    <string name="gesture_double_tap">doppeltippen</string>
+    <string name="gesture_two_finger_up">zwei finger hoch</string>
+    <string name="gesture_two_finger_down">zwei finger runter</string>
+    <string name="gesture_pinch_in">zusammenziehen</string>
+    <string name="gesture_pinch_out">auseinanderziehen</string>
+    <!-- Home's error banner, while the panel a gesture opens doesn't compile; %1$s is the gesture (pinch in). -->
+    <string name="gesture_opens_nothing">%1$s öffnet nichts</string>
+
+    <string name="gesture_action_drawer">app-übersicht</string>
+    <string name="gesture_action_quick_settings">schnelleinstellungen</string>
+    <string name="gesture_action_pages">seiten</string>
+    <string name="gesture_action_lock">bildschirm sperren</string>
+    <string name="gesture_action_recents">letzte apps</string>
+    <!-- What a gesture does, in its row; %1$s is the command or the prompt. -->
+    <string name="gesture_action_linux_label">ausführen: %1$s</string>
+    <string name="gesture_action_terminal_label">terminal: %1$s</string>
+    <string name="gesture_action_agent_label">fragen: %1$s</string>
+
+    <string name="gesture_ask_app">eine app…</string>
+    <string name="gesture_ask_linux">ein Linux-befehl…</string>
+    <string name="gesture_ask_terminal">ein befehl im terminal…</string>
+    <string name="gesture_ask_agent">ein prompt für den agenten…</string>
+    <!-- %1$s is the gesture (double tap). -->
+    <string name="gesture_linux_title">befehl für %1$s</string>
+    <string name="gesture_linux_hint">läuft in Linux ohne eigenes fenster; eine GUI-app, die er startet, öffnet sich wie gewohnt</string>
+    <string name="gesture_terminal_title">terminal-befehl für %1$s</string>
+    <string name="gesture_terminal_hint">öffnet sich in einem eigenen terminal, das zugeht, wenn der befehl endet: häng ; exec bash an, damit es offen bleibt</string>
+    <string name="gesture_agent_title">prompt für %1$s</string>
+    <string name="gesture_agent_hint">geht an den standard-coding-agenten, so wie die leiste einen schickt</string>
+    <string name="gesture_save">speichern</string>
+    <string name="gesture_pick_app_title">app für %1$s</string>
+    <string name="gesture_search_apps">apps suchen</string>
+    <string name="gesture_app_android">android</string>
+    <string name="gesture_app_linux">linux</string>
+    <string name="gesture_no_apps">keine app passt</string>
+    <string name="gesture_hint_more">doppeltippen geht auf leeren flächen; wischen und zusammenziehen mit zwei fingern überall auf den seiten des startbildschirms. style.toml nimmt das gleiche unter [gestures], auch für agenten: defaults.toml listet jede aktion auf</string>
+
+    <!-- Toasts when a gesture can't do what it's set to. -->
+    <string name="gesture_panel_missing">%1$s ist kein panel, das läuft</string>
+    <string name="gesture_app_missing">%1$s ist nicht installiert</string>
+    <string name="gesture_needs_accessibility">schalte dafür die bedienungshilfe ein</string>
+
+    <string name="gesture_accessibility_off">bildschirm sperren und letzte apps brauchen die bedienungshilfe, und die ist aus</string>
+    <string name="gesture_accessibility_turn_on">einschalten</string>
+    <string name="gesture_accessibility_title">bedienungshilfe</string>
+    <string name="gesture_accessibility_on">● an: bildschirm sperren und letzte apps gehen</string>
+    <string name="gesture_accessibility_is_off">○ aus</string>
+    <string name="gesture_accessibility_what">Android lässt eine App den Bildschirm nur über eine Bedienungshilfe sperren oder die letzten Apps zeigen. OmaLauncher++ hat eine, die genau das macht: Wenn du eine Geste machst, die den Bildschirm sperren oder die letzten Apps zeigen soll, bittet sie Android darum, so wie es die Ein-/Aus-Taste oder die Übersichtstaste tun würde.</string>
+    <string name="gesture_accessibility_not">Sie fragt Android nach keinen Ereignissen und kann nicht lesen, was auf dem Bildschirm ist oder was du tippst. Android warnt, dass Bedienungshilfen deinen Bildschirm sehen und steuern können: Das ist, was ein Dienst verlangen könnte, nicht, was dieser macht. Sie bleibt aus, bis du sie einschaltest, und du kannst sie dort jederzeit wieder ausschalten.</string>
+    <string name="gesture_accessibility_steps">Zum Einschalten öffne die Bedienungshilfen, such OmaLauncher++ gestures bei den installierten Apps und schalte es ein. Sagt Android, dass es eine eingeschränkte Einstellung ist, öffne die App-Info, tippe auf ⋮, erlaube eingeschränkte Einstellungen und versuch es nochmal.</string>
+    <string name="gesture_accessibility_open">bedienungshilfen öffnen</string>
+    <string name="gesture_accessibility_app_info">app-info</string>
+    <string name="gesture_accessibility_done">fertig</string>
+    <!-- Android's accessibility settings list the service with these. -->
+    <string name="gesture_accessibility_label">OmaLauncher++ gestures</string>
+    <string name="gesture_accessibility_description">Lässt die Gesten des Startbildschirms den Bildschirm sperren und die letzten Apps zeigen, sonst nichts. Sie liest nichts auf dem Bildschirm und sieht nichts, was du tippst.</string>
+</resources>

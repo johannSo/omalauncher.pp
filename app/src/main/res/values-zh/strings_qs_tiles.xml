@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The quick settings tiles (tiles/) and their page in settings. Tile names are capitalized like Android's own tiles. -->
+<resources>
+    <string name="qs_tiles_linux">Linux</string>
+    <string name="qs_tiles_terminal">终端</string>
+    <string name="qs_tiles_ask">问智能体</string>
+    <string name="qs_tiles_not_installed">未安装</string>
+    <string name="qs_tiles_installing">正在安装…</string>
+    <string name="qs_tiles_failed">安装失败</string>
+    <string name="qs_tiles_removing">正在移除…</string>
+    <string name="qs_tiles_off">已关闭</string>
+    <string name="qs_tiles_starting">正在启动…</string>
+    <string name="qs_tiles_running">运行中</string>
+    <string name="qs_tiles_stopping">正在关闭…</string>
+    <string name="qs_tiles_starts_linux">会启动 Linux</string>
+    <string name="qs_tiles_needs_linux">安装 Linux</string>
+    <string name="qs_tiles_starting_linux">正在启动 Linux…</string>
+    <string name="qs_tiles_shut_down_title">关闭 linux？</string>
+    <string name="qs_tiles_shut_down_body">关闭 Linux 应用和终端，并停止在其中工作的智能体；文件和软件包都会保留。它会一直保持关闭（重启后也是），直到你再次启动它。</string>
+    <string name="qs_tiles_title">快捷设置图块</string>
+    <string name="qs_tiles_subtitle">在 android 快捷设置中放入 linux、终端和问智能体</string>
+    <string name="qs_tiles_linux_about">显示 Linux 是否在运行。点按启动或关闭它；长按打开 设置 › linux。</string>
+    <string name="qs_tiles_terminal_about">打开一个终端；如果 Linux 已关闭，会先启动它。</string>
+    <string name="qs_tiles_ask_about">打开主屏幕，输入栏已准备好接收发给智能体的提示词。</string>
+    <string name="qs_tiles_add">添加</string>
+    <string name="qs_tiles_added">已添加到快捷设置</string>
+    <string name="qs_tiles_already_added">已在快捷设置中</string>
+    <string name="qs_tiles_add_failed">android 没有添加它；请在通知栏的编辑模式中添加</string>
+    <string name="qs_tiles_ask_opens">问智能体打开</string>
+    <string name="qs_tiles_ask_type">键盘</string>
+    <string name="qs_tiles_ask_voice">语音</string>
+    <string name="qs_tiles_ask_no_mic">没有麦克风权限，所以会打开键盘</string>
+    <string name="qs_tiles_hint">也可以把通知栏完全拉下，点按铅笔图标，再把图块拖进去。</string>
+</resources>

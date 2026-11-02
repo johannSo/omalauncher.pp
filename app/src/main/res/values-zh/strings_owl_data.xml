@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Toast as the app's settings open after a widget's permission("location") was refused twice, when Android won't ask again. -->
+    <string name="owl_data_allow_location">要显示你的位置，请在权限中允许位置信息</string>
+    <!-- Toast as the app's settings open after a widget's permission("steps") was refused twice, when Android won't ask again. -->
+    <string name="owl_data_allow_steps">要统计步数，请在权限中允许身体活动</string>
+</resources>

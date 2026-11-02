@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Settings › linux › snapshots: snapshots of the Linux system to roll back to. -->
+<resources>
+    <string name="snapshots_title">快照</string>
+    <string name="snapshots_row_none">暂无 · 回滚搞坏了东西的更新</string>
+    <plurals name="snapshots_row">
+        <item quantity="other">%d 个可回滚的快照</item>
+    </plurals>
+    <string name="snapshots_body">快照会把 Linux 系统保存为当前的样子：它的软件包以及 /etc、/usr、/var 和 /opt 中的所有内容。恢复快照可以回滚搞坏了东西的更新。/root 和 /home（你自己的文件）保持原样，除非你另行选择。快照之间共享未改变的内容，所以更新后拍的快照只占用它所改动部分的空间。</string>
+    <string name="snapshots_storage">可用 %1$s · 快照占用 %2$s</string>
+    <string name="snapshots_take">立即拍快照</string>
+    <string name="snapshots_low_space">存储空间不足：空间不够时会跳过更新前的快照</string>
+    <string name="snapshots_list">快照</string>
+    <string name="snapshots_none">暂无</string>
+    <string name="snapshots_options">选项</string>
+    <string name="snapshots_option_before_update">更新前</string>
+    <string name="snapshots_option_on">拍快照</string>
+    <string name="snapshots_option_off">不拍</string>
+    <string name="snapshots_option_keep">保留</string>
+    <string name="snapshots_option_keep_hint">最新的几个；下次拍快照时会删除更旧的</string>
+    <string name="snapshots_option_home">/root、/home</string>
+    <string name="snapshots_option_home_in">包含在快照中</string>
+    <string name="snapshots_option_home_out">不包含</string>
+    <string name="snapshots_reason_update">更新前</string>
+    <string name="snapshots_reason_manual">手动拍摄</string>
+    <!-- Why it was taken, what deleting it frees, how big the system it holds is. -->
+    <string name="snapshots_details">%1$s · 独占 %2$s · 系统 %3$s</string>
+    <string name="snapshots_restore">恢复</string>
+    <string name="snapshots_delete">删除</string>
+    <string name="snapshots_restore_ask">把 Linux 回滚到这个快照？</string>
+    <string name="snapshots_restore_body">Linux 会关闭，回到当时的状态，然后重新启动：之后安装或更新的软件包也会回到当时的样子。/root 和 /home 保持原样。</string>
+    <string name="snapshots_restore_body_home">Linux 会关闭，回到当时的状态，然后重新启动：之后安装或更新的软件包也会回到当时的样子，/root 和 /home 同样如此。之后在那里修改的文件会丢失。</string>
+    <string name="snapshots_restore_home">/root、/home</string>
+    <string name="snapshots_restore_home_keep">保留</string>
+    <string name="snapshots_restore_home_back">回滚</string>
+    <string name="snapshots_delete_ask">删除这个快照？</string>
+    <string name="snapshots_job_taking">正在拍快照</string>
+    <string name="snapshots_job_restoring">正在恢复快照</string>
+    <string name="snapshots_step_scanning">正在读取系统…</string>
+    <string name="snapshots_step_storing">已存储 %1$s / %2$s</string>
+    <string name="snapshots_step_saving">正在保存…</string>
+    <string name="snapshots_step_unpacking">%1$d / %2$d 个文件</string>
+    <string name="snapshots_step_swapping">正在替换到位…</string>
+    <string name="snapshots_no_room">未拍快照：需要 %1$s 可用空间，但只有 %2$s</string>
+    <string name="snapshots_no_room_restore">存储空间不足，无法恢复：需要 %1$s 可用空间，但只有 %2$s</string>
+    <string name="snapshots_ran_out">存储空间不足，快照已停止</string>
+    <string name="snapshots_gone">这个快照已不存在</string>
+    <string name="snapshots_damaged">快照文件已损坏（%1$s）；没有做任何更改</string>
+</resources>

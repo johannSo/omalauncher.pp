@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- settings › values from other apps (ui/OtherAppsRow.kt, widgets/ExternalValues.kt). -->
+<resources>
+    <string name="owl_intents_setting">来自其他应用的值</string>
+    <string name="owl_intents_setting_off">关：任何应用都不能设置小组件显示的内容</string>
+    <string name="owl_intents_setting_on">开：Tasker 等应用可以为接受外部值的小组件设置值</string>
+    <string name="owl_intents_allow">允许</string>
+    <string name="owl_intents_deny">关</string>
+</resources>

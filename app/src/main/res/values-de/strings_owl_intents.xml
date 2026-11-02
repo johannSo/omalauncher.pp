@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- settings › values from other apps (ui/OtherAppsRow.kt, widgets/ExternalValues.kt). -->
+<resources>
+    <string name="owl_intents_setting">werte aus anderen apps</string>
+    <string name="owl_intents_setting_off">aus: keine app kann festlegen, was widgets zeigen</string>
+    <string name="owl_intents_setting_on">an: tasker und andere apps können werte in widgets setzen, die welche annehmen</string>
+    <string name="owl_intents_allow">erlauben</string>
+    <string name="owl_intents_deny">aus</string>
+</resources>

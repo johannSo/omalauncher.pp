@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Focus mode and app timers (focus/): settings › focus, the time's-up screen, the bar's "focus …" and FocusGuard. -->
+<resources>
+    <string name="focus_title">专注</string>
+    <!-- Settings' row: the profile that's on. -->
+    <string name="focus_subtitle_on">已开启：%1$s</string>
+    <plurals name="focus_timers_count">
+        <item quantity="other">%1$d 个应用计时器</item>
+    </plurals>
+
+    <string name="focus_profiles">专注模式</string>
+    <string name="focus_profiles_hint">某个配置开启时，它没有包含的应用会从应用抽屉、搜索、最近应用和主屏幕中隐藏。也可以在输入栏里输入 focus 加配置名称，或输入 focus off；输入 focus work 25m 会让它保持开启 25 分钟。</string>
+    <string name="focus_new_profile">新配置</string>
+    <string name="focus_create">创建</string>
+    <string name="focus_name_taken">已有同名配置，或者这是输入栏保留的词（off）</string>
+    <string name="focus_turn_on">开启</string>
+    <string name="focus_turn_off">关闭</string>
+    <string name="focus_edit">编辑</string>
+    <string name="focus_delete">删除</string>
+    <string name="focus_delete_title">删除 %1$s？</string>
+    <string name="focus_delete_message">这个配置连同它的应用和计划都会删除。你的应用保持原样。</string>
+    <string name="focus_until_off">直到手动关闭</string>
+    <!-- How long a profile is turned on for: "for 25m". -->
+    <string name="focus_for">持续 %1$s</string>
+    <string name="focus_status_off">关</string>
+    <string name="focus_status_on">开</string>
+    <string name="focus_status_until">开启至 %1$s</string>
+    <string name="focus_status_scheduled">按计划开启至 %1$s</string>
+    <plurals name="focus_allows_apps">
+        <item quantity="other">放行 %1$d 个应用</item>
+    </plurals>
+    <plurals name="focus_blocks_apps">
+        <item quantity="other">隐藏 %1$d 个应用</item>
+    </plurals>
+
+    <string name="focus_rename">重命名</string>
+    <string name="focus_apps_mode">应用</string>
+    <string name="focus_apps_only">仅这些</string>
+    <string name="focus_apps_except">除这些外</string>
+    <string name="focus_dnd">勿扰模式</string>
+    <string name="focus_yes">开</string>
+    <string name="focus_no">关</string>
+    <string name="focus_dnd_needed">需要先让 Android 允许启动器切换勿扰模式。</string>
+    <string name="focus_schedule">计划</string>
+    <string name="focus_schedule_none">无</string>
+    <string name="focus_schedule_weekly">每周</string>
+    <string name="focus_schedule_from">从</string>
+    <string name="focus_schedule_to">到</string>
+    <string name="focus_schedule_no_days">选择它在哪几天开启。</string>
+    <string name="focus_apps">应用</string>
+    <string name="focus_search_apps">查找应用</string>
+    <string name="focus_kind_linux">linux</string>
+    <string name="focus_kind_owl">owl</string>
+    <string name="focus_kind_shortcut">快捷方式</string>
+
+    <string name="focus_timers">应用计时器</string>
+    <string name="focus_timers_hint">为每个 Android 应用设定每日限额。用完后，从启动器打开该应用会先显示时间到了的提示页。也可以长按应用来设置它的计时器。</string>
+    <string name="focus_add_timer">添加计时器</string>
+    <string name="focus_pick_app">选择应用</string>
+    <string name="focus_limit_title">每天 %1$s</string>
+    <string name="focus_no_limit">不限</string>
+    <string name="focus_remove">移除</string>
+    <!-- Used today, of the app's limit: "12m of 30m today". -->
+    <string name="focus_timer_used">今天 %1$s / %2$s</string>
+    <string name="focus_usage_needed">计时器要统计每个应用的屏幕使用时间，而 Android 只把它提供给有使用情况访问权限的应用。</string>
+    <string name="focus_allow">允许</string>
+    <string name="focus_action_timer">应用计时器</string>
+
+    <string name="focus_outside">启动器之外</string>
+    <string name="focus_guard_explain">计时器和专注模式会拦下从 OmaLauncher++ 打开的应用。要在任何地方打开时都拦下它们（比如从通知、其他应用或最近任务打开），请在 Android 的无障碍设置中开启 OmaLauncher++ 专注。它只读取哪个应用来到前台，从不读取屏幕内容或你输入的内容；设置、电话应用和键盘永远不会被拦下。Android 可能会先要求你在启动器的应用信息中允许受限设置，对非应用商店安装的应用它都会这样做。除非你开启，否则它一直是关闭的。</string>
+    <string name="focus_guard_on">开</string>
+    <string name="focus_guard_off">关</string>
+    <string name="focus_guard_open">无障碍设置</string>
+    <string name="focus_file_hint">智能体可以在 ~/.config/omalauncher/focus/focus.toml 中编辑这里的所有内容。</string>
+
+    <string name="focus_guard_label">OmaLauncher++ 专注</string>
+    <string name="focus_guard_summary">对在启动器之外打开的应用也生效的专注模式和应用计时器</string>
+    <string name="focus_guard_description">让 OmaLauncher++ 的专注模式和应用计时器拦下在启动器之外打开的应用：从通知、其他应用或最近任务打开的。它只读取哪个应用来到前台，从不读取屏幕内容或你输入的内容，也不会有任何数据离开手机。设置、电话应用和键盘永远不会被拦下。</string>
+
+    <string name="focus_times_up_title">时间到了</string>
+    <!-- The app, how long it was used today, its daily limit. -->
+    <string name="focus_times_up_message">%1$s：今天已用 %2$s，每天限额 %3$s</string>
+    <string name="focus_times_up_hint">选择“仍然打开”后，今天剩下的时间不再限制它</string>
+    <string name="focus_hidden_title">现在不行</string>
+    <string name="focus_hidden_message">%1$s 不在专注配置 %2$s 中</string>
+    <string name="focus_one_more_minute">再用 1 分钟</string>
+    <string name="focus_open_anyway">仍然打开</string>
+    <string name="focus_close">关闭</string>
+    <string name="focus_duration_hours">%1$d 小时 %2$d 分钟</string>
+    <string name="focus_duration_minutes">%1$d 分钟</string>
+
+    <string name="focus_toast_on">专注：%1$s</string>
+    <string name="focus_toast_until">专注：%1$s，至 %2$s</string>
+    <string name="focus_toast_off">专注已关闭</string>
+</resources>

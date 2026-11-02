@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hiding and renaming apps (AppTweakStore, ui/HiddenAppsScreen.kt): settings › hidden apps, and the apps' long-press menus. -->
+<resources>
+    <!-- Long-press menu entries of an app in the drawer, the recent apps and on home. -->
+    <string name="app_tweaks_rename">重命名</string>
+    <string name="app_tweaks_hide">隐藏</string>
+    <string name="app_tweaks_unhide">取消隐藏</string>
+
+    <string name="app_tweaks_settings">隐藏的应用</string>
+    <plurals name="app_tweaks_settings_subtitle">
+        <item quantity="other">已隐藏 %1$d 个 · 隐藏和重命名应用</item>
+    </plurals>
+    <string name="app_tweaks_settings_none">隐藏和重命名应用</string>
+
+    <string name="app_tweaks_title">隐藏的应用</string>
+    <string name="app_tweaks_search">搜索应用</string>
+    <string name="app_tweaks_intro">隐藏的应用不会出现在应用抽屉、最近应用和输入栏的搜索中；已在主屏幕上的仍会留在那里。重命名的应用在所有地方都使用新名称。智能体可以在 ~/.config/omalauncher/apps/apps.toml 中修改这两项。</string>
+    <!-- Whether typing a hidden app's whole name in the bar still finds it. -->
+    <string name="app_tweaks_find_hidden">输入全名可找到隐藏应用</string>
+    <string name="app_tweaks_on">开</string>
+    <string name="app_tweaks_off">关</string>
+    <string name="app_tweaks_hidden_section">已隐藏</string>
+    <string name="app_tweaks_shown_section">显示中</string>
+    <string name="app_tweaks_show">显示</string>
+    <string name="app_tweaks_none">没有匹配的应用</string>
+    <!-- Under a renamed app's name: the name it has of its own. -->
+    <string name="app_tweaks_own_name">原名 %1$s</string>
+    <string name="app_tweaks_kind_linux">linux</string>
+    <string name="app_tweaks_kind_owl">owl 应用</string>
+    <string name="app_tweaks_kind_shortcut">快捷方式</string>
+    <string name="app_tweaks_kind_work">工作</string>
+    <string name="app_tweaks_kind_clone">分身</string>
+
+    <!-- %1$s is the app's own name. -->
+    <string name="app_tweaks_rename_title">重命名 %1$s</string>
+    <string name="app_tweaks_rename_hint">在所有地方使用：主屏幕、应用抽屉、最近应用和搜索</string>
+    <string name="app_tweaks_rename_confirm">重命名</string>
+    <string name="app_tweaks_rename_reset">恢复原名</string>
+</resources>

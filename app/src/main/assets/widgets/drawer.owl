@@ -79,6 +79,14 @@ panel "app drawer" {
       settings: "einstellungen"; turnOn: "aktivieren"; pause: "pausieren"; installing: "wird installiert…"; installLinux: "linux installieren"
       open: "öffnen"; ask: "fragen"; askInstallLinux: "einen agenten fragen · linux installieren"; askInstallAgent: "einen agenten fragen · einen installieren"
       askAgent: (bin, text) => "${bin} fragen: ${text}"
+      private: "privat"; privateApps: "private apps"; privateLocked: "privater bereich gesperrt"; privateSpace: "privater bereich"
+      widgets: "widgets"; install: "installieren"; lock: "sperren"; unlock: "entsperren"; unlockPrivate: "privaten bereich entsperren"; hideWhileLocked: "ausblenden, wenn gesperrt"
+      shownOn: "an"; shownOff: "aus"; startLinux: "linux starten"
+      copy: "kopieren"; call: "anrufen"; message: "nachricht"; search: "suchen"; webFor: (text) => "im web suchen: ${text}"
+      groupCalc: "rechner"; groupSettings: "android-einstellungen"; groupShortcuts: "app-verknüpfungen"; groupContacts: "kontakte"
+      groupFiles: "dateien"; groupPackages: "pakete"; groupWeb: "web"
+      rename: "umbenennen"; hide: "ausblenden"; unhide: "einblenden"
+      timer: "app-timer"
     }
     zh {
       personal: "个人"; work: "工作"; apps: "应用"; linux: "linux"; shortcuts: "快捷方式"; android: "android"
@@ -87,6 +95,14 @@ panel "app drawer" {
       settings: "设置"; turnOn: "开启"; pause: "暂停"; installing: "正在安装…"; installLinux: "安装 linux"
       open: "打开"; ask: "提问"; askInstallLinux: "问智能体 · 安装 linux"; askInstallAgent: "问智能体 · 先装一个"
       askAgent: (bin, text) => "问 ${bin}：${text}"
+      private: "私密"; privateApps: "私密应用"; privateLocked: "私密空间已锁定"; privateSpace: "私密空间"
+      widgets: "小组件"; install: "安装"; lock: "锁定"; unlock: "解锁"; unlockPrivate: "解锁私密空间"; hideWhileLocked: "锁定时隐藏"
+      shownOn: "开"; shownOff: "关"; startLinux: "启动 linux"
+      copy: "复制"; call: "拨打"; message: "发短信"; search: "搜索"; webFor: (text) => "在网上搜索 ${text}"
+      groupCalc: "计算器"; groupSettings: "android 设置"; groupShortcuts: "应用快捷方式"; groupContacts: "联系人"
+      groupFiles: "文件"; groupPackages: "软件包"; groupWeb: "网页"
+      rename: "重命名"; hide: "隐藏"; unhide: "取消隐藏"
+      timer: "应用计时器"
     }
   }
   source d = android.drawer

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Settings › linux › snapshots: snapshots of the Linux system to roll back to. -->
+<resources>
+    <string name="snapshots_title">snapshots</string>
+    <string name="snapshots_row_none">noch keine · ein update zurücknehmen, das etwas kaputt gemacht hat</string>
+    <plurals name="snapshots_row">
+        <item quantity="one">%d snapshot zum zurückrollen</item>
+        <item quantity="other">%d snapshots zum zurückrollen</item>
+    </plurals>
+    <string name="snapshots_body">Ein Snapshot hält das Linux-System fest, wie es ist: seine Pakete und alles in /etc, /usr, /var und /opt. Einen wiederherzustellen nimmt ein Update zurück, das etwas kaputt gemacht hat. /root und /home, deine eigenen Dateien, bleiben, wie sie sind, außer du willst es anders. Snapshots teilen sich, was sich zwischen ihnen nicht geändert hat, also braucht einer nach einem Update nur so viel Platz, wie das Update geändert hat.</string>
+    <string name="snapshots_storage">%1$s frei · snapshots belegen %2$s</string>
+    <string name="snapshots_take">jetzt snapshot machen</string>
+    <string name="snapshots_low_space">wenig speicher: ein snapshot vor einem update fällt aus, wenn kein platz dafür ist</string>
+    <string name="snapshots_list">snapshots</string>
+    <string name="snapshots_none">noch keine</string>
+    <string name="snapshots_options">optionen</string>
+    <string name="snapshots_option_before_update">vor updates</string>
+    <string name="snapshots_option_on">snapshot</string>
+    <string name="snapshots_option_off">keinen</string>
+    <string name="snapshots_option_keep">behalten</string>
+    <string name="snapshots_option_keep_hint">die neuesten; der nächste snapshot löscht ältere</string>
+    <string name="snapshots_option_home">/root, /home</string>
+    <string name="snapshots_option_home_in">im snapshot</string>
+    <string name="snapshots_option_home_out">ausgelassen</string>
+    <string name="snapshots_reason_update">vor einem update</string>
+    <string name="snapshots_reason_manual">von hand gemacht</string>
+    <!-- Why it was taken, what deleting it frees, how big the system it holds is. -->
+    <string name="snapshots_details">%1$s · %2$s eigene · %3$s system</string>
+    <string name="snapshots_restore">wiederherstellen</string>
+    <string name="snapshots_delete">löschen</string>
+    <string name="snapshots_restore_ask">linux auf diesen snapshot zurückrollen?</string>
+    <string name="snapshots_restore_body">Linux fährt herunter, geht zurück auf den Stand von damals und startet neu: Pakete, die seitdem installiert oder aktualisiert wurden, gehen auch zurück. /root und /home bleiben, wie sie sind.</string>
+    <string name="snapshots_restore_body_home">Linux fährt herunter, geht zurück auf den Stand von damals und startet neu: Pakete, die seitdem installiert oder aktualisiert wurden, gehen auch zurück, und /root und /home ebenso. Dateien, die dort seitdem geändert wurden, sind weg.</string>
+    <string name="snapshots_restore_home">/root, /home</string>
+    <string name="snapshots_restore_home_keep">behalten</string>
+    <string name="snapshots_restore_home_back">zurückrollen</string>
+    <string name="snapshots_delete_ask">diesen snapshot löschen?</string>
+    <string name="snapshots_job_taking">snapshot wird gemacht</string>
+    <string name="snapshots_job_restoring">snapshot wird wiederhergestellt</string>
+    <string name="snapshots_step_scanning">system wird gelesen…</string>
+    <string name="snapshots_step_storing">%1$s von %2$s gespeichert</string>
+    <string name="snapshots_step_saving">wird gespeichert…</string>
+    <string name="snapshots_step_unpacking">%1$d von %2$d dateien</string>
+    <string name="snapshots_step_swapping">wird an seinen platz gesetzt…</string>
+    <string name="snapshots_no_room">kein snapshot: er braucht %1$s frei, und frei sind %2$s</string>
+    <string name="snapshots_no_room_restore">nicht genug speicher zum wiederherstellen: es braucht %1$s frei, und frei sind %2$s</string>
+    <string name="snapshots_ran_out">der speicher wurde knapp, also hat der snapshot aufgehört</string>
+    <string name="snapshots_gone">dieser snapshot ist weg</string>
+    <string name="snapshots_damaged">eine snapshot-datei ist beschädigt (%1$s); nichts wurde geändert</string>
+</resources>

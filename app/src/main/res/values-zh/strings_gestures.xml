@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Home's gestures beyond swiping up and down, their actions, and the accessibility service (ui/GesturesScreen.kt, ui/HomeGestures.kt, GestureAccessibility.kt). -->
+<resources>
+    <string name="gesture_double_tap">双击</string>
+    <string name="gesture_two_finger_up">双指上滑</string>
+    <string name="gesture_two_finger_down">双指下滑</string>
+    <string name="gesture_pinch_in">双指捏合</string>
+    <string name="gesture_pinch_out">双指张开</string>
+    <!-- Home's error banner, while the panel a gesture opens doesn't compile; %1$s is the gesture (pinch in). -->
+    <string name="gesture_opens_nothing">%1$s不会打开任何内容</string>
+
+    <string name="gesture_action_drawer">应用抽屉</string>
+    <string name="gesture_action_quick_settings">快捷设置</string>
+    <string name="gesture_action_pages">页面</string>
+    <string name="gesture_action_lock">锁屏</string>
+    <string name="gesture_action_recents">最近应用</string>
+    <!-- What a gesture does, in its row; %1$s is the command or the prompt. -->
+    <string name="gesture_action_linux_label">运行：%1$s</string>
+    <string name="gesture_action_terminal_label">终端：%1$s</string>
+    <string name="gesture_action_agent_label">提问：%1$s</string>
+
+    <string name="gesture_ask_app">一个应用…</string>
+    <string name="gesture_ask_linux">一条 Linux 命令…</string>
+    <string name="gesture_ask_terminal">在终端中运行的命令…</string>
+    <string name="gesture_ask_agent">发给智能体的提示词…</string>
+    <!-- %1$s is the gesture (double tap). -->
+    <string name="gesture_linux_title">%1$s的命令</string>
+    <string name="gesture_linux_hint">在 Linux 中运行，没有自己的窗口；它启动的图形应用照常打开</string>
+    <string name="gesture_terminal_title">%1$s的终端命令</string>
+    <string name="gesture_terminal_hint">在单独的终端中打开，命令结束时终端关闭：加上 ; exec bash 可让它保持打开</string>
+    <string name="gesture_agent_title">%1$s的提示词</string>
+    <string name="gesture_agent_hint">发给默认的编程智能体，和输入栏发送的方式一样</string>
+    <string name="gesture_save">保存</string>
+    <string name="gesture_pick_app_title">%1$s打开的应用</string>
+    <string name="gesture_search_apps">搜索应用</string>
+    <string name="gesture_app_android">android</string>
+    <string name="gesture_app_linux">linux</string>
+    <string name="gesture_no_apps">没有匹配的应用</string>
+    <string name="gesture_hint_more">双击在空白处生效；双指滑动和捏合在主屏幕各页面的任何位置都可以。style.toml 的 [gestures] 下也能设置这些，智能体也可以改：defaults.toml 列出了所有动作</string>
+
+    <!-- Toasts when a gesture can't do what it's set to. -->
+    <string name="gesture_panel_missing">%1$s 不是可以运行的面板</string>
+    <string name="gesture_app_missing">%1$s 未安装</string>
+    <string name="gesture_needs_accessibility">需要先开启无障碍服务</string>
+
+    <string name="gesture_accessibility_off">锁屏和最近应用需要无障碍服务，但它目前是关闭的</string>
+    <string name="gesture_accessibility_turn_on">开启</string>
+    <string name="gesture_accessibility_title">无障碍服务</string>
+    <string name="gesture_accessibility_on">● 已开启：锁屏和最近应用可用</string>
+    <string name="gesture_accessibility_is_off">○ 已关闭</string>
+    <string name="gesture_accessibility_what">Android 只允许应用通过无障碍服务来锁屏或显示最近应用。OmaLauncher++ 带有一个只做这件事的服务：当你做出设为锁屏或最近应用的手势时，它会请 Android 执行，就像按下电源键或最近任务键一样。</string>
+    <string name="gesture_accessibility_not">它不向 Android 请求任何事件，也无法读取屏幕内容或你输入的内容。Android 会警告无障碍服务可以查看和控制你的屏幕：那是一个服务可能请求的权限，而不是这个服务实际做的事。在你开启之前它一直是关闭的，你也可以随时在那里关闭它。</string>
+    <string name="gesture_accessibility_steps">要开启它，请打开无障碍设置，在已安装的应用中找到 OmaLauncher++ 手势，然后打开开关。如果 Android 提示这是受限设置，请打开应用信息，点按 ⋮，允许受限设置，然后再试一次。</string>
+    <string name="gesture_accessibility_open">打开无障碍设置</string>
+    <string name="gesture_accessibility_app_info">应用信息</string>
+    <string name="gesture_accessibility_done">完成</string>
+    <!-- Android's accessibility settings list the service with these. -->
+    <string name="gesture_accessibility_label">OmaLauncher++ 手势</string>
+    <string name="gesture_accessibility_description">让主屏幕手势可以锁屏和显示最近应用，仅此而已。它不读取屏幕上的任何内容，也看不到你输入的内容。</string>
+</resources>
