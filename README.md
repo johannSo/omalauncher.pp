@@ -217,6 +217,6 @@ licenses. The app also ships proot, talloc and libandroid-shmem (GPL-2.0,
 LGPL-3.0 and BSD-3-Clause, prebuilt by Termux), listed in the app under
 settings › licenses.
 
-OmaLauncher++ is an independent fork, not affiliated with or endorsed by Simon
+OmaLauncher++ is an fork, not affiliated with or endorsed by Simon
 Schubert's Omalauncher, Omarchy, Arch Linux, or the makers of the coding agents
 it installs.
