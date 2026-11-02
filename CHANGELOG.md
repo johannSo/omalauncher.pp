@@ -4,6 +4,19 @@ The most important changes in each release. From 1.0.0 on they're OmaLauncher++'
 dated when they were released on GitHub. The ones before are Omalauncher's, dated
 when they were uploaded to Play.
 
+## 2.1.0 (versionCode 31) – 2026-11-02
+
+- Omalauncher 0.17.0 and 0.18.0 are merged in. Voice is a spoken conversation with a coding agent (Claude Code,
+  Codex, Grok, OpenCode, GitHub Copilot, Kimi or Cursor), opened from the drawer, the AI bar's mic or
+  `omarchy-voice`, with its own language, voice and speed settings.
+- The launcher comes in German and Simplified Chinese, OmaLauncher++'s own screens and words included.
+- today and fetch shrink to 2x2; today keeps "use my location".
+- Settings offers to make OmaLauncher++ the default home app while it isn't one.
+- Speech goes online for a language with no offline model and uses a recognizer picked over Google's.
+- On a slow tablet the drawer opens without a pause and faces with shaders swipe smoothly.
+- Fixes: a widget preview the system refused to remove and listing apps when a system call fails partway no longer
+  crash the launcher.
+
 ## 2.0.0 (versionCode 30) – 2026-11-02
 
 - The bar searches everything: sums and unit conversions, Android's settings pages, apps' shortcuts, contacts
