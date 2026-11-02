@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Omalauncher</string>
+    <string name="app_name">OmaLauncher++</string>
     <string name="wallpaper_label">Omarchy</string>
     <string name="wallpaper_description">Der Hintergrund des aktuellen Omarchy-Themes. Systemfarben folgen dem Theme.</string>
     <string name="activity_linux">Linux</string>
@@ -9,5 +9,5 @@
     <string name="activity_files">Dateien</string>
     <string name="activity_voice">Sprechen</string>
     <string name="activity_settings">Einstellungen</string>
-    <string name="notification_listener">Omalauncher-Widgets</string>
+    <string name="notification_listener">OmaLauncher++-Widgets</string>
 </resources>

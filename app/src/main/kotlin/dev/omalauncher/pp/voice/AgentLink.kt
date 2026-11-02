@@ -474,7 +474,7 @@ class CodexLink(
     override fun command(resume: String?) = "exec codex app-server"
 
     override fun open(resume: String?): List<LinkEvent> {
-        val info = json("name" to "omalauncher_voice", "title" to "Omalauncher Voice", "version" to "1")
+        val info = json("name" to "omalauncher_voice", "title" to "OmaLauncher++ Voice", "version" to "1")
         call("initialize", json("clientInfo" to info)) { _, error ->
             if (error != null) return@call listOf(LinkEvent.Failed(error.optString("message")))
             notify("initialized")

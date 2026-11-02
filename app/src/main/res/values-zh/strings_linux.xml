@@ -140,7 +140,7 @@
     <string name="packages_install">安装</string>
 
     <string name="licenses_title">开源许可</string>
-    <string name="licenses_header">Omalauncher %1$s · © 2026 Simon Schubert\n\n它包含以下开源软件。</string>
+    <string name="licenses_header">OmaLauncher++ %1$s · 基于 Omalauncher，© 2026 Simon Schubert\n\n它包含以下开源软件。</string>
     <string name="licenses_website">网站</string>
     <string name="licenses_source">源代码</string>
     <string name="licenses_use_proot">运行可选的 Linux 系统</string>
