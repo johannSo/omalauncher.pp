@@ -5,7 +5,7 @@ optional Arch Linux ARM system next to your phone apps. OmaLauncher++ runs the
 system under proot, without root, and is its Wayland compositor: every Linux
 window opens as its own Android task, with its own card in Recents.
 
-OmaLauncher++ is an independent fork of
+OmaLauncher++ is an fork of
 [Omalauncher](https://github.com/SimonSchubert/omalauncher) by Simon Schubert,
 with the features [below](#what-omalauncher-adds) on top. It's its own app
 (`dev.omalauncher.pp`), so it installs next to Omalauncher rather than over it.
