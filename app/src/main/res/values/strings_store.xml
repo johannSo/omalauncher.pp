@@ -30,6 +30,7 @@
     <!-- The store's tabs; the others are categories the store names. -->
     <string name="store_tab_all">all</string>
     <string name="store_tab_new">new</string>
+    <string name="store_tab_official">official</string>
     <string name="store_tab_installed">installed</string>
     <!-- The category of one the store gives none: a tab, and on its card. -->
     <string name="store_category_other">other</string>
@@ -49,6 +50,7 @@
 
     <!-- %1$s is what they are, like "widgets"; %2$s the store's repo, like "SimonSchubert/omarchy-widgets". -->
     <string name="store_reviewed">reviewed %1$s from github.com/%2$s</string>
+    <string name="store_official">official %1$s that come with OmaLauncher++, installed from the app</string>
     <string name="store_loading">loading…</string>
     <!-- %1$s is what they are, like "widgets". -->
     <string name="store_empty">no %1$s yet</string>

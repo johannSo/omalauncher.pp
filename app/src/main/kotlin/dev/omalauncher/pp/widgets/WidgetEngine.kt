@@ -3,6 +3,7 @@ package dev.omalauncher.pp.widgets
 import dev.omalauncher.pp.widgets.lang.sha256Hex
 import android.content.ComponentCallbacks
 import android.content.Context
+import android.content.res.AssetManager
 import android.content.res.Configuration
 import android.os.FileObserver
 import android.util.Log
@@ -98,6 +99,9 @@ class WidgetEngine(
 ) {
     /** Outside the rootfs, so widgets work without Linux; the guest sees it at ~/[GUEST_DIR]. */
     val dir = LauncherData.widgetsDir(context)
+
+    /** The app's own files: the store's official tab lists the bundled examples from them. */
+    val assets: AssetManager get() = context.assets
     private val errorDir get() = File(dir, ".errors")
 
     /** What `owl-check` reads: per file, the SHA-256 the launcher last compiled, the result and the preview. */

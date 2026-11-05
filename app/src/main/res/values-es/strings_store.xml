@@ -22,6 +22,7 @@
     <string name="store_search">buscar en %1$d %2$s</string>
     <string name="store_tab_all">todo</string>
     <string name="store_tab_new">novedades</string>
+    <string name="store_tab_official">oficiales</string>
     <string name="store_tab_installed">instalados</string>
     <string name="store_category_other">otros</string>
     <string name="store_tab">%1$s %2$d</string>
@@ -35,6 +36,7 @@
     <string name="store_tap_to_add">toca para agregar a la página %1$d</string>
 
     <string name="store_reviewed">%1$s con revisión, de github.com/%2$s</string>
+    <string name="store_official">%1$s oficiales que vienen con OmaLauncher++, instalados desde la app</string>
     <string name="store_loading">cargando…</string>
     <string name="store_empty">aún no hay %1$s</string>
     <string name="store_no_new">sin novedades en %1$s</string>

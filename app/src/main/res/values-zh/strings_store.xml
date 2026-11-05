@@ -22,6 +22,7 @@
     <string name="store_search">搜索 %1$d 个%2$s</string>
     <string name="store_tab_all">全部</string>
     <string name="store_tab_new">新上架</string>
+    <string name="store_tab_official">官方</string>
     <string name="store_tab_installed">已安装</string>
     <string name="store_category_other">其他</string>
     <string name="store_tab">%1$s %2$d</string>
@@ -35,6 +36,7 @@
     <string name="store_tap_to_add">点按添加到第 %1$d 页</string>
 
     <string name="store_reviewed">来自 github.com/%2$s 的已审核%1$s</string>
+    <string name="store_official">OmaLauncher++ 自带的官方%1$s，从应用内安装</string>
     <string name="store_loading">正在加载…</string>
     <string name="store_empty">还没有%1$s</string>
     <string name="store_no_new">没有新的%1$s</string>

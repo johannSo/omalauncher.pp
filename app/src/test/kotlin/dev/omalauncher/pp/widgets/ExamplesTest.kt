@@ -29,6 +29,17 @@ class ExamplesTest {
         for (f in examples) compile(f.name, f.readText())
     }
 
+    /** The store's official tab lists the examples that pass its review, as Market does: ssh among them. */
+    @Test fun officialWidgetsPassReview() {
+        val passing =
+            File("src/main/assets/widgets/examples").listFiles { f -> f.extension == "owl" }.orEmpty().filter { f ->
+                val name = f.nameWithoutExtension.replace(Regex("^\\d+-"), "")
+                dev.omalauncher.pp.widgets.market.Review("widgets/${Market.OFFICIAL_AUTHOR}/$name/widget.owl", f.readText()).errors.isEmpty()
+            }.map { it.nameWithoutExtension }
+        assertTrue("ssh isn't official: $passing", "ssh" in passing)
+        assertTrue(passing.size >= 10)
+    }
+
     /** The store's built-in agent tiles. */
     @Test fun agentWidgetsCompile() {
         for (agent in dev.omalauncher.pp.linux.AGENTS) {

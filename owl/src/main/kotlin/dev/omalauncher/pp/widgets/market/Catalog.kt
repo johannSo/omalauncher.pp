@@ -54,6 +54,8 @@ data class CatalogEntry(
      * [requires], [commands] and [owl] cover them too. Launchers from before pages install only [path].
      */
     val pages: List<FacePage> = emptyList(),
+    /** Shipped with the launcher (its bundled examples), not from the online catalog: [path] is an app asset. */
+    val official: Boolean = false,
 ) {
     /** The preview drawn in [theme], or the default one. */
     fun previewFor(theme: String?) = themePreviews[theme] ?: preview

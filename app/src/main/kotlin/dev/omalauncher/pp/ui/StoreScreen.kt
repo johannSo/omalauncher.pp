@@ -243,6 +243,8 @@ private fun StoreList(
         val tabs =
             buildList {
                 add(ALL to market.entries.size)
+                // The widgets that come with the launcher, installed from the app itself.
+                market.entries.count { it.official }.takeIf { it > 0 }?.let { add(OFFICIAL to it) }
                 // There even when nothing is new.
                 if (!apps) add(NEW to market.entries.count { it.new })
                 // The biggest categories first, ties in the catalog's order. Ones the store added after this launcher was built
@@ -313,7 +315,7 @@ private fun StoreList(
             }
             item(key = "catalog", span = { GridItemSpan(maxLineSpan) }) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Caption(stringResource(R.string.store_reviewed, noun, Market.REPO))
+                    Caption(if (filter.tab == OFFICIAL) stringResource(R.string.store_official, noun) else stringResource(R.string.store_reviewed, noun, Market.REPO))
                     when {
                         market.loading && market.entries.isEmpty() -> BasicText(stringResource(R.string.store_loading), style = Mono.copy(color = Palette.muted))
                         market.error != null && market.entries.isEmpty() -> BasicText(market.error?.resolve().orEmpty(), style = Mono.copy(color = Palette.red))
@@ -340,6 +342,7 @@ private fun shownEntries(
         .filter { e ->
             when (filter.tab) {
                 ALL -> true
+                OFFICIAL -> e.official
                 NEW -> e.new
                 INSTALLED -> market.installedVersion(e) != null
                 OTHER -> e.category == null
@@ -351,6 +354,7 @@ private fun shownEntries(
 }
 
 private const val ALL = "all"
+private const val OFFICIAL = "official"
 private const val NEW = "new"
 private const val OTHER = "other"
 private const val INSTALLED = "installed"
@@ -361,6 +365,7 @@ private fun tabName(tab: String) =
     when (tab) {
         ALL -> stringResource(R.string.store_tab_all)
         NEW -> stringResource(R.string.store_tab_new)
+        OFFICIAL -> stringResource(R.string.store_tab_official)
         OTHER -> stringResource(R.string.store_category_other)
         INSTALLED -> stringResource(R.string.store_tab_installed)
         else -> tab

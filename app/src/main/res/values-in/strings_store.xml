@@ -22,6 +22,7 @@
     <string name="store_search">cari %1$d %2$s</string>
     <string name="store_tab_all">semua</string>
     <string name="store_tab_new">baru</string>
+    <string name="store_tab_official">resmi</string>
     <string name="store_tab_installed">terinstal</string>
     <string name="store_category_other">lainnya</string>
     <string name="store_tab">%1$s %2$d</string>
@@ -35,6 +36,7 @@
     <string name="store_tap_to_add">ketuk untuk menambahkan ke halaman %1$d</string>
 
     <string name="store_reviewed">%1$s yang sudah ditinjau dari github.com/%2$s</string>
+    <string name="store_official">%1$s resmi bawaan OmaLauncher++, dipasang dari aplikasi</string>
     <string name="store_loading">memuat…</string>
     <string name="store_empty">belum ada %1$s</string>
     <string name="store_no_new">tidak ada %1$s baru</string>

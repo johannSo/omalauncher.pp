@@ -23,6 +23,7 @@ import dev.omalauncher.pp.upgrade.strings
 import dev.omalauncher.pp.widgets.lang.OwlKind
 import dev.omalauncher.pp.widgets.market.Catalog
 import dev.omalauncher.pp.widgets.market.CatalogEntry
+import dev.omalauncher.pp.widgets.market.Review
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -61,7 +62,39 @@ class Market(
 
         /** Settings checks for updates with a catalog at most this old; the store always reloads it. */
         private const val STALE_MS = 60 * 60 * 1000L
+
+        /** The author the official widgets are listed under, and installed as (market-omalauncher-pp-<name>.owl). */
+        const val OFFICIAL_AUTHOR = "omalauncher-pp"
+
+        /** Where the official widgets come from: the launcher's bundled examples. */
+        private const val OFFICIAL_DIR = "widgets/examples"
+
+        /** An official entry's [CatalogEntry.path]: the asset it installs from, never fetched from the web. */
+        private const val ASSET = "asset:"
     }
+
+    /**
+     * The launcher's bundled examples that pass the store's own review (a description, version and license; widgets only),
+     * as catalog entries: the store's official tab. They install from the app, offline, and update with it. Compiled once,
+     * off the main thread.
+     */
+    private val official by lazy {
+        if (kind != OwlKind.Widget) return@lazy emptyList()
+        runCatching { engine.assets.list(OFFICIAL_DIR) }.getOrNull().orEmpty().filter { it.endsWith(".owl") }.sorted().mapNotNull { file ->
+            runCatching {
+                val text = engine.assets.open("$OFFICIAL_DIR/$file").use { String(it.readBytes()) }
+                // 84-steps.owl is listed as steps: the number only orders the examples folder.
+                val name = file.removeSuffix(".owl").replace(Regex("^\\d+-"), "").lowercase()
+                val review = Review("widgets/$OFFICIAL_AUTHOR/$name/widget.owl", text)
+                if (review.errors.isNotEmpty()) return@runCatching null
+                review.entry(preview = null).copy(path = "$ASSET$OFFICIAL_DIR/$file", official = true)
+            }.getOrNull()
+        }
+    }
+
+    /** The file at a catalog [path]: an official one from the app, the rest from the store. */
+    private fun fetch(path: String): ByteArray =
+        if (path.startsWith(ASSET)) engine.assets.open(path.removePrefix(ASSET)).use { it.readBytes() } else httpGet(BASE + path)
 
     /** What the user installed and approved, per catalog id. */
     data class Installed(
@@ -110,12 +143,16 @@ class Market(
         loading = true
         error = null
         try {
-            entries = withContext(Dispatchers.IO) { Catalog.parse(String(httpGet(BASE + catalog)), "${kind.word}s") }
+            // The official ones show at once, and stay when the store can't be reached.
+            val own = withContext(Dispatchers.IO) { official }
+            if (entries.isEmpty()) entries = own
+            // After the store's, which "all" lists under its caption; a store entry can't take an official one's id.
+            entries = withContext(Dispatchers.IO) { Catalog.parse(String(httpGet(BASE + catalog)), "${kind.word}s") }.filter { e -> own.none { it.id == e.id } } + own
             refreshedAt = System.currentTimeMillis()
         } catch (e: Exception) {
-            // A catalog the store doesn't publish yet (faces.json, before the first face) is an empty one.
+            // A catalog the store doesn't publish yet (faces.json, before the first face) is an empty one: the official ones alone.
             if (e.message?.startsWith("HTTP 404") == true) {
-                entries = emptyList()
+                entries = withContext(Dispatchers.IO) { official }
                 refreshedAt = System.currentTimeMillis()
                 return
             }
@@ -228,7 +265,7 @@ class Market(
             // All of them or none: a face whose second page failed to download would be half there.
             val bytes =
                 withContext(Dispatchers.IO) {
-                    picked.associateWith { n -> httpGet(BASE + paths[n].first) }
+                    picked.associateWith { n -> fetch(paths[n].first) }
                 }
             if (bytes.any { (n, b) -> sha256Hex(b) != paths[n].second }) return StoreMessage(R.string.store_download_mismatch)
             // A page on home keeps its place; a new one goes where the user is. Apps go in the drawer, on no page, and a face's
