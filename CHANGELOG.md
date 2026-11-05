@@ -4,7 +4,7 @@ The most important changes in each release. From 1.0.0 on they're OmaLauncher++'
 dated when they were released on GitHub. The ones before are Omalauncher's, dated
 when they were uploaded to Play.
 
-## Unreleased
+## 2.3.0 (versionCode 33) – 2026-11-05
 
 - An ssh widget (in the store's examples): the phone's address and port, a switch for the SSH server of
   settings › linux › ssh, and who's logged in; tap it for every address, sftp and scp commands, and the keys.
