@@ -4,6 +4,20 @@ The most important changes in each release. From 1.0.0 on they're OmaLauncher++'
 dated when they were released on GitHub. The ones before are Omalauncher's, dated
 when they were uploaded to Play.
 
+## 2.2.0 (versionCode 32) – 2026-11-05
+
+- Omalauncher 0.19.0 is merged in, with owl 18: Browser tiles (a web page in a tile, `web(...)` to steer it), a
+  widget's `lock:` that holds the home screen still while it's in use, an `Input` of several lines, and widgets
+  that read the phone's calendars (`android.calendar`) and show and change AirPods (`android.airpods`).
+- `android.location` is the one this fork had since owl 17, now also as Omalauncher's owl 18 has it: `granted`,
+  `available` once there's a place to read, and `location("request")` from a tap, besides `permission("location")`,
+  so widgets made for either work. The place's name, region and country stay.
+- Voice talks to Oh My Pi and Pi too.
+- Home's double taps and two-finger gestures pause while a widget holds the screen, like the swipes.
+- Fixes from upstream: a widget command printing hundreds of megabytes no longer runs the launcher out of memory,
+  many regex matches in one widget update can't add up to a freeze, Voice no longer crashes in landscape with the
+  keyboard up, and a widget's preview is saved off the main thread.
+
 ## 2.1.0 (versionCode 31) – 2026-11-02
 
 - Omalauncher 0.17.0 and 0.18.0 are merged in. Voice is a spoken conversation with a coding agent (Claude Code,
