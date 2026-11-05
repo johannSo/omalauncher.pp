@@ -10,13 +10,12 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
-import dev.omalauncher.pp.ui.MicPermission
 import dev.omalauncher.pp.ui.OwlAppWindow
 import dev.omalauncher.pp.ui.Palette
 import dev.omalauncher.pp.ui.holdsKeys
 import dev.omalauncher.pp.ui.showStatusBar
 import dev.omalauncher.pp.widgets.render.LocalInputFocus
-import dev.omalauncher.pp.widgets.runtime.WidgetPermissions
+import dev.omalauncher.pp.ui.WidgetAsks
 
 /**
  * An owl app (`app "name" { }`) as its own task and Recents card, named after it and with its icon,
@@ -25,7 +24,7 @@ import dev.omalauncher.pp.widgets.runtime.WidgetPermissions
  */
 class OwlAppActivity : InstantActivity() {
     private var name: String? = null
-    private val mic = MicPermission(this)
+    private val asks = WidgetAsks(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,14 +62,12 @@ class OwlAppActivity : InstantActivity() {
 
     override fun onResume() {
         super.onResume()
-        runtime.dictation.askMic = mic::ask
-        WidgetPermissions.ask = mic::ask
+        asks.resumed(runtime)
     }
 
     override fun onPause() {
         super.onPause()
-        runtime.dictation.askMic = null
-        WidgetPermissions.ask = null
+        asks.paused(runtime)
     }
 
     override fun onStop() {

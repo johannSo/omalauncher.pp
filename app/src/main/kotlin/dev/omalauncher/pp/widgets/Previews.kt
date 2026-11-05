@@ -139,7 +139,7 @@ internal class Previews(
             delay(SETTLE_MS)
             val image = latest ?: return false
             val bitmap = image.toBitmap(widthPx, heightPx)
-            // Encoding the PNG takes a while; not on the main thread.
+            // Encoding a screen's worth of PNG took the main thread for a frame or more.
             return withContext(Dispatchers.IO) {
                 out.parentFile?.mkdirs()
                 val tmp = File(out.path + ".tmp")

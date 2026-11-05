@@ -72,6 +72,7 @@ import dev.omalauncher.pp.widgets.WidgetSpec
 import dev.omalauncher.pp.widgets.app
 import dev.omalauncher.pp.widgets.lang.Program
 import dev.omalauncher.pp.widgets.runtime.Dictation
+import dev.omalauncher.pp.widgets.runtime.PhoneCalendar
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -136,6 +137,9 @@ class Runtime(
 
     /** Widgets' speech(...) and android.speech. */
     val dictation = Dictation(context)
+
+    /** Widgets' android.calendar, calendar("request") and calendar("open"). */
+    val calendar = PhoneCalendar(context)
 
     /** The voice screen's replies, in the phone's voice. */
     val speaker = Speaker(context)

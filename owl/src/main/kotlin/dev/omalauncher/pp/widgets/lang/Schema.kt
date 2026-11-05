@@ -37,9 +37,11 @@ internal val KINDS: Map<String, Kind> =
         "Spacer" to Kind(emptySet(), Children.NONE),
         // owl 2: a live terminal (foot) inside the tile.
         "Terminal" to Kind(setOf("command", "fontSize"), Children.NONE),
+        // owl 18: a live page from the web, another surface in the tile beside it.
+        "Browser" to Kind(setOf("url", "js", "zoom"), Children.NONE),
         // owl 4: input.
         "Slider" to Kind(setOf("value", "min", "max", "step", "color", "track", "live"), Children.NONE),
-        "Input" to Kind(setOf("text", "placeholder", "color", "fontSize", "clear", "focus", "underline", "password"), Children.NONE),
+        "Input" to Kind(setOf("text", "placeholder", "color", "fontSize", "clear", "focus", "underline", "password", "lines"), Children.NONE),
         // owl 10: a menu over everything else, next to the node that holds it.
         "Popup" to Kind(setOf("position", "gap", "align"), Children.UI),
     )
@@ -172,11 +174,23 @@ internal val SINCE =
         // sent with extras, broadcasts heard, and values they set.
         listOf("intent", "broadcast", BROADCAST_SOURCE, EXTERNAL).associateWith { 17 } +
         // owl 17 (this fork): where the phone is, roughly, and the steps walked today, each behind a permission a tap asks
-        // for; seeking in what's playing.
+        // for; seeking in what's playing. Omalauncher has android.location from 18: a file of its for 18 runs here too.
         listOf("android.location", "android.steps", "permission", MEDIA_SEEK).associateWith { 17 } +
         // owl 17 (this fork): today's screen time per app, and focus mode: which profile is on, switched with focus(...);
         // usage access's settings.
-        listOf("android.usage", "android.focus", "focus", "settings(\"usage\")", "appAction(\"timer\")").associateWith { 17 }
+        listOf("android.usage", "android.focus", "focus", "settings(\"usage\")", "appAction(\"timer\")").associateWith { 17 } +
+        // owl 18: a field that wraps what's typed and grows with it, for messages longer than a line.
+        mapOf("Input.lines" to 18) +
+        // owl 18: holding the home screen still while the widget is being used, as long as its lock: holds.
+        mapOf(HOME_LOCK to 18) +
+        // owl 18: a web page in the tile, and the taps that steer it.
+        listOf("Browser", "web").associateWith { 18 } +
+        // owl 18: asking for where the phone roughly is, as Omalauncher does; permission("location") is this fork's 17.
+        mapOf("location" to 18) +
+        // owl 18: AirPods, read and set over their own link, with the Bluetooth permission.
+        listOf("android.airpods", "airpods").associateWith { 18 } +
+        // owl 18: events in the phone's calendars, only after a tap asks for read access.
+        listOf("android.calendar", "calendar").associateWith { 18 }
 
 /** `source x = broadcast("…")`, named like this in [SINCE]; `broadcast` alone is the action that sends one. */
 internal const val BROADCAST_SOURCE = "source … = broadcast(…)"
@@ -233,6 +247,9 @@ internal const val GRADIENT_BACKGROUND = "a gradient background"
 
 internal const val APP_STATUS_BAR = "an app's statusBar"
 
+/** A widget's or a face's `lock:`, named like this in [SINCE]. */
+internal const val HOME_LOCK = "lock"
+
 internal const val FACE_EDGE = "a face's edge"
 
 internal const val FONT_FILE = "a font of its own"
@@ -281,10 +298,24 @@ internal val HANDLER_PARAMS =
         "onDismiss" to emptyList(),
         // A panel's, at its top: a key pressed in the prompt bar while it's open.
         "onKey" to listOf("value"),
+        // owl 18: the page a Browser went to, its title, and how far it has loaded.
+        "onNavigate" to listOf("value"),
+        "onTitle" to listOf("value"),
+        "onProgress" to listOf("value"),
     )
 
 /** Handlers only some nodes have. */
-internal val HANDLER_KINDS = mapOf("onChange" to setOf("Slider", "Input"), "onSubmit" to setOf("Input"), "onDismiss" to setOf("Popup"), "onPull" to setOf("Column", "Grid"))
+internal val HANDLER_KINDS =
+    mapOf(
+        "onChange" to setOf("Slider", "Input"),
+        "onSubmit" to setOf("Input"),
+        "onDismiss" to setOf("Popup"),
+        "onPull" to setOf("Column", "Grid"),
+        // owl 18: only a Browser has a page to report on.
+        "onNavigate" to setOf("Browser"),
+        "onTitle" to setOf("Browser"),
+        "onProgress" to setOf("Browser"),
+    )
 
 /** What triggers bind in their statements. */
 internal val TRIGGER_PARAMS = mapOf("on" to listOf("value", "old"))
@@ -295,12 +326,19 @@ internal val TRIGGER_PARAMS = mapOf("on" to listOf("value", "old"))
  */
 val SPEECH_ANYWHERE = setOf("stop", "cancel")
 
+/**
+ * The android sources a widget asks Android's permission for, each with x("request") from a tap: never a press, before
+ * the finger lifts, or a trigger, so a widget can't ask on its own. The compiler and WidgetInstance both check.
+ */
+val ASKS = setOf("location", "calendar", "airpods")
+
 /** Data from the phone and the launcher; device is fixed, system, network and power are polled, the rest update as they change. */
-internal val ANDROID = setOf("battery", "device", "media", "notifications", "volume", "system", "network", "power", "sim", "alarm", "modes", "apps", "agents", "recent", "drawer", "modifiers", "speech", "location", "steps", "usage", "focus")
+internal val ANDROID = setOf("battery", "device", "media", "notifications", "volume", "system", "network", "power", "sim", "alarm", "modes", "apps", "agents", "recent", "drawer", "modifiers", "speech", "location", "steps", "usage", "focus", "airpods", "calendar")
 
 /**
  * permission(...)'s words, each an Android permission a source needs: what android.location and android.steps read stays
- * unavailable until the user allows it, from a tap on a widget that explains why.
+ * unavailable until the user allows it, from a tap on a widget that explains why. location("request") asks for the same
+ * one as permission("location").
  */
 val PERMISSIONS = setOf("location", "steps")
 
@@ -314,6 +352,12 @@ internal class Words(
     val numbers: Boolean = false,
     val forms: Map<String, Pair<IntRange, String>> = emptyMap(),
 )
+
+/** What the store's review lists for a widget that reads or changes AirPods, from the source or airpods(...). */
+internal const val AIRPODS_COMMAND = "read and change the AirPods connected to the phone over Bluetooth, once you allow it"
+
+/** AirPods' listening modes, as android.airpods' `mode` and `modes` name them. */
+internal val AIRPODS_MODES = setOf("off", "anc", "transparency", "adaptive")
 
 /** settings("...")'s pages. */
 internal val SETTINGS_PAGES = setOf("internet", "wifi", "bluetooth", "airplane", "data", "location", "cast", "nfc", "volume", "output", "sound", "dnd", "display", "dark", "battery", "notifications", "usage")
@@ -361,6 +405,25 @@ internal val ACTION_WORDS =
         "speech" to setOf("start", "stop", "toggle", "cancel").let { Words(it, "speech takes ${it.joinToString()}; what's heard is in source x = android.speech") },
         "latch" to KeyNames.latches.toSet().let { Words(it, "latch takes ${it.joinToString()}, and optionally once, locked or off") },
         "privateSpace" to setOf("lock", "unlock", "toggle", "settings", "install", "hide", "show").let { Words(it, "privateSpace takes ${it.joinToString()}") },
+        "location" to setOf("request").let { Words(it, "location takes request; where the phone is is in source x = android.location") },
+        "calendar" to
+            Words(
+                setOf("request", "open"),
+                "calendar takes request or open; the events are in source x = android.calendar",
+                forms = mapOf("request" to (1..1 to "calendar(\"request\")"), "open" to (1..2 to "calendar(\"open\"), or calendar(\"open\", event)")),
+            ),
+        // owl 18: where a Browser goes, or how it loads where it is.
+        "web" to setOf("back", "forward", "reload", "stop").let { Words(it, "web takes ${it.joinToString()}") },
+        // A listening mode, the next one, or a setting: on and off ones turn over without a value.
+        "airpods" to
+            Words(
+                AIRPODS_MODES + setOf("next", "request", "connect", "conversation", "oneBud", "earDetection", "adaptiveLevel"),
+                "airpods takes ${AIRPODS_MODES.joinToString()}, next, request, connect, conversation, oneBud, earDetection or adaptiveLevel",
+                forms =
+                    (AIRPODS_MODES + setOf("next", "request", "connect")).associateWith { 1..1 to "airpods(\"$it\")" } +
+                        setOf("conversation", "oneBud", "earDetection").associateWith { 1..2 to "airpods(\"$it\"), or airpods(\"$it\", on)" } +
+                        ("adaptiveLevel" to (2..2 to "airpods(\"adaptiveLevel\", level)")),
+            ),
     )
 
 /** The tile's size, readable anywhere a declaration of the same name doesn't shadow it. */
@@ -369,7 +432,7 @@ internal val TILE = setOf("cols", "rows", "tileWidth", "tileHeight", "screenWidt
 /** Builtins that always give a number (or null, which reads as …). */
 internal val NUMBERS = setOf("int", "round", "floor", "ceil", "abs", "fixed", "len", "count", "sum", "min", "max", "clamp")
 
-internal val WIDGET_PROPS = setOf("size", "minSize", "page", "order", "padding", "background")
+internal val WIDGET_PROPS = setOf("size", "minSize", "page", "order", "padding", "background", "lock")
 
 /** A face has no tile's size; it says where it goes and whether the status bar stays over it. */
-internal val FACE_PROPS = setOf("page", "order", "padding", "background", "statusBar", "edge")
+internal val FACE_PROPS = setOf("page", "order", "padding", "background", "statusBar", "edge", "lock")

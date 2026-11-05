@@ -52,7 +52,7 @@ private const val GEOCODE_TIMEOUT_MS = 10_000L
 
 /**
  * `source l = android.location`: where the phone is, coarsely (Android blurs it to a few km), once the user allows it with
- * `permission("location")`, and the place's name where the phone has a geocoder. Battery first: it takes the fixes other
+ * `permission("location")` or `location("request")`, and the place's name where the phone has a geocoder. Battery first: it takes the fixes other
  * apps get, and asks for one of its own only when the last is over half an hour old, from the network rather than GPS where
  * it can. Only while a widget shows it; never in the background.
  *
@@ -80,15 +80,21 @@ class Location(
 
     private fun cell(f: Fix) = "%.2f,%.2f".format(Locale.ROOT, f.latitude, f.longitude)
 
+    /**
+     * `{granted, available, on, lat, lon, …}`, as Omalauncher's owl 18 has it: `granted` once the user allowed it, `available`
+     * once there's a fix to read with the location switch on, the rest null until then.
+     */
     fun value(): Value {
-        if (!granted) return Obj(mapOf("available" to bool(false), "on" to bool(on)))
-        val f = fix ?: lastKnown()?.also { fix = it }
+        val g = granted
+        val f = if (g) fix ?: lastKnown()?.also { fix = it } else null
         val a = f?.let { synchronized(places) { places[cell(it)] } }
+        val on = on
         fun text(s: String?) = s?.takeIf { it.isNotBlank() }?.let(::Str) ?: Null
         fun round(v: Double) = Num(Math.round(v * 1000) / 1000.0)
         return Obj(
             mapOf(
-                "available" to bool(true),
+                "granted" to bool(g),
+                "available" to bool(f != null && on),
                 "on" to bool(on),
                 "lat" to (f?.let { round(it.latitude) } ?: Null),
                 "lon" to (f?.let { round(it.longitude) } ?: Null),

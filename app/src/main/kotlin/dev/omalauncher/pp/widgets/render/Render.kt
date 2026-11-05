@@ -139,6 +139,7 @@ import dev.omalauncher.pp.widgets.lang.WNode
 import dev.omalauncher.pp.widgets.lang.num
 import dev.omalauncher.pp.widgets.lang.text
 import dev.omalauncher.pp.widgets.runtime.WidgetInstance
+import dev.omalauncher.pp.ui.BrowserView
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
@@ -752,6 +753,24 @@ private fun Element(
             if (command != Null) {
                 val term = remember(el, command, fontSize) { inst.terminal(el, command?.toString(), fontSize) }
                 TerminalView(term, mod.then(if (sized) Modifier else Modifier.fillMaxSize()))
+            }
+        }
+        "Browser" -> {
+            val url = p.observe("url")?.takeIf { it != Null }?.toString()
+            // Script off unless the node asks: it's what makes a page able to do anything on its own.
+            val js = p.observe("js")?.truthy == true
+            // A NaN or negative zoom would throw as the page's text size is worked out; 1 is the page's own.
+            val zoom = p.observe("zoom")?.num()?.takeIf { it.isFinite() && it > 0 } ?: 1.0
+            // A URL built from a value still loading waits for it, rather than loading about:blank first.
+            if (url != null) {
+                val page = remember(el, url, js, zoom) { inst.browser(el, url, js, zoom) }
+                BrowserView(
+                    page,
+                    mod.then(if (sized) Modifier else Modifier.fillMaxSize()),
+                    onTitle = el.handlers["onTitle"]?.let { a -> { v: String -> a.run(p.env, listOf(Str(v))) } },
+                    onNavigate = el.handlers["onNavigate"]?.let { a -> { v: String -> a.run(p.env, listOf(Str(v))) } },
+                    onProgress = el.handlers["onProgress"]?.let { a -> { v: Double -> a.run(p.env, listOf(Num(v))) } },
+                )
             }
         }
     }
