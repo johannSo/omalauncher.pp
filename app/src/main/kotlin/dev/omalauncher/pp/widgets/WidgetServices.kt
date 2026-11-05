@@ -202,7 +202,8 @@ class WidgetServices(
     private val panels = SystemPanels(context)
     private val location = Location(context)
     private val steps = Steps(context)
-    private val sshSource = SshSource(context, runtime.ssh)
+    /** Lazy: the runtime makes its widget engine before its SSH server, so runtime.ssh is still null while this is built. */
+    private val sshSource by lazy { SshSource(context, runtime.ssh) }
 
     /** Opens launcher screens ("style" or "themes", "agents", "drawer"); set by the UI. */
     var launcherAction: ((String) -> Unit)? = null

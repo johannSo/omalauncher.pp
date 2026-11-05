@@ -4,6 +4,10 @@ The most important changes in each release. From 1.0.0 on they're OmaLauncher++'
 dated when they were released on GitHub. The ones before are Omalauncher's, dated
 when they were uploaded to Play.
 
+## 2.3.1 (versionCode 34) – 2026-11-05
+
+- Fixes the launcher crashing on every start in 2.3.0.
+
 ## 2.3.0 (versionCode 33) – 2026-11-05
 
 - An ssh widget (in the store's examples): the phone's address and port, a switch for the SSH server of
