@@ -190,7 +190,9 @@ internal val SINCE =
         // owl 18: AirPods, read and set over their own link, with the Bluetooth permission.
         listOf("android.airpods", "airpods").associateWith { 18 } +
         // owl 18: events in the phone's calendars, only after a tap asks for read access.
-        listOf("android.calendar", "calendar").associateWith { 18 }
+        listOf("android.calendar", "calendar").associateWith { 18 } +
+        // owl 18 (this fork): the launcher's SSH server, read, and switched from a tap.
+        listOf("android.ssh", "ssh").associateWith { 18 }
 
 /** `source x = broadcast("…")`, named like this in [SINCE]; `broadcast` alone is the action that sends one. */
 internal const val BROADCAST_SOURCE = "source … = broadcast(…)"
@@ -333,7 +335,7 @@ val SPEECH_ANYWHERE = setOf("stop", "cancel")
 val ASKS = setOf("location", "calendar", "airpods")
 
 /** Data from the phone and the launcher; device is fixed, system, network and power are polled, the rest update as they change. */
-internal val ANDROID = setOf("battery", "device", "media", "notifications", "volume", "system", "network", "power", "sim", "alarm", "modes", "apps", "agents", "recent", "drawer", "modifiers", "speech", "location", "steps", "usage", "focus", "airpods", "calendar")
+internal val ANDROID = setOf("battery", "device", "media", "notifications", "volume", "system", "network", "power", "sim", "alarm", "modes", "apps", "agents", "recent", "drawer", "modifiers", "speech", "location", "steps", "usage", "focus", "airpods", "calendar", "ssh")
 
 /**
  * permission(...)'s words, each an Android permission a source needs: what android.location and android.steps read stays
@@ -355,6 +357,15 @@ internal class Words(
 
 /** What the store's review lists for a widget that reads or changes AirPods, from the source or airpods(...). */
 internal const val AIRPODS_COMMAND = "read and change the AirPods connected to the phone over Bluetooth, once you allow it"
+
+/** What the store's review lists for a widget that reads the SSH server, from the source. */
+internal const val SSH_READ = "read the launcher's SSH server: whether it's on, its port, the phone's addresses and the keys that may log in"
+
+/** What the store's review lists for a widget that switches the SSH server with ssh(...). */
+internal const val SSH_SWITCH = "turn the launcher's SSH server into Linux on and off"
+
+/** ssh(...)'s words that open the server, which only a tap may: off works anywhere. */
+val SSH_OPENS = setOf("on", "toggle")
 
 /** AirPods' listening modes, as android.airpods' `mode` and `modes` name them. */
 internal val AIRPODS_MODES = setOf("off", "anc", "transparency", "adaptive")
@@ -414,6 +425,8 @@ internal val ACTION_WORDS =
             ),
         // owl 18: where a Browser goes, or how it loads where it is.
         "web" to setOf("back", "forward", "reload", "stop").let { Words(it, "web takes ${it.joinToString()}") },
+        // The launcher's SSH server, as its switch in settings › linux › ssh.
+        "ssh" to setOf("on", "off", "toggle").let { Words(it, "ssh takes ${it.joinToString()}; the server's state is in source x = android.ssh") },
         // A listening mode, the next one, or a setting: on and off ones turn over without a value.
         "airpods" to
             Words(

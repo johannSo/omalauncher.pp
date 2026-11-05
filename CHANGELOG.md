@@ -4,6 +4,13 @@ The most important changes in each release. From 1.0.0 on they're OmaLauncher++'
 dated when they were released on GitHub. The ones before are Omalauncher's, dated
 when they were uploaded to Play.
 
+## Unreleased
+
+- An ssh widget (in the store's examples): the phone's address and port, a switch for the SSH server of
+  settings › linux › ssh, and who's logged in; tap it for every address, sftp and scp commands, and the keys.
+  Widgets read the server with `android.ssh` and switch it with `ssh("toggle")`, only from a tap;
+  `launcher("ssh")` opens its settings.
+
 ## 2.2.0 (versionCode 32) – 2026-11-05
 
 - Omalauncher 0.19.0 is merged in, with owl 18: Browser tiles (a web page in a tile, `web(...)` to steer it), a

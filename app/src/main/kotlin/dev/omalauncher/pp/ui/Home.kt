@@ -175,6 +175,7 @@ fun HomeScreen(
                 "jobs" -> state.show(SettingsPage.Jobs)
                 "store" -> state.show(SettingsPage.Store)
                 "linux" -> state.show(SettingsPage.Linux)
+                "ssh" -> state.show(SettingsPage.Ssh)
                 "focus" -> state.show(SettingsPage.Focus)
                 "drawer" -> state.open()
                 "settings" -> state.show()

@@ -106,6 +106,7 @@ import dev.omalauncher.pp.widgets.runtime.Modes
 import dev.omalauncher.pp.widgets.runtime.Notifications
 import dev.omalauncher.pp.widgets.runtime.Services
 import dev.omalauncher.pp.widgets.runtime.Sim
+import dev.omalauncher.pp.widgets.runtime.SshSource
 import dev.omalauncher.pp.widgets.runtime.Steps
 import dev.omalauncher.pp.widgets.runtime.Streams
 import dev.omalauncher.pp.widgets.runtime.SystemPanels
@@ -201,6 +202,7 @@ class WidgetServices(
     private val panels = SystemPanels(context)
     private val location = Location(context)
     private val steps = Steps(context)
+    private val sshSource = SshSource(context, runtime.ssh)
 
     /** Opens launcher screens ("style" or "themes", "agents", "drawer"); set by the UI. */
     var launcherAction: ((String) -> Unit)? = null
@@ -256,6 +258,7 @@ class WidgetServices(
             "steps" -> steps.value()
             "usage" -> runtime.focus.usageValue()
             "focus" -> runtime.focus.focusValue()
+            "ssh" -> sshSource.value()
             else -> throw WidgetError("unknown android source $name")
         }
 
@@ -284,6 +287,7 @@ class WidgetServices(
             "modifiers" -> snapshotFlow { modifiers() }
             "usage" -> runtime.focus.usageUpdates()
             "focus" -> snapshotFlow { runtime.focus.focusValue() }
+            "ssh" -> sshSource.updates()
             // Linux's state is a flow of its own, not Compose state: a change of its word starts the drawer's anew.
             "drawer" -> runtime.bootstrap.state.map(::linuxWord).distinctUntilChanged().flatMapLatest { snapshotFlow { drawer() } }
                 // The first at once, then the latest at most every DRAWER_EVERY_MS.
@@ -791,6 +795,8 @@ class WidgetServices(
             "privateSpace" -> privateSpace(arg)
             "permission" -> WidgetPermissions.request(context, arg)
             "focus" -> runtime.focus.act(arg, args.getOrNull(1))
+            // The server settings › linux › ssh switches; turning it on without Linux up opens settings › linux.
+            "ssh" -> sshSource.act(arg) { launcherAction?.invoke("linux") ?: runtime.openSettings(SettingsPage.Linux) }
         }
         // Anything the action changed should show up without waiting for the next interval.
         scope.launch {

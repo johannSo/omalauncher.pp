@@ -932,6 +932,7 @@ class Compiler private constructor(
                 if (e.name == "usage") commands += "read how long you used each app today"
                 if (e.name == "calendar") commands += "read events in the phone's calendars, once you allow it"
                 if (e.name == "airpods") commands += AIRPODS_COMMAND
+                if (e.name == "ssh") commands += SSH_READ
                 Global.Source(d.name, "android.${e.name}", null, (every ?: 60.0).coerceAtLeast(1.0), false, 0)
             }
             else -> fail("a source is cmd(\"...\"), stream(\"...\"), http(\"...\"), ws(\"...\"), file(\"...\"), broadcast(\"...\"), clock, external, or android.${ANDROID.joinToString("/")}", e.pos)
@@ -1491,6 +1492,14 @@ class Compiler private constructor(
                     if (TriggerKind.entries.any { it.word == handlerName }) fail("permission(...) works in onTap, not in a trigger: the user asks for it", call.pos)
                 }
                 if (call.name == "airpods") commands += AIRPODS_COMMAND
+                if (call.name == "ssh") {
+                    commands += SSH_SWITCH
+                    // Opening the phone to the network only for a touch, never on a timer or a fetched value; closing it anywhere.
+                    val word = (args[0].const as? Str)?.v
+                    if (TriggerKind.entries.any { it.word == handlerName } && word !in setOf("off")) {
+                        fail("ssh(\"${word ?: "…"}\") works in onTap, not in a trigger: the server opens only when you tap; ssh(\"off\") works anywhere", call.pos)
+                    }
+                }
                 if (call.name in ASKS && (args.getOrNull(0)?.const as? Str)?.v == "request") {
                     val ask = "${call.name}(\"request\")"
                     // Asking for what nothing reads: what it allows is only in the source.

@@ -48,6 +48,7 @@ import dev.omalauncher.pp.widgets.lang.TRUE
 import dev.omalauncher.pp.widgets.lang.FALSE
 import dev.omalauncher.pp.widgets.lang.Program
 import dev.omalauncher.pp.widgets.lang.SPEECH_ANYWHERE
+import dev.omalauncher.pp.widgets.lang.SSH_OPENS
 import dev.omalauncher.pp.widgets.lang.Sprite
 import dev.omalauncher.pp.widgets.lang.Str
 import dev.omalauncher.pp.widgets.lang.text
@@ -605,6 +606,8 @@ class WidgetInstance(
         if (name == "pickImages" && inTrigger) return report("pickImages() works in onTap, not in a trigger")
         // Android's dialog only for a touch, never on a timer or a fetched value.
         if (name == "permission" && inTrigger) return report("permission(...) works in onTap, not in a trigger")
+        // The SSH server opens only for a touch, never on a timer or a fetched value; it closes from anywhere.
+        if (name == "ssh" && inTrigger && key in SSH_OPENS) return report("ssh(\"$key\") works in onTap, not in a trigger")
         if (name in ASKS && key == "request" && inTrigger) return report("$name(\"request\") works in onTap, not in a trigger")
         // The microphone, like the keys, only from a touch; stopping it from anywhere.
         if (name == "speech" && inTrigger && key !in SPEECH_ANYWHERE) return report("speech(\"$key\") works in onTap, not in a trigger")

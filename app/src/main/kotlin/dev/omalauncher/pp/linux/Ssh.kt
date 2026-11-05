@@ -73,8 +73,9 @@ class Ssh(
 
     val shares = LanShares()
 
-    /** Linux is up; sshd only runs then. */
-    private var linux = false
+    /** Linux is up; sshd only runs then. Compose state, so widgets' android.ssh sees it change. */
+    var linux by mutableStateOf(false)
+        private set
     private var supervisor: Job? = null
 
     @Volatile private var process: Process? = null

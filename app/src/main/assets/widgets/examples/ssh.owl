@@ -1,0 +1,254 @@
+widget "ssh" {
+  size: 3x2
+  minSize: 1x1
+
+  meta { owl: 18; description: "The launcher's SSH server at a glance: the phone's address and port, a switch to turn it on and off, and who's logged in. Tap the tile for every address, sftp and scp, and the keys."; version: "1.0"; license: "MIT"; category: "system" }
+
+  // The SSH server of settings › linux › ssh: the switch below is the same one, so it starts with Linux while it's on.
+  source s = android.ssh
+  // Who's logged in: every login's shell carries SSH_CONNECTION. Base tools only, and null without Linux.
+  source sessions = cmd("""
+    grep -las SSH_CONNECTION= /proc/[0-9]*/environ | while read -r e; do
+      p=$(echo "$e" | cut -d/ -f3)
+      c=$(tr '\0' '\n' < "$e" 2>/dev/null | grep -m1 '^SSH_CONNECTION=' | cut -d= -f2)
+      [ -n "$c" ] && echo "$p $c"
+    done | sort -n | awk '!seen[$2 " " $3]++' | while read -r p ip port rest; do
+      t=$(ps -o etimes= -p "$p" 2>/dev/null | tr -d ' ')
+      [ -n "$t" ] || t=0
+      printf '{"ip":"%s","port":%s,"secs":%s}\n' "$ip" "$port" "$t"
+    done | awk 'BEGIN { printf "[" } { printf "%s%s", (NR > 1 ? "," : ""), $0 } END { print "]" }'
+  """) every 5s json optional
+
+  let status = s.status ?? "off"
+  let on = status == "on"
+  let busy = status == "starting"
+  let tint = on ? green : busy || status == "waiting" ? yellow : status == "failed" ? red : muted
+  let word = on ? "running" : busy ? "starting" : status == "waiting" ? "waits for linux" : status == "failed" ? "failed" : "stopped"
+  let ip = s.host
+  let port = s.port ?? 8022
+  let user = s.user ?? "root"
+  let sshCmd = s.command ?? "no network"
+  // Only while sshd answers: a session list from before it stopped means nothing.
+  let conns = on ? sessions ?? [] : []
+  let nconn = len(conns)
+  let keys = s.keys ?? []
+  let w = tileWidth ?? 200
+  let h = tileHeight ?? 200
+  let narrow = w < 130
+  let short = h < 130
+
+  onTap: screen()
+
+  component Dot(c, size = 8) {
+    Box { size: size; radius: size / 2; background: c }
+  }
+
+  // The switch's look: on is the switch (enabled), yellow while it's starting.
+  component Knob(isOn, wait, k = 1) {
+    Box {
+      width: 40 * k; height: 22 * k; radius: 11 * k * corners
+      background: wait ? alpha(yellow, 0.5) : isOn ? green : surface
+      border: 1; borderColor: isOn ? green : border
+      animate background: tween(200ms, "ease")
+      align: start
+      Box {
+        size: 16 * k; radius: 8 * k * corners; background: isOn ? background : muted
+        offset: [isOn ? 20 * k : 3 * k, 0]
+        animate offset: spring()
+      }
+    }
+  }
+
+  // A tap switches the server; one that failed starts again rather than going off.
+  component Toggle(k = 1) {
+    Box {
+      onTap: {
+        if status == "failed" {
+          ssh("on")
+        } else {
+          ssh("toggle")
+        }
+        haptic()
+      }
+      Knob { isOn: s.enabled == true; wait: busy; k: k }
+    }
+  }
+
+  component Copyable(t, size = 12) {
+    Box {
+      fill: width; padding: [8, 6]; radius: 6 * corners; background: surface
+      onTap: { copy(t); haptic() }
+      Text { text: t; font: mono; fontSize: size; maxLines: 1 }
+    }
+  }
+
+  component Heading(t) {
+    Text { text: t; style: label; color: accent }
+  }
+
+  if narrow && short {
+    // 1x1: a dot, the port or who's in, and the switch.
+    Column {
+      fill: true; align: center; justify: center; gap: 4
+      Row { gap: 4; align: center
+        Dot { c: tint; size: 8 }
+        Text { text: nconn > 0 ? "${nconn} in" : on ? ":${port}" : "ssh"; style: small; color: nconn > 0 ? accent : muted }
+      }
+      Toggle { k: 0.8 }
+    }
+  } else if narrow {
+    Column {
+      fill: true; align: center; justify: spaceEvenly
+      Row { gap: 4; align: center
+        Dot { c: tint; size: 9 }
+        Text { text: "ssh"; bold: true }
+      }
+      Text { text: ip == null ? "no ip" : last(split(ip, ".")); font: mono; fontSize: 11; align: center; maxLines: 1 }
+      Text { text: ":${port}"; font: mono; fontSize: 11; color: muted; align: center }
+      Toggle { k: 0.8 }
+    }
+  } else if short {
+    // One row: the address and port, and the switch.
+    Row {
+      fill: true; align: center; gap: 8
+      if w >= 200 { Dot { c: tint; size: 10 } }
+      Column { weight: 1; gap: 0
+        Text { text: ip ?? "no network"; font: mono; fontSize: w < 200 ? 12 : 15; bold: true; maxLines: 1 }
+        Text { text: "port ${port} · ${nconn > 0 ? "${nconn} in" : word}"; style: small; color: nconn > 0 ? accent : tint; maxLines: 1 }
+      }
+      Toggle { k: w < 200 ? 0.8 : 1 }
+    }
+  } else {
+    Column {
+      fill: true; gap: 6
+      Row { align: center; gap: 6
+        Dot { c: tint }
+        Text { text: "sshd"; bold: true }
+        Text { text: word; style: small; color: tint; weight: 1; maxLines: 1 }
+        Toggle {}
+      }
+      Column { weight: 1; gap: 2; justify: center
+        Text { text: ip ?? "no network"; font: mono; fontSize: w < 200 ? 15 : 22; bold: true; maxLines: 1 }
+        Text { text: "port ${port} · ${user}"; font: mono; fontSize: 12; color: muted; maxLines: 1 }
+        if w >= 230 && ip != null {
+          Spacer { height: 4 }
+          Copyable { t: sshCmd; size: w < 300 ? 10 : 12 }
+        }
+      }
+      if s.localNetwork == false {
+        Text { text: "allow local network ›"; style: small; color: yellow; maxLines: 1; onTap: launcher("ssh") }
+      } else if status == "failed" {
+        Text { text: s.error ?? "couldn't start"; style: small; color: red; maxLines: 1 }
+      } else if on && len(keys) == 0 && !s.password {
+        Text { text: "no keys yet ›"; style: small; color: yellow; maxLines: 1; onTap: launcher("ssh") }
+      } else {
+        Row { align: center; gap: 6
+          Dot { c: nconn > 0 ? accent : border; size: 6 }
+          Text { text: !on ? "server ${word}" : nconn == 0 ? "no one connected" : nconn == 1 ? "${conns[0].ip} connected" : "${nconn} connected"; style: small; color: nconn > 0 ? accent : muted; weight: 1; maxLines: 1 }
+        }
+      }
+    }
+  }
+
+  screen {
+    title: "ssh"
+    Column {
+      scroll: true; gap: 10; padding: 16
+      Row { align: center; gap: 12
+        Dot { c: tint; size: 14 }
+        Column { weight: 1; gap: 0
+          Text { text: "sshd ${word}"; style: title; color: tint }
+          Text { text: on ? "listening on port ${port}" : status == "waiting" ? "starts as soon as Linux runs" : "not listening"; style: small; color: muted }
+        }
+        Toggle { k: 1.3 }
+      }
+      if status == "failed" {
+        Text { text: "couldn't start: ${s.error ?? "see the log below"}"; color: red }
+      }
+      if s.linux == false && s.enabled != true {
+        Text { text: "Linux isn't running: the switch opens settings › linux to start it."; style: small; color: muted }
+      }
+      if s.localNetwork == false {
+        Box {
+          fill: width; padding: 12; radius: 8 * corners; background: alpha(yellow, 0.12); border: 1; borderColor: alpha(yellow, 0.6)
+          onTap: launcher("ssh")
+          Column { gap: 4
+            Text { text: "Allow the local network"; bold: true; color: yellow }
+            Text { text: "Android keeps the launcher from answering other devices on your network until you allow it, so ssh would time out. Tap to allow it in the server's settings."; style: small; color: yellow }
+          }
+        }
+      }
+
+      Heading { t: "connect from your computer" }
+      if len(s.addresses ?? []) == 0 {
+        Text { text: "the phone has no network address right now: join a Wi-Fi network or turn on the hotspot"; color: muted }
+      }
+      for a, i in s.addresses ?? [] key a.iface + a.host {
+        Column { gap: 4
+          Text { text: "${a.iface}${i == 0 ? " · use this one" : ""}"; style: small; color: i == 0 ? accent : muted }
+          Copyable { t: a.command; size: 14 }
+        }
+      }
+      if ip != null {
+        Text { text: "files"; style: small; color: muted }
+        Copyable { t: "sftp -P ${port} ${user}@${ip}" }
+        Copyable { t: "scp -P ${port} FILE ${user}@${ip}:~/" }
+        Text { text: "host · port · user"; style: small; color: muted }
+        Row { gap: 6
+          Box { weight: 1; Copyable { t: ip } }
+          Box { width: 70; Copyable { t: "${port}" } }
+          Box { width: 70; Copyable { t: user } }
+        }
+        Text { text: "~/.ssh/config on your computer (the address changes with the network)"; style: small; color: muted }
+        Box {
+          fill: width; padding: 10; radius: 6 * corners; background: surface
+          onTap: { copy("Host phone\n  HostName ${ip}\n  Port ${port}\n  User ${user}\n"); haptic() }
+          Text { text: "Host phone\n  HostName ${ip}\n  Port ${port}\n  User ${user}"; font: mono; fontSize: 12 }
+        }
+        Text { text: "tap any box to copy it"; style: small; color: muted }
+      }
+      if s.fingerprint != null {
+        Text { text: "host key, as ssh shows it the first time"; style: small; color: muted }
+        Text { text: s.fingerprint; font: mono; fontSize: 11 }
+      }
+
+      Heading { t: "keys that may log in (${len(keys)})" }
+      if len(keys) == 0 {
+        Text { text: s.password ? "none: logins use root's password" : "none yet: add your computer's public key (cat ~/.ssh/id_ed25519.pub there) in the server's settings"; style: small; color: s.password ? muted : yellow }
+      }
+      for k in keys key k.fingerprint {
+        Row { gap: 8; align: center
+          Dot { c: green; size: 6 }
+          Text { text: k.comment != "" ? k.comment : k.type; font: mono; fontSize: 12; weight: 1; maxLines: 1 }
+        }
+      }
+
+      Heading { t: "sessions (${nconn})" }
+      if nconn == 0 {
+        Text { text: on ? "no one connected" : "the server is off"; color: muted }
+      }
+      for c in conns key "${c.ip}:${c.port}" {
+        Row { gap: 8; align: center
+          Dot { c: accent; size: 8 }
+          Text { text: "${c.ip}:${c.port}"; font: mono; weight: 1; maxLines: 1 }
+          Text { text: fmtDuration(c.secs); color: muted }
+        }
+      }
+
+      Flow { gap: 8
+        // Port, password login, keys (paste or GitHub), sharing Linux's servers.
+        Button { text: "server settings"; onTap: launcher("ssh") }
+        if nconn > 0 {
+          Button { text: "end all sessions"; color: red; onTap: run("pkill -f '^sshd-session'; pkill -f '^sshd: .*@'") }
+        }
+      }
+
+      if len(s.log ?? []) > 0 {
+        Heading { t: "log" }
+        for l in take(reverse(s.log), 8) {
+          Text { text: l; font: mono; fontSize: 10; color: muted }
+        }
+      }
+    }
+  }
+}
