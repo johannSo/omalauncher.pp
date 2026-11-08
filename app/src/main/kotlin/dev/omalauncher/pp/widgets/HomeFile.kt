@@ -6,11 +6,27 @@ sealed interface Tile {
     val cell: Cell?
 }
 
-/** A widget, by its file name in widgets/. */
+/** A widget, by its file name in widgets/, drawn with its own [look]. */
 data class WidgetTile(
     val file: String,
     override val cell: Cell? = null,
+    val look: TileLook = TileLook.DEFAULT,
 ) : Tile
+
+/**
+ * How one widget's tile is drawn, over the style's widgets.*: [opacity] how much its glass covers the wallpaper
+ * (widgets.opacity's, when null), and whether it has an outline at all ([border]); the focused one's shows either way.
+ */
+data class TileLook(
+    val opacity: Double? = null,
+    val border: Boolean = true,
+) {
+    val isDefault get() = this == DEFAULT
+
+    companion object {
+        val DEFAULT = TileLook()
+    }
+}
 
 /** A pinned app, by its key in the file; see [HomeStore]. */
 data class AppTile(
@@ -62,6 +78,8 @@ object HomeFile {
     private const val VERSION_KEY = "version"
     private const val COLUMNS = "columns"
     private const val PAGE = "page"
+    private const val OPACITY = "opacity"
+    private const val BORDER = "border"
 
     /** Columns a file may say its cells are on: more than [dev.omalauncher.pp.theme.Style.COLUMNS] takes, for a newer launcher's. */
     private val COLUMN_RANGE = 1..20
@@ -73,6 +91,7 @@ object HomeFile {
         |# follows edits to it. A tile is { widget = "file.owl" }, { app = "…" }, { folder = "name", apps = [...] }
         |# or { android = "pkg/provider", id = n }, an Android app's widget, added from home's menu on the phone;
         |# at x, y (cells from the top left) and w, h wide and tall; without x and y it takes the first free spot.
+        |# A widget tile may also take opacity = 0..1 (its own widgets.opacity) and border = false (no outline).
         |# A widget file or Android widget left out stays where it is, and a new file goes by its own page:, order: and size:;
         |# an app left out comes off home. An app is a package, "pkg/activity" (with "@profile" for a work
         |# profile's), "linux:<desktop id>" or "owl:<file>".
@@ -133,6 +152,10 @@ object HomeFile {
             }
         }
         if (tile is FolderTile) out["apps"] = tile.apps
+        if (tile is WidgetTile) {
+            tile.look.opacity?.let { out[OPACITY] = it }
+            if (!tile.look.border) out[BORDER] = false
+        }
         return out
     }
 
@@ -200,6 +223,7 @@ object HomeFile {
                 when (kind) {
                     "folder" -> setOf("apps")
                     "android" -> setOf("id")
+                    "widget" -> setOf(OPACITY, BORDER)
                     else -> emptySet()
                 }
         for (k in t.keys) if (k !in known) problems += "$where: $k isn't a $kind tile's"
@@ -210,7 +234,7 @@ object HomeFile {
         }
         val cell = cell(t, kind == "widget" || kind == "android", where, problems)
         return when (kind) {
-            "widget" -> WidgetTile(name, cell)
+            "widget" -> WidgetTile(name, cell, look(t, where, problems))
             "app" -> AppTile(name, cell)
             "android" -> {
                 val id = t["id"]?.let(::whole)
@@ -222,6 +246,22 @@ object HomeFile {
                 FolderTile(name.trim().ifEmpty { null }, apps, cell)
             }
         }
+    }
+
+    private fun look(
+        t: Map<*, *>,
+        where: String,
+        problems: MutableList<String>,
+    ): TileLook {
+        val opacity =
+            t[OPACITY]?.let { v -> (v as? Double)?.takeIf { it in 0.0..1.0 } ?: null.also { problems += "$where: $OPACITY takes a number from 0 (clear) to 1 (solid)" } }
+        val border =
+            when (val v = t[BORDER]) {
+                null -> true
+                is Boolean -> v
+                else -> true.also { problems += "$where: $BORDER takes true or false" }
+            }
+        return TileLook(opacity, border)
     }
 
     private fun cell(

@@ -20,7 +20,7 @@ class HomeFileTest {
                         AndroidTile("com.example/.ClockWidget", 12, Cell(0, 4, 4, 2)),
                     ),
                 ),
-                TilePage(listOf(WidgetTile("60-owl.owl", Cell(0, 0, 6, 3)))),
+                TilePage(listOf(WidgetTile("60-owl.owl", Cell(0, 0, 6, 3), TileLook(opacity = 0.25, border = false)))),
             ),
         )
 
@@ -29,6 +29,17 @@ class HomeFileTest {
         val decoded = HomeFile.decode(Toml.parse(text), 6)
         assertEquals(emptyList<String>(), decoded.problems)
         assertEquals(layout.copy(pages = layout.pages.map { p -> if (p is TilePage) TilePage(p.tiles.map(::unsized)) else p }), decoded.layout)
+    }
+
+    @Test fun widgetLooks() {
+        val text = "version = 1\n[[page]]\ntiles = [ { widget = \"a.owl\", opacity = 0.5 }, { widget = \"b.owl\", border = false }, { widget = \"c.owl\", opacity = 2, border = \"no\" } ]\n"
+        val decoded = HomeFile.decode(Toml.parse(text), 6)
+        val tiles = (decoded.layout.pages.single() as TilePage).tiles.map { (it as WidgetTile).look }
+        assertEquals(listOf(TileLook(0.5, true), TileLook(null, false), TileLook.DEFAULT), tiles)
+        assertEquals(2, decoded.problems.size)
+        // Only what differs from the style is written.
+        val written = Toml.write(HomeFile.encode(emptyMap(), decoded.layout))
+        assertTrue("opacity = 0.5" in written && "border = false" in written && written.split("opacity").size == 2)
     }
 
     /** Apps and folders are one cell, so the file doesn't say their size. */

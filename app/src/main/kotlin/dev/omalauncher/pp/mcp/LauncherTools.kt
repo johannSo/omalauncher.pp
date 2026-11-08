@@ -17,6 +17,7 @@ import dev.omalauncher.pp.widgets.Folder
 import dev.omalauncher.pp.widgets.HomeFile
 import dev.omalauncher.pp.widgets.HomeStore
 import dev.omalauncher.pp.widgets.Shortcut
+import dev.omalauncher.pp.widgets.TileLook
 import dev.omalauncher.pp.widgets.WidgetEngine
 import dev.omalauncher.pp.widgets.WidgetItem
 import dev.omalauncher.pp.widgets.lang.OwlKind
@@ -116,6 +117,26 @@ class LauncherTools(
                 schema(),
                 readOnly = true,
             ) { listPages() },
+            McpTool(
+                "set_widget_look",
+                "Changes how one widget's tile on home is drawn, over the style's widgets.opacity and widgets.border-width: how " +
+                    "see-through its background is, and whether it has an outline. It shows at once, and is kept in " +
+                    "${HomeStore.FILE} as the tile's opacity and border. Give opacity, border or both; what's left out stays.",
+                schema(
+                    "file" to prop("string", "The widget's file, like clock.owl, as list_pages lists it."),
+                    "opacity" to
+                        JSONObject().put("type", JSONArray(listOf("number", "null"))).put(
+                            "description",
+                            "How much its background covers the wallpaper, from 0 (clear: only its content shows) to 1 (solid); null goes back to widgets.opacity.",
+                        ),
+                    "border" to
+                        JSONObject().put("type", JSONArray(listOf("boolean", "null"))).put(
+                            "description",
+                            "false hides its outline (the one in use still shows the focus outline); true or null shows it as the style says.",
+                        ),
+                    required = listOf("file"),
+                ),
+            ) { setWidgetLook(it) },
             McpTool("list_themes", "The Omarchy themes to pick from, which is applied, and which are on the phone already.", schema(), readOnly = true) { listThemes() },
             McpTool("get_theme", "The theme applied now: its colors, its backgrounds and the one shown.", schema(), readOnly = true) { getTheme() },
             McpTool(
@@ -297,7 +318,12 @@ class LauncherTools(
                             items.filterNot { it.isFace }.map { item ->
                                 val tile =
                                     when (item) {
-                                        is WidgetItem -> JSONObject().put("widget", item.key).put("name", item.spec.name)
+                                        is WidgetItem ->
+                                            JSONObject().put("widget", item.key).put("name", item.spec.name).apply {
+                                                val look = engine.home.look(item.key)
+                                                look.opacity?.let { put("opacity", it) }
+                                                if (!look.border) put("border", false)
+                                            }
                                         is Shortcut -> JSONObject().put("app", item.key).put("name", runtime.shortcutLabel(item))
                                         is Folder -> JSONObject().put("folder", item.name.orEmpty()).put("apps", JSONArray(item.apps.map { runtime.shortcutLabel(it) }))
                                         is AndroidWidget -> JSONObject().put("android", item.provider.flattenToShortString()).put("id", item.id).put("name", item.label)
@@ -310,6 +336,41 @@ class LauncherTools(
                 }
             JSONObject().put("shown", engine.activePage).put("columns", engine.layout.columns).put("pages", JSONArray(pages))
         }
+
+    private fun setWidgetLook(args: JSONObject): JSONObject {
+        val name = LauncherChecks.widgetFile(args.getString("file"))
+        if (!args.has("opacity") && !args.has("border")) throw ToolError("give opacity, border or both")
+        val opacity =
+            if (args.has("opacity") && !args.isNull("opacity")) {
+                val v = args.get("opacity")
+                (v as? Number)?.toDouble()?.takeIf { it in 0.0..1.0 } ?: throw ToolError("opacity takes a number from 0 (clear) to 1 (solid), or null")
+            } else {
+                null
+            }
+        val border =
+            if (args.has("border") && !args.isNull("border")) {
+                args.get("border") as? Boolean ?: throw ToolError("border takes true, false or null")
+            } else {
+                null
+            }
+        return main {
+            val spec = engine.specs.firstOrNull { it.file.name == name } ?: throw ToolError("$name: no such widget; list_pages lists home's")
+            if (!engine.onHome(spec)) throw ToolError("$name isn't on home, so it has no tile")
+            if (spec.isFace) throw ToolError("$name is a face: it draws straight on the wallpaper, with no tile background or outline")
+            val old = engine.home.look(name)
+            val look =
+                TileLook(
+                    opacity = if (args.has("opacity")) opacity else old.opacity,
+                    border = if (args.has("border")) border ?: true else old.border,
+                )
+            engine.home.setLook(name, look)
+            JSONObject()
+                .put("file", name)
+                .put("opacity", look.opacity ?: JSONObject.NULL)
+                .put("border", look.border)
+                .apply { if (look.opacity == null) put("note", "opacity follows widgets.opacity (${LauncherChecks.json(runtime.style.style[Style.TILE_OPACITY])})") }
+        }
+    }
 
     private fun listThemes(): JSONObject =
         main {

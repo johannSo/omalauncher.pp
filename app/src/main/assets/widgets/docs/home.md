@@ -18,7 +18,7 @@ face = "terminal.owl"
 
 [[page]]                  # page 1, where home opens: the first page of tiles
 tiles = [
-  { widget = "50-memory.owl", x = 0, y = 0, w = 3, h = 4 },
+  { widget = "50-memory.owl", x = 0, y = 0, w = 3, h = 4, opacity = 0.3, border = false },
   { app = "org.mozilla.firefox", x = 3, y = 0 },
   { folder = "Work", x = 4, y = 0, apps = ["com.slack", "linux:foot"] },
   { widget = "20-fetch.owl" },   # no x and y: the first free spot, at its size:
@@ -31,6 +31,11 @@ tiles = [
 - `x` and `y` count cells from the top left; `w` and `h` are a widget's size.
   Apps and folders are one cell. A tile off the grid or on top of one before it
   takes the first free spot instead.
+- A widget tile can have its own look: `opacity` from 0 (clear, only what it
+  draws shows) to 1 (solid) in place of the style's `widgets.opacity`, and
+  `border = false` for no outline (the one in use still shows the focus outline).
+  Left out, it looks as the style says. Faces have neither: they draw straight
+  on the wallpaper. The MCP tool `set_widget_look` changes them for one widget.
 - `app` is an Android package (`"org.mozilla.firefox"`), an activity with its
   profile when there's more than one (`"com.android.chrome/.Main@10"`),
   `"linux:<desktop id>"`, or `"owl:<file>"` for an owl app. Adding one pins it;

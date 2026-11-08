@@ -58,6 +58,8 @@ internal class Previews(
         widthPx: Int,
         heightPx: Int,
         out: File,
+        /** Its own look on home, so the picture is the tile as it shows. */
+        look: TileLook = TileLook.DEFAULT,
         ready: suspend () -> Unit,
     ): Boolean =
         draw(spec, widthPx, heightPx, out, ready) {
@@ -72,6 +74,7 @@ internal class Previews(
                 install = null,
                 onInstall = {},
                 onFix = {},
+                look = look,
             )
         }
 

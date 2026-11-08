@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import dev.omalauncher.pp.R
 import dev.omalauncher.pp.linux.LinuxState
+import dev.omalauncher.pp.widgets.TileLook
 import dev.omalauncher.pp.widgets.WidgetSpec
 import dev.omalauncher.pp.widgets.lang.text
 import dev.omalauncher.pp.widgets.render.WidgetContent
@@ -59,6 +60,8 @@ internal fun WidgetTile(
     onInstallLinux: () -> Unit = {},
     /** How much of a face the soft keyboard covers while one of its fields has it, in pixels: its `screenInset` then. */
     keyboard: Float = 0f,
+    /** Its own opacity and outline, from layout.toml. */
+    look: TileLook = TileLook.DEFAULT,
 ) {
     // A face draws straight on the wallpaper, without a tile's frame; selected, it still shows the focus border.
     val bare = spec.isFace && waitsForLinux == null && instance != null && needs.isEmpty()
@@ -66,7 +69,7 @@ internal fun WidgetTile(
         modifier
             .then(
                 when {
-                    !bare -> Modifier.tile(focused)
+                    !bare -> Modifier.tile(focused, look)
                     focused -> Modifier.frame(LauncherStyle.focusWidth, LauncherStyle.focusBorder)
                     else -> Modifier
                 },

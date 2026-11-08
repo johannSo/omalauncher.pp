@@ -737,6 +737,7 @@ private fun HomeTile(
                 // has none, being the whole screen; its screenInset grows by what the keyboard covers instead.
                 focused = highlighted || (typing && !item.isFace),
                 keyboard = if (typing && item.isFace) terminals.cut else 0f,
+                look = engine.home.look(item.key),
                 modifier =
                     if (typing && item.isFace) {
                         tile.onGloballyPositioned { terminals.tile = it.boundsInWindow().translate(0f, terminals.lift) }

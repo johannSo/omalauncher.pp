@@ -773,7 +773,7 @@ class WidgetEngine(
         var screen: String? = null
         val ok =
             try {
-                previews.render(spec, inst, shownCells(cells), w, h, File(previewDir, "$name.png"), loaded).also {
+                previews.render(spec, inst, shownCells(cells), w, h, File(previewDir, "$name.png"), home.look(name), loaded).also {
                     // The screen { } as it opens over home, at the phone's size.
                     if (it && program.screen != null) {
                         val dm = context.resources.displayMetrics
@@ -877,7 +877,7 @@ class WidgetEngine(
                     if (spec.kind == OwlKind.App || spec.kind == OwlKind.Panel || spec.kind == OwlKind.Keybar) {
                         previews.renderScreen(spec, inst, dm.widthPixels, dm.heightPixels, out, ready)
                     } else {
-                        previews.render(spec, inst, shownCells(cells), w, h, out, ready)
+                        previews.render(spec, inst, shownCells(cells), w, h, out, ready = ready)
                     }
                 }
             }
@@ -1130,7 +1130,7 @@ class WidgetEngine(
                 "docs/home.md in the widgets folder explains it.\n\n" +
                 "The launcher is also an MCP server, `omalauncher-mcp` (already added to Claude Code, Codex, OpenCode, Copilot, " +
                 "Crush and Cursor's configs), with tools that check a change before applying it: get_home_layout, " +
-                "set_home_layout and list_pages; list_widgets, read_widget, write_widget and check_owl; list_themes, get_theme " +
+                "set_home_layout, list_pages and set_widget_look (one widget's own opacity and outline); list_widgets, read_widget, write_widget and check_owl; list_themes, get_theme " +
                 "and set_theme; get_style and set_style_value; list_apps and open_app; show_toast. Prefer them to editing " +
                 "the files when they're available.\n" +
                 "Scheduled agent jobs (a prompt run by a coding agent, headless, daily at 07:00 or on any schedule) are " +

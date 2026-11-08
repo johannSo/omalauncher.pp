@@ -1,6 +1,7 @@
 package dev.omalauncher.pp.widgets
 
 import android.content.Context
+import androidx.compose.runtime.mutableStateMapOf
 import dev.omalauncher.pp.LauncherData
 import dev.omalauncher.pp.Runtime
 import dev.omalauncher.pp.widgets.lang.sha256Hex
@@ -32,6 +33,21 @@ class HomeStore(
             table = HomeFile.encode(table, snapshot())
             Toml.write(table, HomeFile.HEADER)
         }
+
+    /** Widgets' own looks, by file name, as the file gives them; one not in here is drawn as the style says. */
+    private val looks = mutableStateMapOf<String, TileLook>()
+
+    /** How [file]'s tile is drawn. */
+    fun look(file: String): TileLook = looks[file] ?: TileLook.DEFAULT
+
+    /** Draws [file]'s tile with [look] from now on, and writes it to the file. */
+    fun setLook(
+        file: String,
+        look: TileLook,
+    ) {
+        if (look.isDefault) looks.remove(file) else looks[file] = look
+        changed()
+    }
 
     /** What errors.txt says, for home to show. */
     val errors get() = synced.errors
@@ -65,6 +81,8 @@ class HomeStore(
             // The saved layout stays, and the file follows it.
             hash(text) == prefs.getString(WRITTEN, null) -> {
                 table = runCatching { Toml.parse(text) }.getOrDefault(emptyMap())
+                // Looks are only in the file: they come from it either way.
+                if ("page" in table) takeLooks(HomeFile.decode(table, layout.columns).layout, replace = true)
                 synced.setProblems(emptyList())
                 synced.save()
             }
@@ -125,7 +143,7 @@ class HomeStore(
                     .map { item ->
                         val cell = layout.cell(item.key)
                         when (item) {
-                            is WidgetItem -> WidgetTile(item.key, cell)
+                            is WidgetItem -> WidgetTile(item.key, cell, look(item.key))
                             is Shortcut -> AppTile(fileKey(item.key), cell)
                             is Folder -> FolderTile(item.name, item.apps.map { fileKey(it.key) }, cell)
                             is AndroidWidget -> AndroidTile(item.provider.flattenToShortString(), item.id, cell)
@@ -262,10 +280,28 @@ class HomeStore(
             shortcuts.replace(apps, folders)
             for ((key, cell) in cells) if (cell == null) layout.clearCell(key) else layout.set(key, cell)
             layout.save()
+            // Widgets named get the look the file gives (none: the style's); those left out keep theirs, as their place.
+            takeLooks(file, replace = false, only = widgets.map { it.first.file.name }.toSet())
         } finally {
             applying = false
         }
         return gone
+    }
+
+    /** The looks of [file]'s widget tiles (of those in [only], if given); [replace] forgets the others' first. */
+    private fun takeLooks(
+        file: HomeLayout,
+        replace: Boolean,
+        only: Set<String>? = null,
+    ) {
+        if (replace) looks.clear()
+        for (page in file.pages) {
+            if (page !is TilePage) continue
+            for (tile in page.tiles) {
+                if (tile !is WidgetTile || (only != null && tile.file !in only)) continue
+                if (tile.look.isDefault) looks.remove(tile.file) else looks[tile.file] = tile.look
+            }
+        }
     }
 
     /** [c] from the file's grid of [from] columns on this one's [to]; a tile without a size in the file keeps [size]. */

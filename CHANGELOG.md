@@ -4,6 +4,12 @@ The most important changes in each release. From 1.0.0 on they're OmaLauncher++'
 dated when they were released on GitHub. The ones before are Omalauncher's, dated
 when they were uploaded to Play.
 
+## Unreleased
+
+- Each widget can have its own look: `opacity` (0 clear to 1 solid) and `border = false` on its tile in
+  home's layout.toml, over the style's widgets.opacity and outline. Agents change them with the MCP tool
+  `set_widget_look`.
+
 ## 2.4.0 (versionCode 35) – 2026-11-05
 
 - The widget store has an official tab: the widgets that come with OmaLauncher++, ssh among them, installed straight

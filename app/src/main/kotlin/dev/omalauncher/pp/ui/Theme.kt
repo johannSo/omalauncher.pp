@@ -1,5 +1,6 @@
 package dev.omalauncher.pp.ui
 
+import dev.omalauncher.pp.widgets.TileLook
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
@@ -243,11 +244,19 @@ val ReadingWidth = 640.dp
  * With widgets.frost, the wallpaper under its glass is blurred (only on home, which has a wallpaper behind).
  */
 @Composable
-fun Modifier.tile(focused: Boolean = false): Modifier =
+fun Modifier.tile(
+    focused: Boolean = false,
+    /** A widget's own look (layout.toml), over the style's opacity and outline. */
+    look: TileLook = TileLook.DEFAULT,
+): Modifier =
     frost(if (LauncherStyle.style[Style.TILE_FROST]) Style.TILE_FROST_DP else 0.0) { 16f * LauncherStyle.cornerScale }.frame(
-        if (focused) LauncherStyle.focusWidth else LauncherStyle.borderWidth,
+        when {
+            focused -> LauncherStyle.focusWidth
+            look.border -> LauncherStyle.borderWidth
+            else -> 0.dp
+        },
         if (focused) LauncherStyle.focusBorder else LauncherStyle.tileBorder,
-        Palette.glass,
+        look.opacity?.let { Palette.background.copy(alpha = it.toFloat()) } ?: Palette.glass,
     )
 
 /** The launcher's text style in the theme's foreground color and the user's font. */

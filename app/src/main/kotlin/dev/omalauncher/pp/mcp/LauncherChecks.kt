@@ -81,7 +81,11 @@ object LauncherChecks {
                                 page.tiles.map { tile ->
                                     val out =
                                         when (tile) {
-                                            is WidgetTile -> JSONObject().put("widget", tile.file)
+                                            is WidgetTile ->
+                                                JSONObject().put("widget", tile.file).apply {
+                                                    tile.look.opacity?.let { put("opacity", it) }
+                                                    if (!tile.look.border) put("border", false)
+                                                }
                                             is AppTile -> JSONObject().put("app", tile.app)
                                             is FolderTile -> JSONObject().put("folder", tile.name.orEmpty()).put("apps", JSONArray(tile.apps))
                                             is AndroidTile -> JSONObject().put("android", tile.provider).put("id", tile.id)
