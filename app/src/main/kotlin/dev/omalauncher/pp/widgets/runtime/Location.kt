@@ -122,6 +122,9 @@ class Location(
         if (current == null || f.elapsedRealtimeNanos > current.elapsedRealtimeNanos) fix = f
     }
 
+    /** Granted or taken back in Android's settings while away (the permissions screen, `omalauncher location`). */
+    fun recheck() = WidgetPermissions.recheck()
+
     @OptIn(ExperimentalCoroutinesApi::class)
     fun updates(): Flow<Value> =
         WidgetPermissions.changes

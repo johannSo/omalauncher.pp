@@ -41,6 +41,9 @@ object WidgetPermissions {
 
     private fun bump() = changed.update { it + 1 }
 
+    /** Granted or taken back in Android's settings while away: the sources that need one check again. */
+    fun recheck() = bump()
+
     fun granted(
         context: Context,
         word: String,

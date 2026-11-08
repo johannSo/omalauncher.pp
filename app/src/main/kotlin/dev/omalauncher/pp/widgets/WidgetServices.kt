@@ -48,6 +48,7 @@ import dev.omalauncher.pp.linux.Proot
 import dev.omalauncher.pp.linux.ShellPool
 import dev.omalauncher.pp.linux.ShellResult
 import dev.omalauncher.pp.SecretBox
+import dev.omalauncher.pp.postNotification
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.resume
 import kotlin.concurrent.thread
@@ -115,6 +116,7 @@ import dev.omalauncher.pp.widgets.runtime.WidgetPermissions
 import dev.omalauncher.pp.widgets.runtime.watchFile
 import dev.omalauncher.pp.ui.EmbeddedBrowser
 import dev.omalauncher.pp.widgets.runtime.AirPods
+import dev.omalauncher.pp.widgets.runtime.battery
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -191,7 +193,7 @@ class WidgetServices(
     private val streams = Streams(proot, scope)
 
     /** What's playing on the phone. */
-    private val media = Media(context)
+    val media = Media(context)
     private val notifications = Notifications(context, media, ::profileKind)
     private val volume = Volume(context)
     private val alarm = Alarm(context)
@@ -238,7 +240,7 @@ class WidgetServices(
 
     override fun android(name: String): Value =
         when (name) {
-            "battery" -> battery()
+            "battery" -> battery(context)
             "power" -> power()
             "device" -> device()
             "system" -> system()
@@ -304,7 +306,7 @@ class WidgetServices(
             "battery" ->
                 callbackFlow {
                     // The broadcast is sticky: registering delivers the current state at once.
-                    val receiver = context.registerNotExported(IntentFilter(Intent.ACTION_BATTERY_CHANGED)) { trySend(battery()) }
+                    val receiver = context.registerNotExported(IntentFilter(Intent.ACTION_BATTERY_CHANGED)) { trySend(battery(context)) }
                     awaitClose { context.unregisterReceiver(receiver) }
                 }.distinctUntilChanged()
             else -> null
@@ -647,50 +649,6 @@ class WidgetServices(
                 "updates" to Num((runtime.updates.pending?.count ?: 0).toDouble()),
                 "labels" to bool(LauncherStyle.drawerLabels),
                 "iconSize" to Num(LauncherStyle.iconScale.toDouble()),
-            ),
-        )
-    }
-
-    /** Android hides the battery from the guest (/sys/class/power_supply), so expose it here. */
-    private fun battery(): Value {
-        val intent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
-        val level = intent?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
-        // Some builds report no scale (0); dividing by it would throw inside the battery receiver.
-        val scale = (intent?.getIntExtra(BatteryManager.EXTRA_SCALE, 100) ?: 100).takeIf { it > 0 } ?: 100
-        val status = intent?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
-        val charging = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL
-        fun extra(name: String) = intent?.getIntExtra(name, -1)?.takeIf { it >= 0 }
-        val health =
-            when (extra(BatteryManager.EXTRA_HEALTH)) {
-                BatteryManager.BATTERY_HEALTH_GOOD -> "good"
-                BatteryManager.BATTERY_HEALTH_OVERHEAT -> "overheating"
-                BatteryManager.BATTERY_HEALTH_DEAD -> "dead"
-                BatteryManager.BATTERY_HEALTH_OVER_VOLTAGE -> "over voltage"
-                BatteryManager.BATTERY_HEALTH_COLD -> "cold"
-                BatteryManager.BATTERY_HEALTH_UNSPECIFIED_FAILURE -> "failing"
-                else -> null
-            }
-        val plugged =
-            when (extra(BatteryManager.EXTRA_PLUGGED)) {
-                BatteryManager.BATTERY_PLUGGED_AC -> "ac"
-                BatteryManager.BATTERY_PLUGGED_USB -> "usb"
-                BatteryManager.BATTERY_PLUGGED_WIRELESS -> "wireless"
-                BatteryManager.BATTERY_PLUGGED_DOCK -> "dock"
-                else -> null
-            }
-        return Obj(
-            mapOf(
-                "level" to Num(if (level >= 0) (level * 100 / scale).toDouble() else 0.0),
-                "charging" to bool(charging),
-                // Plugged in but not charging: full, or held below full to spare the battery.
-                "status" to Str(if (charging) "charging" else if (plugged != null) "plugged in" else "on battery"),
-                // Reported in tenths of a degree and in millivolts.
-                "temp" to (extra(BatteryManager.EXTRA_TEMPERATURE)?.let { Num(it / 10.0) } ?: Null),
-                "voltage" to (extra(BatteryManager.EXTRA_VOLTAGE)?.let { Num(it / 1000.0) } ?: Null),
-                "health" to (health?.let(::Str) ?: Null),
-                "plugged" to (plugged?.let(::Str) ?: Null),
-                "technology" to (intent?.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY)?.takeIf { it.isNotBlank() }?.let(::Str) ?: Null),
-                "cycles" to ((if (Build.VERSION.SDK_INT >= 34) extra(BatteryManager.EXTRA_CYCLE_COUNT) else null)?.let { Num(it.toDouble()) } ?: Null),
             ),
         )
     }
@@ -1169,30 +1127,14 @@ class WidgetServices(
         context.shareText(text)
     }
 
-    private var notificationId = 1000
-
     /** notify(title, text): an Android notification that opens the home screen. Needs the notification permission. */
     private fun notify(
         title: String,
         text: String?,
     ) {
-        val nm = context.getSystemService(NotificationManager::class.java)
-        if (!nm.areNotificationsEnabled()) {
+        if (!context.postNotification(NOTIFY_CHANNEL, context.getString(R.string.widgets_notify_channel), title, text)) {
             Log.w("widgets", "notify: notifications are off for the launcher")
-            return
         }
-        nm.createNotificationChannel(NotificationChannel(NOTIFY_CHANNEL, context.getString(R.string.widgets_notify_channel), NotificationManager.IMPORTANCE_DEFAULT))
-        val open = PendingIntent.getActivity(context, 0, Intent(context, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE)
-        val n =
-            Notification
-                .Builder(context, NOTIFY_CHANNEL)
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle(title)
-                .setContentText(text)
-                .setContentIntent(open)
-                .setAutoCancel(true)
-                .build()
-        nm.notify(notificationId++, n)
     }
 }
 

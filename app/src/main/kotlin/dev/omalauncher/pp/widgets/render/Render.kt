@@ -124,9 +124,11 @@ import dev.omalauncher.pp.ui.frame
 import dev.omalauncher.pp.ui.holdsKeys
 import dev.omalauncher.pp.ui.keyActivated
 import dev.omalauncher.pp.ui.TerminalView
+import dev.omalauncher.pp.ui.BrowserView
 import dev.omalauncher.pp.widgets.lang.Action
 import dev.omalauncher.pp.widgets.lang.Builtins
 import dev.omalauncher.pp.widgets.lang.Env
+import dev.omalauncher.pp.widgets.lang.MAX_FPS
 import dev.omalauncher.pp.widgets.lang.Gradient
 import dev.omalauncher.pp.widgets.lang.Lst
 import dev.omalauncher.pp.widgets.lang.Null
@@ -139,7 +141,6 @@ import dev.omalauncher.pp.widgets.lang.WNode
 import dev.omalauncher.pp.widgets.lang.num
 import dev.omalauncher.pp.widgets.lang.text
 import dev.omalauncher.pp.widgets.runtime.WidgetInstance
-import dev.omalauncher.pp.ui.BrowserView
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
@@ -248,11 +249,6 @@ val LocalLongPressClaim = staticCompositionLocalOf<LongPressClaim?> { null }
 /** Widget text, 13sp as widgets were made for, whatever size the launcher's own text is. */
 internal val WidgetMono get() = Mono.copy(fontSize = 13.sp)
 
-/** Animated widgets' frame rate: on a 120 Hz screen, twice it costs twice the battery for motion that looks the same. */
-private const val WIDGET_FPS = 60
-
-private const val TICK = 1_000_000_000L / WIDGET_FPS
-
 /** The widget's screen { } block, filling [modifier]; `screenWidth` and `screenHeight` follow its size. */
 @Composable
 fun WidgetScreen(
@@ -293,7 +289,8 @@ private fun ScreenNodes(
  * A frame clock for widgets that read `time`, only while they're on screen ([covered] is false)
  * and something still reads it: a `time` under an `if` that's false, like a backdrop drawn only
  * while music plays, stops it after a few frames, and the next read starts it again. At most
- * [WIDGET_FPS] frames a second, whatever the screen's rate.
+ * [MAX_FPS] frames a second, whatever the screen's rate (on a 120 Hz screen, twice it costs twice the battery for
+ * motion that looks the same), or fewer as the widget's `fps:` asks.
  */
 @Composable
 private fun FrameClock(
@@ -313,10 +310,12 @@ private fun FrameClock(
                 inst.awaitTimeRead(start)
                 unread = 0
             }
+            // As often as the widget's fps: asks for now, at most MAX_FPS.
+            val tick = (1e9 / inst.frameRate()).toLong()
             withFrameNanos { now ->
-                if (now < due - TICK / 4) return@withFrameNanos
+                if (now < due - tick / 4) return@withFrameNanos
                 // Behind by more than a tick (covered, or a long frame): the next one is a tick from now.
-                due = if (now - due > TICK) now + TICK else due + TICK
+                due = if (now - due > tick) now + tick else due + tick
                 // Widgets that draw slowly get half the frame rate instead of stalling the home screen.
                 if (inst.slow && frame++ % 2 != 0L) return@withFrameNanos
                 unread = if (inst.timeRead) 0 else unread + 1

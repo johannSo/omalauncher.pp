@@ -149,11 +149,14 @@ class SystemUpdates(
     /** Upgrades everything: a full pacman sync, then mise's tools. Returns whether it worked. */
     suspend fun updateAll(): Boolean {
         if (job is JobState.Working) return false
+        // mise's too, as agents install and remove with it: mise's first, as agent jobs never take pacman's.
         job = JobState.Working(R.string.linux_job_waiting, emptyList())
         val (ok, _) =
-            pacman.lock.withLock {
-                beforeUpdate { job = it }
-                proot.trackedJob(R.string.linux_job_updating, UPDATE_SCRIPT) { job = it }
+            agents.lock.withLock {
+                pacman.lock.withLock {
+                    beforeUpdate { job = it }
+                    proot.trackedJob(R.string.linux_job_updating, UPDATE_SCRIPT) { job = it }
+                }
             }
         // Agents may have changed, and what's left to update is worth knowing either way.
         withContext(Dispatchers.IO) { agents.load() }

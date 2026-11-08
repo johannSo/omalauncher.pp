@@ -58,6 +58,8 @@ enum class SettingsPage {
     Snapshots,
     /** Scheduled agent jobs, from the agents screen. */
     Jobs,
+    /** Every permission, to turn on or off. */
+    Permissions,
 }
 
 /** Opens [page] over the ones in [stack]; one that's already open comes back to the top, closing what's over it. */
@@ -135,6 +137,7 @@ private fun SettingsPage(
                 onHiddenApps = { stack.push(SettingsPage.HiddenApps) },
                 onQuickTiles = { stack.push(SettingsPage.QuickTiles) },
                 onFocus = { stack.push(SettingsPage.Focus) },
+                onPermissions = { stack.push(SettingsPage.Permissions) },
             )
         SettingsPage.Style -> StyleScreen(runtime, onDismiss = close, onBrowse = { stack.push(SettingsPage.Themes) }, onAgent = ::agent)
         SettingsPage.Pages -> {
@@ -190,5 +193,6 @@ private fun SettingsPage(
         SettingsPage.Focus -> dev.omalauncher.pp.focus.FocusScreen(runtime, onDismiss = close)
         SettingsPage.Snapshots -> SnapshotsScreen(runtime, onDismiss = close)
         SettingsPage.Jobs -> JobsScreen(runtime, onDismiss = close)
+        SettingsPage.Permissions -> PermissionsScreen(runtime, onDismiss = close)
     }
 }

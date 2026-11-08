@@ -73,6 +73,9 @@ import dev.omalauncher.pp.widgets.app
 import dev.omalauncher.pp.widgets.lang.Program
 import dev.omalauncher.pp.widgets.runtime.Dictation
 import dev.omalauncher.pp.widgets.runtime.PhoneCalendar
+import dev.omalauncher.pp.linux.LinuxDns
+import dev.omalauncher.pp.linux.PhoneBridge
+import dev.omalauncher.pp.widgets.runtime.Location
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -122,7 +125,7 @@ class Runtime(
     private val openBridge = OpenBridge(context, proot, onOpenFiles = ::openFiles, onOpenVoice = ::openVoice, onEdit = ::edit, onMcp = { mcp.serve(it) })
     private val mcp = McpBridge(context, proot, this)
     val agents: AgentStore =
-        AgentStore(proot) {
+        AgentStore(proot, text = { id, arg -> context.getString(id, arg) }) {
             syncGuest()
             if (linux) scope.launch(Dispatchers.IO) { mcp.register(agents.installed) }
         }
@@ -138,14 +141,30 @@ class Runtime(
     /** Widgets' speech(...) and android.speech. */
     val dictation = Dictation(context)
 
+    /** The phone's rough location for `omalauncher location`, as widgets' android.location reads it. */
+    val location = Location(context)
+
     /** Widgets' android.calendar, calendar("request") and calendar("open"). */
     val calendar = PhoneCalendar(context)
+
+    /** The phone's folders the user let Linux reach: in Files, and through `omalauncher`. */
+    val phoneFolders = PhoneFolders(context)
+
+    /** `omalauncher` in the guest (and `phone`, its old name): location, calendar and AirPods for agents, as far as widgets were allowed them; the phone folders. */
+    private val phoneBridge by lazy { PhoneBridge(context, proot, location, calendar, { widgets.airpods }, phoneFolders, scope) }
 
     /** The voice screen's replies, in the phone's voice. */
     val speaker = Speaker(context)
 
     /** A spoken conversation with a coding agent: the voice screen's (VoiceActivity). */
-    val voice by lazy { VoiceSession(context, proot, agents, speaker) }
+    private val voiceSession = lazy { VoiceSession(context, proot, agents, speaker) }
+    val voice by voiceSession
+
+    init {
+        // Not started just for this: a Voice that never ran has nothing to stop.
+        agents.release = { agent -> voiceSession.isInitialized() && voice.release(agent.bin) }
+    }
+
     /** Snapshots of the rootfs to roll back to; one is taken before each system update. */
     val snapshots: Snapshots =
         Snapshots(context, proot, style, pacman) {
@@ -157,6 +176,9 @@ class Runtime(
 
     /** The SSH server into Linux and its local servers on the LAN; settings › linux › ssh. */
     val ssh = Ssh(context, proot, pacman)
+
+    /** The guest's resolv.conf, on the phone's DNS servers while Linux is up. */
+    private val dns = LinuxDns(context, proot.rootfs)
 
     /** The launcher's own provided files (default widgets, their docs); see [Provisioner]. */
     private val launcherFiles = Provisioner(proot.filesDir, LauncherData.LAUNCHER_MANIFEST, listOf(widgets::managed, style::managed, { jobs.managed() }))
@@ -171,6 +193,7 @@ class Runtime(
                 { bundledIcons(context, proot.home) },
                 openBridge::managed,
                 notifications::managed,
+                { phoneBridge.managed() },
                 proot::managed,
                 pacman::managed,
                 agents::managed,
@@ -475,6 +498,8 @@ class Runtime(
                 server.start()
                 proot.procShim.start()
                 openBridge.start()
+                phoneBridge.start()
+                dns.start()
             }
         } else {
             // Linux installed again: its new home has no foot-font.ini yet.

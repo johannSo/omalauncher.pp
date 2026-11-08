@@ -152,6 +152,9 @@ class WidgetEngine(
     /** android.airpods and airpods(...), which ask the activity in front for Bluetooth. */
     val airpods get() = services.airpods
 
+    /** android.media, and android.modes' Do Not Disturb switch: both need notification access. */
+    val media get() = services.media
+
     /** The store's widgets, and its apps. */
     val market = Market(this, OwlKind.Widget)
     val faceMarket = Market(this, OwlKind.Face)
@@ -1110,7 +1113,15 @@ class WidgetEngine(
 
         private const val AGENT_POINTER =
             "# OmaLauncher++\n\nThis Arch system runs inside an Android launcher, OmaLauncher++ (a fork of Omalauncher); its source is at " +
-                "https://github.com/johannSo/omalauncher.pp, should you need to understand how the launcher works. " +
+                "https://github.com/johannSo/omalauncher.pp, should you need to understand how the launcher works.\n\n" +
+                "It's Arch Linux ARM under proot, not a booted system: you are root already (no sudo needed), and there is " +
+                "no systemd (systemctl, services and timers don't work), no cron, no Docker and no kernel modules. Install " +
+                "packages with pacman or yay, command-line tools with mise. /sdcard is the phone's own storage, but it shows only " +
+                "the files Linux put there itself: save files for the user's other apps in /sdcard/Download or /sdcard/Documents " +
+                "(pictures in /sdcard/Pictures). The user's other files are in the phone folders they let Linux reach, which have " +
+                "no path: `omalauncher folders` lists them, `omalauncher ls`, `get` and `put` list and copy files in and out, and " +
+                "`omalauncher pick` lets the user choose any file on the phone. xdg-open opens http(s) links in Android's browser; `omarchy-edit <file>` opens a file in the " +
+                "launcher's editor and `omarchy-files [folder]` its file manager; GUI apps (Wayland) open as windows on the launcher.\n\n" +
                 "Home-screen widgets are `.owl` files in " +
                 "~/$GUEST_DIR, written in a small declarative language documented in README.md there (and docs/ next to it); so are apps for the " +
                 "app drawer (`app \"name\" { }`) and panels that swiping up or down on home opens (`panel \"name\" { }`, picked with " +
@@ -1120,7 +1131,7 @@ class WidgetEngine(
                 "and .stock-keybar.owl the bar as shipped. " +
                 "Saved files show up on the phone within seconds. After saving, run `owl-check <file>`: it prints the errors " +
                 "and the path of a PNG of the tile or view, drawn with live data; look at it to check the layout. " +
-                "examples/ holds more widgets to learn from or move up to use. Scripts, cron jobs and hooks can set a running " +
+                "examples/ holds more widgets to learn from or move up to use. Scripts and hooks can set a running " +
                 "widget's state or refresh it with `owl-send <file> set <state> <value>` and `owl-send <file> refresh`.\n\n" +
                 "The launcher's look (theme, background, tile spacing and borders, corners, the system bars' colors, the " +
                 "terminals' font) is ~/${StyleStore.GUEST_DIR}/${StyleStore.FILE}; ${StyleStore.DEFAULTS} next to it lists every " +
@@ -1135,6 +1146,11 @@ class WidgetEngine(
                 "the files when they're available.\n" +
                 "Scheduled agent jobs (a prompt run by a coding agent, headless, daily at 07:00 or on any schedule) are " +
                 "~/${Jobs.GUEST_DIR}/${JobsFile.NAME}; README.md next to it explains the file, the permissions a job runs " +
-                "with, and where each job's output and status go (status.json there is what widgets read).\n"
+                "with, and where each job's output and status go (status.json there is what widgets read).\n\n" +
+                "The phone's approximate location, its calendar, the AirPods connected to it and its battery are `omalauncher location`, " +
+                "`omalauncher calendar [days]`, `omalauncher airpods` and `omalauncher battery` (JSON; `omalauncher --help` says more), where the " +
+                "launcher was allowed them. `omalauncher notify <title> [text]` puts a notification on the phone, to tell the user something " +
+                "they should know while away, such as a long task being done; `omalauncher share <file>...` opens Android's share sheet for " +
+                "files, to send them on with an app the user picks.\n"
     }
 }
