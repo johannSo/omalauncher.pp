@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,7 +64,7 @@ fun HomeMenu(
     val engine = runtime.widgets
     val agent = runtime.agents.default
     // These need Linux; without it they open its install sheet.
-    val linux = runtime.bootstrap.state.collectAsState().value == LinuxState.Installed
+    val linux = linuxPhase(runtime) == LinuxPhase.Installed
     val scope = rememberCoroutineScope()
 
     /** Recolors right away, then applies the full theme: its first background, like omarchy-theme-set, and the guest's configs. */

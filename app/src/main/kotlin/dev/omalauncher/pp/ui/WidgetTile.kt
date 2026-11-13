@@ -56,7 +56,7 @@ internal fun WidgetTile(
     onInstall: () -> Unit,
     onFix: (String) -> Unit,
     /** Where Linux stands, if the widget needs it and it isn't running: a placeholder keeps its cells. */
-    waitsForLinux: LinuxState? = null,
+    waitsForLinux: LinuxPhase? = null,
     onInstallLinux: () -> Unit = {},
     /** How much of a face the soft keyboard covers while one of its fields has it, in pixels: its `screenInset` then. */
     keyboard: Float = 0f,
@@ -77,7 +77,7 @@ internal fun WidgetTile(
     ) {
         if (waitsForLinux != null) {
             // While an installed Linux starts up the tile stays empty; it offers an install when there's none, a start when it's shut down.
-            if (waitsForLinux != LinuxState.Checking && waitsForLinux != LinuxState.Installed) {
+            if (waitsForLinux != LinuxPhase.Checking && waitsForLinux != LinuxPhase.Installed) {
                 LinuxPlaceholder(spec.name, waitsForLinux, onInstallLinux)
             }
         } else if (instance != null && needs.isNotEmpty()) {
@@ -122,7 +122,7 @@ internal fun WidgetTile(
 @Composable
 private fun LinuxPlaceholder(
     name: String,
-    linux: LinuxState,
+    linux: LinuxPhase,
     onInstall: () -> Unit,
 ) {
     Column(Modifier.fillMaxSize().padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -138,8 +138,8 @@ private fun LinuxPlaceholder(
         TileButton(
             stringResource(
                 when (linux) {
-                    is LinuxState.Installing -> R.string.home_installing
-                    LinuxState.Off -> R.string.fork_home_start
+                    LinuxPhase.Installing -> R.string.home_installing
+                    LinuxPhase.Off -> R.string.fork_home_start
                     else -> R.string.home_install
                 },
             ),

@@ -46,6 +46,7 @@ import dev.omalauncher.pp.widgets.market.Shared
 import dev.omalauncher.pp.widgets.runtime.WidgetInstance
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -344,6 +345,44 @@ class WidgetEngine(
     ) = layout.setPage(fileName, page)
 
     /**
+     * Home moves to [screen] (a foldable's cover screen or unfolded inner screen, or back): the layout's cells and pages
+     * are that screen's from here on, and every widget is on the page it has there, its file's own `page:` where none was
+     * chosen. No file is compiled again. The unfolded screen, the first time it shows once the widgets have loaded,
+     * starts from the main pages side by side, as home showed them there before (see [seedUnfolded]).
+     */
+    fun show(screen: Screen) {
+        val seeding = screen == Screen.UNFOLDED && loaded && !layout.has(screen)
+        if (seeding) seedUnfoldedScreen()
+        if (layout.screen == screen) {
+            if (seeding) repage()
+            return
+        }
+        layout.show(screen)
+        repage()
+    }
+
+    private fun seedUnfoldedScreen() {
+        val main = itemsByPageOn(Screen.MAIN).values.flatten()
+        val minWidth = main.associate { it.key to it.minSize.first }
+        val seed =
+            seedUnfolded(
+                main.map { Triple(it.key, it.page, layout.cell(it.key, Screen.MAIN)) },
+                layout.columnsOf(Screen.MAIN),
+                layout.columnsOf(Screen.UNFOLDED),
+            ) { minWidth[it] ?: 1 }
+        layout.seed(Screen.UNFOLDED, seed)
+    }
+
+    /** Every widget onto the page the layout has for it on the screen shown, else its file's. */
+    private fun repage() {
+        for (i in specs.indices) {
+            val spec = specs[i]
+            val page = layout.pageOn(spec.file.name, spec.program?.page ?: if (spec.isFace) FACE_PAGE else 1)
+            if (spec.page != page) specs[i] = spec.onPage(page)
+        }
+    }
+
+    /**
      * The user put [item] where it is: an app they pinned, or a widget with a page chosen on the phone (a store add, a
      * share, a drag). A shipped widget is on its file's own `page:` until then.
      */
@@ -395,14 +434,15 @@ class WidgetEngine(
         arrangePages(pages)
     }
 
-    /** Puts [item] on [page]: a widget through its page override, a shortcut in place. */
+    /** Puts [item] on [page] of [screen] (the one shown unless said): a widget through its page override, a shortcut in place. */
     fun moveToPage(
         item: HomeItem,
         page: Int,
+        screen: Screen = layout.screen,
     ) {
         when (item) {
-            is WidgetItem -> placeOnPage(item.key, page)
-            is Shortcut, is Folder -> shortcuts.move(item.key, page)
+            is WidgetItem -> if (screen == layout.screen) placeOnPage(item.key, page) else layout.setPage(item.key, page, screen)
+            is Shortcut, is Folder -> shortcuts.move(item.key, page, screen)
             is AndroidWidget -> androidWidgets.move(item.key, page)
         }
     }
@@ -516,6 +556,17 @@ class WidgetEngine(
     /** Widgets, pinned apps, folders and Android widgets on [page]. Wrappers compare by spec, so unchanged pages skip recomposition. */
     fun itemsOn(page: Int): List<HomeItem> = itemsByPage[page].orEmpty()
 
+    /**
+     * Home's items by page as [screen] has them, shown or not: a widget on the page the layout keeps for it there, else its
+     * file's; an app or folder on its page there. For layout.toml, which holds every screen; home draws from [itemsOn].
+     */
+    fun itemsByPageOn(screen: Screen): Map<Int, List<HomeItem>> {
+        if (screen == layout.screen) return itemsByPage
+        val widgets = specs.filter(::onHome).map { spec -> WidgetItem(spec.onPage(layout.pageOn(spec.file.name, spec.program?.page ?: if (spec.isFace) FACE_PAGE else 1, screen))) }
+        // Android widgets have one page on every screen.
+        return (widgets + shortcuts.onGrid(screen) + androidWidgets.items).groupBy { it.page }
+    }
+
     /** Built once per change rather than per call: home asks for every page on each recomposition, and drags ask often. */
     private val itemsByPage by derivedStateOf {
         (specs.filter(::onHome).map(::WidgetItem) + shortcuts.onGrid() + androidWidgets.items).groupBy { it.page }
@@ -604,7 +655,11 @@ class WidgetEngine(
                 }.also { it.startWatching() }
             launch {
                 snapshotFlow { loaded }.first { it }
-                snapshotFlow { runtime.style.style[Style.COLUMNS] }.collect { layout.regrid(it, pages.map(::itemsOn)) }
+                snapshotFlow { runtime.style.style[Style.COLUMNS] }.collect { layout.regrid(it, itemsByPageOn(Screen.MAIN).values.toList()) }
+            }
+            launch {
+                snapshotFlow { loaded }.first { it }
+                snapshotFlow { runtime.style.style[Style.UNFOLDED_COLUMNS] }.collect { layout.regrid(it, itemsByPageOn(Screen.UNFOLDED).values.toList(), Screen.UNFOLDED) }
             }
             // A new phone language, or one picked in settings: files with strings { } or lang() compile anew for it.
             launch { AppLanguage.language.drop(1).collect { changes.trySend(false) } }
@@ -631,6 +686,9 @@ class WidgetEngine(
 
     private fun widgetFiles() = dir.listFiles { f -> (!f.name.startsWith(".") || f.name == STOCK_DRAWER || f.name == STOCK_KEYBAR) && f.extension == "owl" }.orEmpty().sortedBy { it.name }
 
+    /** New files that haven't compiled yet: home placed them at the default size. Main thread. */
+    private val unsized = HashSet<String>()
+
     private suspend fun reload(files: List<File>) {
         // Compiled for another language, a file's texts would stay in it.
         val relanguaged = phoneLanguage() != language
@@ -641,6 +699,16 @@ class WidgetEngine(
             withContext(Dispatchers.IO) {
                 files.map { f -> async { old[f.name]?.takeIf { !relanguaged && it.stamp == f.lastModified() } ?: compile(f, old[f.name]) } }.awaitAll()
             }
+        // A new file that didn't compile was placed with no size: to go by; once it compiles, its page places it again, at its size.
+        unsized.retainAll(parsed.mapTo(HashSet()) { it.file.name })
+        for (spec in parsed) {
+            val name = spec.file.name
+            if (spec.program == null) {
+                if (old[name] == null && Screen.entries.none { layout.cell(name, it) != null }) unsized += name
+            } else if (unsized.remove(name) && spec.size != null) {
+                for (screen in Screen.entries) layout.clearCell(name, screen)
+            }
+        }
         val changed = parsed.filter { old[it.file.name] !== it }.map { it.file.name }
         specs.clear()
         specs += parsed.sortedWith(compareBy({ it.page }, { it.order }, { it.file.name }))
@@ -727,6 +795,8 @@ class WidgetEngine(
                 parts.getOrNull(1) == "set" -> inst.setState(parts.getOrNull(2).orEmpty(), Json.parseOrText(parts.getOrNull(3).orEmpty()))?.let { "error: $it" } ?: "ok"
                 else -> "error: unknown command '${parts.getOrNull(1).orEmpty()}'"
             }
+        // The picture owl-check has is of the widget before this: without its preview line, the next check asks for a new one.
+        if (reply == "ok") hashes[name]?.let { writeCheck(spec!!.file, it, "ok").join() }
         withContext(Dispatchers.IO) {
             runCatching { writeAtomically(File(inboxDir, "$id.done"), (reply + "\n").toByteArray()) }
         }
@@ -766,7 +836,10 @@ class WidgetEngine(
                 instance(spec) == null -> "it isn't running"
                 else -> null
             }
-        if (skip != null) return writeCheck(spec.file, hash, "ok", "preview-skipped $hash $skip")
+        if (skip != null) {
+            writeCheck(spec.file, hash, "ok", "preview-skipped $hash $skip")
+            return
+        }
         val inst = instance(spec)!!
         if (program.kind == OwlKind.App || program.kind == OwlKind.Panel || program.kind == OwlKind.Keybar) return previewView(spec, inst, hash)
         val cells = tileCells(spec)
@@ -791,7 +864,9 @@ class WidgetEngine(
         // The file may have changed while this rendered; its own preview follows.
         if (hashes[name] != hash) return
         val line = if (ok) shownCells(cells).let { (c, r) -> "preview $hash ${c}x$r ${w}x$h" } else "preview-skipped $hash rendering failed"
-        writeCheck(spec.file, hash, "ok", listOfNotNull(line, screen).joinToString("\n"))
+        // Where home put the tile, which the file's size: only decides the first time.
+        val home = if (spec.isFace) null else layout.cell(name)?.let { "home $hash ${it.x} ${it.y} ${it.w} ${it.h}" }
+        writeCheck(spec.file, hash, "ok", listOfNotNull(line, screen, home).joinToString("\n"))
     }
 
     /** The tile's cells as it's laid out on home, else as the file sizes it; a face's are the whole grid. */
@@ -929,7 +1004,7 @@ class WidgetEngine(
             // Advice, after the clear and before the check result, so owl-check prints it with the rest.
             for (w in p.warnings) writeError(file, "warning: $w", append = true)
             writeCheck(file, hash, "ok")
-            WidgetSpec(file, p.name, layout.page(file.name) ?: p.page, p.order, p, null, p.size, p.minSize, stamp, p.kind)
+            WidgetSpec(file, p.name, layout.pageOn(file.name, p.page), p.order, p, null, p.size, p.minSize, stamp, p.kind)
         } catch (e: CompileError) {
             broken(file, previous, stamp, Source(text).format(e), hash, OwlKind.of(text))
         } catch (e: RuntimeException) {
@@ -948,7 +1023,7 @@ class WidgetEngine(
     ): WidgetSpec {
         writeError(file, error)
         writeCheck(file, hash, "error")
-        return WidgetSpec(file, file.nameWithoutExtension, previous?.page ?: layout.page(file.name) ?: if (kind == OwlKind.Face) FACE_PAGE else 1, previous?.order ?: 999, null, error, previous?.size, previous?.minSize ?: (1 to 1), stamp, kind)
+        return WidgetSpec(file, file.nameWithoutExtension, previous?.page ?: layout.pageOn(file.name, if (kind == OwlKind.Face) FACE_PAGE else 1), previous?.order ?: 999, null, error, previous?.size, previous?.minSize ?: (1 to 1), stamp, kind)
     }
 
     /** Error files are written in order: a clear must never land after the error that follows it. */
@@ -984,7 +1059,8 @@ class WidgetEngine(
     /**
      * Writes .check/<file>.txt for `owl-check`: `sha256 <hash>`, `result ok` or
      * `result error`, and once rendered, `preview <hash> <cells> <pixels>` or
-     * `preview-skipped <hash> <why>`, then `screen <hash> <pixels>` for a screen { }. After the error file, in the same order,
+     * `preview-skipped <hash> <why>`, then `screen <hash> <pixels>` for a screen { } and `home <hash> <x> <y> <w> <h>`
+     * for a tile's cell on home. After the error file, in the same order,
      * so a check that sees the hash also sees that version's errors.
      */
     private fun writeCheck(
@@ -992,9 +1068,9 @@ class WidgetEngine(
         hash: String,
         result: String,
         preview: String? = null,
-    ) {
+    ): Job {
         val text = "sha256 $hash\nresult $result\n" + (preview?.let { "$it\n" } ?: "")
-        scope.launch(errorWriter) {
+        return scope.launch(errorWriter) {
             runCatching { writeAtomically(File(checkDir, "${file.name}.txt"), text.toByteArray()) }
         }
     }

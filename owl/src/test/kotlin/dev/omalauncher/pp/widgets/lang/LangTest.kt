@@ -183,6 +183,17 @@ class LangTest {
         assertEquals(Str("a2"), (p.root[0] as WNode.Element).props["text"]!!.const)
     }
 
+    /** A let that folded to a constant is used as its value, so what reads it folds too; one that reads a state isn't. */
+    @Test fun constantLetsFoldWhereTheyAreRead() {
+        val p = Compiler.compile("widget { let C = 32\n let D = C * 2\n state s = 1\n let E = s * C\n Text { text: \"${'$'}{C + 1} ${'$'}{E}\" } }")
+        assertEquals(Num(64.0), (p.globals.first { it.name == "D" } as Global.Let).value.const)
+        assertEquals(null, (p.globals.first { it.name == "E" } as Global.Let).value.const)
+        assertEquals(null, (p.root[0] as WNode.Element).props["text"]!!.const)
+        assertEquals("33 32", text("\"${'$'}{C + 1} ${'$'}{E}\"", "let C = 32\n state s = 1\n let E = s * C"))
+        val a = Compiler.compile("widget { asset logo = base64\"AAAA\"\n Image { src: logo } }")
+        assertEquals(Str("asset:logo"), (a.root[0] as WNode.Element).props["src"]!!.const)
+    }
+
     @Test fun interpolationAndNulls() {
         assertEquals("cpu 42%", text("\"cpu ${'$'}{x}%\"", "state x = 42"))
         assertEquals("…", text("\"${'$'}{s}\"", "source s = cmd('date')"))
@@ -1342,6 +1353,25 @@ class LangTest {
         for (cmd in listOf("ls ~/sdcards", "echo /sdcardish", "cat /root/sdcard")) assertTrue(cmd, Review.risks(listOf(cmd)).isEmpty())
     }
 
+    @Test fun androidMotion() {
+        val src = "widget {\n meta { owl: 21 }\n source m = android.motion\n Text { text: m.available ? \"\${m.roll}° \${m.pitch}°\" : \"no sensor\" } }"
+        val p = Compiler.compile(src)
+        assertEquals("android.motion", (p.globals.single() as Global.Source).kind)
+        assertTrue(!p.needsLinux)
+        assertEquals(listOf("read how the phone is tilted while it shows"), p.commands)
+        assertTrue(compileError(src.replace("owl: 21", "owl: 20")).contains("android.motion needs owl 21"))
+    }
+
+    @Test fun everyFrame() {
+        val src = "widget {\n meta { owl: 21 }\n state x = 0\n every frame { x = x + 100 * dt }\n Text { text: x } }"
+        val p = Compiler.compile(src)
+        assertEquals(TriggerKind.FRAME, p.triggers.single().kind)
+        assertEquals(listOf("dt"), p.triggers.single().action.params)
+        // The frame clock runs it, which only an animated widget has.
+        assertTrue(p.animated)
+        assertTrue(compileError(src.replace("owl: 21", "owl: 20")).contains("every frame needs owl 21"))
+    }
+
     @Test fun androidCalendarAskedForOnATap() {
         val src = "widget {\n meta { owl: 18 }\n source agenda = android.calendar\n Text { text: agenda.granted ? \"events\" : \"allow\"; onTap: calendar(\"request\") } }"
         val p = Compiler.compile(src)
@@ -1793,6 +1823,12 @@ class LangTest {
         assertEquals(listOf("sed -i ${Compiler.NUMBER}d ~/todo.md"), commands("onTap: run(\"sed -i ${'$'}{int(n)}d ~/todo.md\")"))
         assertEquals(listOf("true", "curl -d ${Compiler.VALUE} https://ha.local"), commands("onTap: run(n > 1 ? \"true\" : \"curl -d ${'$'}{sh(v)} https://ha.local\")"))
         assertEquals(listOf("echo ${Compiler.VALUE}x"), commands("source o = cmd(\"echo \" + sh(v) + \"x\") every 1m"))
+        // A script kept in a let stays one value, as before lets folded: its text has quotes and # in it, which
+        // would make the command unlistable, and the store would drop the widget.
+        assertEquals(
+            listOf("bash -c ${Compiler.VALUE} x ${Compiler.VALUE}"),
+            commands("let script = \"echo 'hi' # a comment\"\n onTap: run(\"bash -c ${'$'}{sh(script)} x ${'$'}{sh(v)}\")"),
+        )
         // Unquoted, or quoted where bash would undo it: it could run anything.
         for (bad in listOf("echo ${'$'}{v}", "echo \\\"${'$'}{sh(v)}\\\"", "echo '${'$'}{sh(v)}'", "echo ok # ${'$'}{sh(v)}", "cat <<E\\n${'$'}{sh(v)}\\nE")) {
             assertEquals(bad, listOf("run(…) built from widget values"), commands("onTap: run(\"$bad\")"))

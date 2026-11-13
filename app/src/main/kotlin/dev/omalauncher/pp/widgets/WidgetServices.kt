@@ -117,6 +117,7 @@ import dev.omalauncher.pp.widgets.runtime.watchFile
 import dev.omalauncher.pp.ui.EmbeddedBrowser
 import dev.omalauncher.pp.widgets.runtime.AirPods
 import dev.omalauncher.pp.widgets.runtime.battery
+import dev.omalauncher.pp.widgets.runtime.Motion
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -199,6 +200,7 @@ class WidgetServices(
     private val alarm = Alarm(context)
     private val modes = Modes(context)
     private val sim = Sim(context)
+    private val motion = Motion(context)
     /** android.airpods and airpods(...); each activity that shows widgets lets it ask for Bluetooth while it's in front. */
     val airpods = AirPods(context, scope)
     private val panels = SystemPanels(context)
@@ -279,12 +281,14 @@ class WidgetServices(
             "alarm" -> alarm.updates()
             "modes" -> modes.updates()
             "sim" -> sim.updates()
+            "motion" -> motion.updates()
             "location" -> location.updates()
             "steps" -> steps.updates()
             "calendar" -> runtime.calendar.updates()
             "airpods" -> airpods.updates()
             // Both read Compose state: the app list and its usage, the installed agents and the one picked.
-            "apps" -> snapshotFlow { apps() }
+            // The apps are up to a thousand values made on each change, as the drawer's are: not on the main thread.
+            "apps" -> snapshotFlow { apps() }.flowOn(Dispatchers.Default)
             "agents" -> snapshotFlow { agents() }
             "recent" -> snapshotFlow { recent() }
             "modifiers" -> snapshotFlow { modifiers() }
@@ -338,11 +342,13 @@ class WidgetServices(
     override fun heard(owner: Any) = runtime.dictation.heard(owner)
 
     /** "work", "clone" or "private" for an app in a profile beside the launcher's own, as the drawer marks it; null for its own. */
-    private fun profileKind(user: UserHandle): String? {
-        if (user == Process.myUserHandle()) return null
-        val serial = context.getSystemService(UserManager::class.java).getSerialNumberForUser(user)
+    private fun profileKind(user: UserHandle): String? =
+        if (user == Process.myUserHandle()) null else profileKind(context.getSystemService(UserManager::class.java).getSerialNumberForUser(user))
+
+    /** As above, by [profile]'s serial number (see [dev.omalauncher.pp.AndroidApp.profile]): no binder call. */
+    private fun profileKind(profile: Long?): String? {
         val apps = runtime.androidApps
-        return profileWord(serial, apps.cloned(serial), apps.isPrivate(serial))
+        return profile?.let { profileWord(it, apps.cloned(it), apps.isPrivate(it)) }
     }
 
     /** Apps by package, in the drawer's order: a widget listing every app asks for each one's icon, and a scan per icon was O(n²). */
@@ -517,7 +523,7 @@ class WidgetServices(
         Lst(
             runtime.androidApps.apps.asSequence().filter { !it.privateSpace }.map { AppHit.Android(it) }.filterNot { it.hidden }.take(Builtins.MAX_LIST).map { hit ->
                 val app = hit.app
-                val kind = profileKind(app.user)
+                val kind = profileKind(app.profile)
                 val usage = hit.key
                 Obj(
                     mapOf(
@@ -591,8 +597,9 @@ class WidgetServices(
     /**
      * The drawer for `source d = android.drawer`: `{apps, hidden, findHidden, linux, monochrome, work, private, updates, labels, iconSize}`. `apps` is every app in the drawer's
      * order (owl apps, Linux apps, shortcuts, Android apps, then the work profile's shortcuts and apps, then the private
-     * space's while it's unlocked), each `{key, kind, name, own, label, icon, hasIcon, initials, profile, alias, paused, actions, score, last}`:
+     * space's while it's unlocked), each `{key, kind, name, own, label, icon, hasIcon, initials, profile, alias, paused, dot, actions, score, last}`:
      * - `label` what screen readers say for it ("WhatsApp work"), for an Image's `label`; `profile` as in `android.apps`, or `private`; `alias` what search matches besides the name ("WhatsApp work");
+     * - `dot` whether it has a notification dot;
      * - `paused` for an app in a paused work profile; `actions` the words its long-press menu offers, for appAction(...);
      * - `hasIcon` whether `icon` draws anything yet; without, the drawer shows `initials` on a badge, as it does a
      *   silhouette when `monochrome`.
@@ -612,14 +619,16 @@ class WidgetServices(
                 apps.shortcuts.filter { personal(it.profile) }.map { AppHit.Shortcut(it) } + apps.apps.filter { personal(it.profile) }.map { AppHit.Android(it, runtime.appWidgets.offers(it)) } +
                 apps.shortcuts.filter { it.work }.map { AppHit.Shortcut(it) } + apps.apps.filter { it.work }.map { AppHit.Android(it, runtime.appWidgets.offers(it)) } +
                 apps.shortcuts.filter { it.privateSpace }.map { AppHit.Shortcut(it) } + apps.apps.filter { it.privateSpace }.map { AppHit.Android(it, runtime.appWidgets.offers(it)) }
-        fun entry(hit: AppHit) =
-            Obj(
+        fun entry(hit: AppHit): Obj {
+            val dot = hit.hasDot
+            return Obj(
                 mapOf(
                     "key" to Str(hit.key),
                     "kind" to Str(hit.kind),
                     "name" to Str(hit.label),
                     "own" to Str(hit.own),
-                    "label" to Str(hit.spoken),
+                    "label" to Str(if (dot) context.getString(R.string.home_app_has_notifications, hit.spoken) else hit.spoken),
+                    "dot" to bool(dot),
                     "icon" to Str("icon:" + hit.key),
                     "profile" to (hit.profileKind?.let(::Str) ?: Null),
                     "alias" to (hit.alias?.let(::Str) ?: Null),
@@ -632,6 +641,7 @@ class WidgetServices(
                     "last" to (runtime.usage.last(hit.key)?.let { Num((it / 1000).toDouble()) } ?: Null),
                 ),
             )
+        }
         // Focus mode hides the apps the profile on leaves out, from the drawer and its search alike, hidden ones too.
         val focus = runtime.focus.active?.profile
         val (hidden, shown) = hits.filter { runtime.focus.allows(it, focus) }.partition { it.hidden }
@@ -705,8 +715,8 @@ class WidgetServices(
         if (name == "run") return run(arg) { done() }
         // Keys go out as they're pressed, many a second while one repeats: nothing to refresh after them.
         when (name) {
-            "pressKey" -> return KeyNames.combo(arg)?.let(runtime.keyboard::press) ?: Unit
-            "typeText" -> return runtime.keyboard.type(arg)
+            "pressKey" -> return KeyNames.combo(arg)?.let { runtime.keyboard.flush(); runtime.keyboard.press(it) } ?: Unit
+            "typeText" -> return runtime.keyboard.run { flush(); type(arg) }
             "latch" -> return runtime.keyboard.latch(arg, args.getOrNull(1).textOrNull())
             "pickImages" -> return runtime.keyboard.pickImages()
             // Nothing to refresh: the source follows the grant itself.

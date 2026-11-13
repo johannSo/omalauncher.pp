@@ -66,6 +66,7 @@ import dev.omalauncher.pp.spokenLabel
 import dev.omalauncher.pp.linux.LinuxApp
 import dev.omalauncher.pp.widgets.WidgetSpec
 import dev.omalauncher.pp.widgets.render.LocalMenuOpened
+import dev.omalauncher.pp.widgets.runtime.NotificationDots
 
 /** One app the drawer lists: an owl app, a Linux or Android app, or a shortcut. */
 internal sealed interface AppHit {
@@ -96,6 +97,9 @@ internal sealed interface AppHit {
     /** In the private space: kept off home, and opening it isn't counted, so it never shows among recent apps. */
     val privateSpace: Boolean get() = false
 
+    /** It has a notification Android would put a dot on it for. */
+    val hasDot: Boolean get() = false
+
     data class Linux(
         val app: LinuxApp,
     ) : AppHit {
@@ -113,6 +117,8 @@ internal sealed interface AppHit {
         override val spoken get() = spokenLabel(label, app.profile, app.clone, app.privateSpace)
         override val alias get() = profileKind?.let { "$own $it" } ?: own.takeIf { it != label }
         override val privateSpace get() = app.privateSpace
+
+        override val hasDot get() = NotificationDots.has(app.component.packageName, app.profile)
 
         override fun paused(runtime: Runtime) = runtime.androidApps.paused(app.profile)
     }
@@ -134,6 +140,8 @@ internal sealed interface AppHit {
         override val spoken get() = spokenLabel(label, shortcut.profile, shortcut.clone, shortcut.privateSpace)
         override val alias get() = profileKind?.let { "$own $it" } ?: own.takeIf { it != label }
         override val privateSpace get() = shortcut.privateSpace
+
+        override val hasDot get() = NotificationDots.has(shortcut.ref.packageName, shortcut.profile, shortcut.ref.id)
 
         override fun paused(runtime: Runtime) = runtime.androidApps.paused(shortcut.profile)
     }

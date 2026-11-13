@@ -10,7 +10,10 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.rememberUpdatedState
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withTimeoutOrNull
 import dev.omalauncher.pp.widgets.FACE_PAGE
 import dev.omalauncher.pp.widgets.isFacePage
@@ -22,6 +25,7 @@ import dev.omalauncher.pp.widgets.Shortcut
 import dev.omalauncher.pp.widgets.WidgetItem
 import dev.omalauncher.pp.widgets.WidgetSpec
 import dev.omalauncher.pp.widgets.app
+import dev.omalauncher.pp.widgets.Screen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -100,9 +104,19 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
 ) {
     val engine = runtime.widgets
-    val linuxState by runtime.bootstrap.state.collectAsState()
+    val linuxState = linuxPhase(runtime)
     val arrange = remember { Arrange() }
     val empty = remember { EmptyPresses() }
+    // A foldable's cover screen has a layout of its own (its cells and pages in the layout, [cover] in layout.toml), and
+    // with home.unfolded-layout so does a Fold's unfolded inner screen ([unfolded]): home shows that one there, and the
+    // main one back on the phone-shaped screen. The pages below follow a frame later.
+    val screen =
+        when {
+            coverScreen() -> Screen.COVER
+            unfoldedScreen() -> Screen.UNFOLDED
+            else -> Screen.MAIN
+        }
+    SideEffect { engine.show(screen) }
     // One empty page always waits after the last one, to drop tiles on or pin apps to. Pages only exist
     // while they hold something, so it becomes a real page once used and a new empty one follows.
     // Left of page 1 the same, for faces: like a stock launcher's feed, but the user's own. An empty one waits left of
@@ -202,6 +216,19 @@ fun HomeScreen(
         shownPer = per
         if (i >= 0) pager.scrollToPage(i)
     }
+    // Switching screens (a fold or unfold with a home of its own there, or the cover screen) goes back to the page that
+    // screen last showed, page 1 the first time: the page numbers are another screen's. A drag the switch cuts short
+    // drops nothing, and carries nothing on.
+    val lastPage = remember { HashMap<Screen, Int>() }
+    var shownScreen by remember { mutableStateOf(screen) }
+    LaunchedEffect(screen) {
+        if (screen == shownScreen) return@LaunchedEffect
+        shownScreen = screen
+        state.editing = null
+        arrange.folder = null
+        arrange.drop()
+        showPage = lastPage[screen] ?: homePage()
+    }
     // The drawer pins apps to whichever page is showing (the left one of a pair); from a face, wherever it is, to page 1.
     // Pages appearing before the one showing don't move home off it, unless home was just sent to another page. At
     // start, pinned apps load before widgets, so page 1 may join after the faces and later pages: until widgets have
@@ -220,6 +247,7 @@ fun HomeScreen(
             }
         }
         engine.activePage = slots.getOrNull(pager.currentPage)?.first() ?: 1
+        if (engine.layout.screen == shownScreen && showPage == null) lastPage[shownScreen] = engine.activePage
         state.currentPage = engine.activePage.takeIf { it >= 1 && !full(it) } ?: 1
     }
     val shown = slots.getOrElse(pager.currentPage) { listOf(1) }
@@ -515,7 +543,7 @@ fun HomeScreen(
                     agent,
                     onBrowse = { state.show(SettingsPage.FaceStore) },
                 ) {
-                    if (linuxState == LinuxState.Installed) {
+                    if (linuxState == LinuxPhase.Installed) {
                         state.withAgent(runtime, "New face") { newOwlCommand(it, OwlKind.Face, page) }
                     } else {
                         state.show(SettingsPage.Linux)
@@ -530,7 +558,7 @@ fun HomeScreen(
                     agent,
                     onBrowse = { state.show(SettingsPage.Store) },
                 ) {
-                    if (linuxState == LinuxState.Installed) {
+                    if (linuxState == LinuxPhase.Installed) {
                         state.withAgent(runtime, "New widget") { newOwlCommand(it, OwlKind.Widget) }
                     } else {
                         state.show(SettingsPage.Linux)
@@ -703,7 +731,7 @@ private fun HomeTile(
     arrange: Arrange,
     /** As homeTurned(): cells are shown on their side. */
     turned: Boolean,
-    linuxState: LinuxState,
+    linuxState: LinuxPhase,
 ) {
     // An app focus mode leaves out leaves its cell empty while the profile is on.
     if (item is Shortcut && !runtime.focus.allows(item)) return
@@ -777,6 +805,7 @@ private fun HomeTile(
                 onTap = open,
                 paused = runtime.androidApps.paused(item.profile),
                 clone = runtime.androidApps.cloned(item.profile),
+                dot = runtime.hasDot(item),
             )
         is AndroidWidget -> AppWidgetTile(item, runtime.appWidgets, highlighted, tile, onRestore = open)
         is Folder ->
@@ -787,6 +816,41 @@ private fun HomeTile(
                 focused = highlighted,
                 modifier = tile,
                 onTap = open,
+                dot = item.apps.any(runtime::hasDot),
             )
     }
 }
+
+/** What home and its bar show of Linux: [LinuxState] without an install's progress and log, which change with every line it logs. */
+enum class LinuxPhase {
+    Checking,
+    Installing,
+    Installed,
+
+    /** Installed and shut down ([LinuxState.Off]). */
+    Off,
+
+    /** Not installed, failed or being removed. */
+    Absent,
+}
+
+/** Linux's [LinuxPhase], recomposing the caller only when that changes. */
+@Composable
+fun linuxPhase(runtime: Runtime): LinuxPhase {
+    val bootstrap = runtime.bootstrap
+    val phases = remember(bootstrap) { bootstrap.state.phases() }
+    val initial = remember(bootstrap) { linuxPhase(bootstrap.state.value) }
+    return phases.collectAsState(initial).value
+}
+
+/** These states' phases, each once until it changes. */
+internal fun Flow<LinuxState>.phases(): Flow<LinuxPhase> = map(::linuxPhase).distinctUntilChanged()
+
+private fun linuxPhase(state: LinuxState) =
+    when (state) {
+        LinuxState.Checking -> LinuxPhase.Checking
+        is LinuxState.Installing -> LinuxPhase.Installing
+        LinuxState.Installed -> LinuxPhase.Installed
+        LinuxState.Off -> LinuxPhase.Off
+        LinuxState.NotInstalled, is LinuxState.Failed, LinuxState.Removing -> LinuxPhase.Absent
+    }

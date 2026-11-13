@@ -4,6 +4,70 @@ The most important changes in each release. From 1.0.0 on they're OmaLauncher++'
 dated when they were released on GitHub. The ones before are Omalauncher's, dated
 when they were uploaded to Play.
 
+## Unreleased
+
+### From Omalauncher 1.4.0
+
+- Linux commands that look at many files run 2-8x faster with "fast system calls" on (pacman -Qk
+  8x, ls -lR 6x, du 5x, grep -r 3x, git status 2x): a small library inside Linux answers stat,
+  access, readlink, read-only open and similar calls itself instead of stopping for proot each
+  time.
+- Sunset heist: a brake button under the right thumb, and cars bump instead of passing through
+  each other: police, race rivals, the takedown car and parked cars are solid like traffic.
+- Agents building widgets lose fewer turns: owl-check draws a new preview after owl-send changed a
+  state and says which cells the tile has on home. The bundled game examples drop boomtown, sky
+  forge and last outpost.
+- Home no longer redraws for every line a Linux install logs, and typing and drawing do less work.
+- Fixes: AirPods no longer crash the launcher when their link stops.
+
+### From Omalauncher 1.3.0
+
+- Owl 22 brings 3D: a Canvas `scene(camera)` draws lit, fogged and textured models from cubes,
+  spheres, cylinders, cones, planes, terrain, your own meshes or OBJ files, with vector math for
+  games. `onTouch` sees every finger at once, and a Shader can sample images and take array
+  uniforms. New example apps: sunset heist, a 3D city to drive, run missions in and escape the
+  police, and canyon run, a low-poly flight down an endless canyon; plus boomtown, a city builder,
+  sky forge, a shooter with a hangar of upgrades, and last outpost, tower defense.
+- The store has two sections, widgets and apps; faces are now called full-screen widgets, with a
+  tab of their own in the store.
+- Apps that ask for 60 frames a second keep them however long they take to draw, and widgets that
+  read fixed values draw faster.
+- today, what's new, ntfy and github inbox refresh when their list is pulled down.
+
+### From Omalauncher 1.2.0
+
+- Owl 21: `android.motion` gives the phone's tilt from the gyroscope and accelerometer, and
+  `every frame { }` runs each frame with `dt`. New example apps: space bounce, a tilt-to-fly
+  arena shooter, and sky raid, a pixel-art plane shooter over five stages.
+- Voice: the orb is a glossy blob in shades of its colour whose edge moves while it listens,
+  speaks or works, more as you talk louder. Replies use the text-to-speech engine picked in
+  Android's settings without a launcher restart, and voice settings say which voice the default
+  is, like "default (Germany)".
+- Linux no longer looks uninstalled after the launcher restarts: the old /tmp is deleted in the
+  background, and while Linux starts, settings and the Linux screen say checking.
+- Fixes: a widget Shader whose loops take over 1000 turns a pixel isn't drawn (the store review
+  turns it away), so it can't freeze the screen; past 256 Wayland clients at once new ones are
+  turned away, so a runaway Linux program can't run the launcher out of memory.
+
+### From Omalauncher 1.1.0
+
+- Linux commands under proot run 2-30x faster: proot keeps itself and processes making many
+  syscalls on one fast CPU. The Linux screen has a switch for it, on by default, for phones or
+  programs that do better without it.
+- Apps with notifications show a dot on their icon, on home, on folders and in the drawer;
+  Android's own dot settings decide, and it needs notification access. Owl 20: `dot` on the
+  apps of `android.drawer` (#239).
+- The terminal's input can be a normal text field, on by default, so the keyboard's suggestions,
+  glide typing, dictation and clipboard work there: `terminal.keyboard-suggestions`, also in
+  style › terminal (#271). Tapping a suggestion that changes letters already typed corrects the
+  word (#251).
+- Foldables: home stays upright on a cover screen, and the cover and unfolded inner screens can
+  have layouts of their own, as `[cover]` and `[unfolded]` sections in layout.toml (#256, #257,
+  #259).
+- Fixes: turning a phone sideways no longer sends home back to page 1; a notification whose
+  extras can't be read and a layout.toml tile placed past its own columns no longer crash the
+  launcher.
+
 ## 2.5.0-beta.1 (versionCode 36) – 2026-11-08
 
 - Each widget can have its own look: `opacity` (0 clear to 1 solid) and `border = false` on its tile in

@@ -7,6 +7,7 @@ import dev.omalauncher.pp.widgets.lang.Compiler
 import dev.omalauncher.pp.widgets.lang.OwlKind
 import dev.omalauncher.pp.widgets.lang.Program
 import dev.omalauncher.pp.widgets.lang.Source
+import dev.omalauncher.pp.widgets.lang.ShaderCost
 
 /**
  * The marketplace rules for one submitted widget or app: it compiles, it lives at
@@ -98,6 +99,9 @@ class Review(
                 "See \"Values in commands\" in the widgets docs (docs/declarations.md)"
         }
         warnings += risks(p.commands - unquoted.toSet())
+        // A heavy shader hangs the GPU whenever its page shows. Code put together while the widget runs is counted by
+        // the launcher before it draws it.
+        for (code in p.shaders.filterNotNull().distinct()) ShaderCost.problem(code)?.let { errors += "a Shader: $it" }
         warnings += costs(p)
 
         // A later page has no version of its own: changing it needs face.owl's to go up, which the CLI checks.

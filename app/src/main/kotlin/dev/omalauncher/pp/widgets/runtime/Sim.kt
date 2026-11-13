@@ -2,7 +2,6 @@ package dev.omalauncher.pp.widgets.runtime
 
 import android.content.Context
 import android.content.pm.PackageManager
-import android.database.ContentObserver
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -18,6 +17,7 @@ import dev.omalauncher.pp.widgets.lang.Obj
 import dev.omalauncher.pp.widgets.lang.Str
 import dev.omalauncher.pp.widgets.lang.Value
 import dev.omalauncher.pp.widgets.lang.bool
+import dev.omalauncher.pp.changeObserver
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -101,12 +101,7 @@ class Sim(
                     @Suppress("DEPRECATION")
                     ({ t.listen(listener, PhoneStateListener.LISTEN_NONE) })
                 }
-            val observer =
-                object : ContentObserver(main) {
-                    override fun onChange(selfChange: Boolean) {
-                        trySend(Unit)
-                    }
-                }
+            val observer = changeObserver(main) { trySend(Unit) }
             context.contentResolver.registerContentObserver(Settings.Global.getUriFor(MOBILE_DATA), true, observer)
             trySend(Unit)
             awaitClose {

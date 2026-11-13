@@ -89,8 +89,16 @@ internal val DRAW: Map<String, DrawOp> =
         "layer" to DrawOp(1..1, group = true),
         // owl 3: pixel art from rows of letters, one color per letter.
         "sprite" to DrawOp(4..4),
+        // owl 22: 3D, models seen through a camera.
+        "scene" to DrawOp(1..1, group = true),
+        "model" to DrawOp(1..1),
     )
-internal val DRAW_NAMED = setOf("fill", "stroke", "width", "cap", "radius", "closed", "size", "color", "align", "bold", "palette") + TEXT_STYLE
+
+/** The options of scene(...) and model(...), which take only these (owl 22). */
+internal val SCENE_NAMED = setOf("light", "ambient", "fog")
+internal val MODEL_NAMED = setOf("at", "turn", "scale", "color", "image", "ambient", "smooth", "twoSided")
+
+internal val DRAW_NAMED = setOf("fill", "stroke", "width", "cap", "radius", "closed", "size", "color", "align", "bold", "palette") + TEXT_STYLE + SCENE_NAMED + MODEL_NAMED
 
 /** What needs a newer language than 1, with the version: using one without `meta { owl: N }` is an error. */
 internal val SINCE =
@@ -194,7 +202,26 @@ internal val SINCE =
         // owl 18 (this fork): the launcher's SSH server, read, and switched from a tap.
         listOf("android.ssh", "ssh").associateWith { 18 } +
         // owl 19: how many frames a second an animation needs, so a slow one costs the battery less.
-        mapOf(FRAME_RATE to 19)
+        mapOf(FRAME_RATE to 19) +
+        // owl 21: how the phone is tilted, for tilt games and spirit levels.
+        mapOf("android.motion" to 21) +
+        // owl 21: statements each frame, for games that move things by what they were a frame before.
+        mapOf(EVERY_FRAME to 21) +
+        // owl 22: every finger at once, for a game's two thumbs.
+        mapOf("onTouch" to 22) +
+        // owl 22: 3D scenes in a Canvas, the meshes they draw and the vector math of a 3D game.
+        listOf("scene", "model", "cube", "plane", "sphere", "cylinder", "cone", "terrain", "mesh", "parseObj", "project", "turn", "dot", "cross", "norm", "dist").associateWith { 22 } +
+        // owl 22: Shader images to sample, and uniforms that are arrays.
+        listOf(SHADER_IMAGE, SHADER_ARRAY).associateWith { 22 }
+
+/** A Shader's `uniform shader name;`, an image it samples, named like this in [SINCE]. */
+internal const val SHADER_IMAGE = "uniform shader"
+
+/** A Shader's array uniform, like `uniform float3 enemies[8];`, named like this in [SINCE]. */
+internal const val SHADER_ARRAY = "an array uniform"
+
+/** `every frame { }`, named like this in [SINCE]. */
+internal const val EVERY_FRAME = "every frame"
 
 /** `source x = broadcast("…")`, named like this in [SINCE]; `broadcast` alone is the action that sends one. */
 internal const val BROADCAST_SOURCE = "source … = broadcast(…)"
@@ -301,6 +328,8 @@ internal val HANDLER_PARAMS =
         "onDragEnd" to listOf("vx", "vy"),
         // Sideways, as the finger lifts: `left` from right to left, `right` back.
         "onSwipe" to listOf("value"),
+        // owl 22: every finger down, as {id, x, y, startX, startY}, on each change; [] once they've all lifted.
+        "onTouch" to listOf("touches"),
         // A Column or Grid that scrolls, pulled down past its top and let go there: refresh(), mostly.
         "onPull" to emptyList(),
         "onChange" to listOf("value"),
@@ -343,7 +372,7 @@ val SPEECH_ANYWHERE = setOf("stop", "cancel")
 val ASKS = setOf("location", "calendar", "airpods")
 
 /** Data from the phone and the launcher; device is fixed, system, network and power are polled, the rest update as they change. */
-internal val ANDROID = setOf("battery", "device", "media", "notifications", "volume", "system", "network", "power", "sim", "alarm", "modes", "apps", "agents", "recent", "drawer", "modifiers", "speech", "location", "steps", "usage", "focus", "airpods", "calendar", "ssh")
+internal val ANDROID = setOf("battery", "device", "media", "notifications", "volume", "system", "network", "power", "sim", "alarm", "modes", "apps", "agents", "recent", "drawer", "modifiers", "speech", "location", "steps", "usage", "focus", "airpods", "calendar", "ssh", "motion")
 
 /**
  * permission(...)'s words, each an Android permission a source needs: what android.location and android.steps read stays
@@ -457,3 +486,9 @@ internal val WIDGET_PROPS = setOf("size", "minSize", "page", "order", "padding",
 
 /** A face has no tile's size; it says where it goes and whether the status bar stays over it. */
 internal val FACE_PROPS = setOf("page", "order", "padding", "background", "statusBar", "edge", "lock", "fps")
+
+/** `uniform shader name;` in a Shader's code; see [SHADER_IMAGE]. */
+internal val SHADER_IMAGE_RE = Regex("""\buniform\s+shader\s+(\w+)""")
+
+/** `uniform float3 name[8];` in a Shader's code; see [SHADER_ARRAY]. */
+internal val SHADER_ARRAY_RE = Regex("""\buniform\s+\w+\s+\w+\s*\[""")

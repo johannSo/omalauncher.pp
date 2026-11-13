@@ -5,7 +5,12 @@ import dev.omalauncher.pp.LauncherData
 import dev.omalauncher.pp.PhoneStorage
 import dev.omalauncher.pp.upgrade.Managed
 import dev.omalauncher.pp.upgrade.Policy
+import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import java.io.File
+import kotlin.concurrent.thread
 
 /** Paths and process launching for the proot'd Arch rootfs. */
 class Proot(
@@ -41,6 +46,30 @@ class Proot(
 
     /** How guest apps render OpenGL and Vulkan: in software, or on the GPU once [Gpu] turns it on. */
     @Volatile var graphicsEnv: List<String> = SOFTWARE_ENV
+
+    private val prefs = LauncherData.prefs(context)
+
+    /**
+     * What makes Linux's system calls fast: proot keeping itself and programs making many syscalls on one fast
+     * CPU (patches/proot/0002), and the fast lane, [fastLane]. On unless the user turned it off; applies to what
+     * starts after a change.
+     */
+    var cpuPinning by mutableStateOf(prefs.getBoolean(CPU_PINNING, true))
+        private set
+
+    fun changeCpuPinning(on: Boolean) {
+        cpuPinning = on
+        prefs.edit().putBoolean(CPU_PINNING, on).apply()
+    }
+
+    /**
+     * The fast lane library (patches/proot/fastpath): preloaded into guest programs, it answers stat, access,
+     * readlink and read-only open for plain rootfs paths itself, without a stop in proot (patches/proot/0003).
+     * Built by scripts/fetch-proot.sh next to proot and copied into the guest by [managed], so the two always
+     * come from the same APK; a build without it runs as before.
+     */
+    private val fastLaneSource = File(nativeDir, "libfastpath.so")
+    private val fastLane = File(rootfs, FAST_LANE.removePrefix("/"))
 
     /** Launcher data the guest sees in its home, kept outside the rootfs; see [LauncherData]. */
     private val dataBinds =
@@ -114,10 +143,9 @@ class Proot(
      * stand-ins every guest command needs. Call once, before any guest runs.
      */
     fun prepare() {
-        for (dir in listOf(tmpDir, runtimeDir)) {
-            LauncherData.deleteTree(dir)
-            dir.mkdirs()
-        }
+        discardTmp()
+        LauncherData.deleteTree(runtimeDir)
+        runtimeDir.mkdirs()
         // proot skips a bind whose host directory is missing, and the guest would then write into the rootfs.
         // The empty mount points make the bound directories show up in listings of their parents.
         for ((guest, host) in dataBinds) {
@@ -145,12 +173,30 @@ class Proot(
         File(filesDir, "bwrap-shim").delete()
     }
 
+    /** Old /tmp contents waiting to be deleted; see [discardTmp]. */
+    private val discardedTmp = File(filesDir, "tmp-discarded")
+
+    /**
+     * Starts the guest with an empty /tmp. A day of agent work can leave hundreds of thousands of files there (a
+     * cloned repo with node_modules), and deleting them takes long enough on a phone that Linux looked uninstalled
+     * meanwhile. So the old one moves aside and is deleted in the background, along with any a killed process left.
+     */
+    private fun discardTmp() {
+        discardedTmp.mkdirs()
+        if (tmpDir.exists() && !tmpDir.renameTo(File(discardedTmp, System.nanoTime().toString()))) LauncherData.deleteTree(tmpDir)
+        tmpDir.mkdirs()
+        thread(name = "tmp-discard", isDaemon = true) {
+            runCatching { LauncherData.deleteTree(discardedTmp) }.onFailure { Log.w("proot", "old /tmp", it) }
+        }
+    }
+
     /**
      * The bwrap stand-in (assets/bwrap-shim.sh): user namespaces are unavailable under proot, so the real one
      * fails. glycin and Codex look for bwrap on PATH, where /usr/local/bin precedes the package's /usr/bin.
      */
     fun managed(): List<Managed> =
-        listOf(Managed.asset(context, "bwrap-shim.sh", File(rootfs, "usr/local/bin/bwrap"), Policy.Owned, executable = true))
+        listOf(Managed.asset(context, "bwrap-shim.sh", File(rootfs, "usr/local/bin/bwrap"), Policy.Owned, executable = true)) +
+            if (fastLaneSource.isFile) listOf(Managed(fastLane, Policy.Owned) { fastLaneSource.readBytes() }) else emptyList()
 
     private fun command(script: String): List<String> =
         listOf(
@@ -213,7 +259,9 @@ class Proot(
                 "QT_QPA_PLATFORM=wayland",
                 "MOZ_ENABLE_WAYLAND=1",
                 "SDL_VIDEODRIVER=wayland",
-            ) + graphicsEnv
+            ) + graphicsEnv +
+            // Only once the library is there: the dynamic linker complains on every start about one it can't find.
+            (if (cpuPinning && fastLane.isFile) listOf("LD_PRELOAD=$FAST_LANE") else emptyList())
 
     /**
      * Kills every proot we started and every guest process: before the rootfs
@@ -240,15 +288,23 @@ class Proot(
                 put("PROOT_LOADER", loader)
                 put("PROOT_TMP_DIR", tmpDir.path)
                 put("LD_LIBRARY_PATH", nativeDir.path)
+                if (!cpuPinning) {
+                    put("PROOT_HOME_CPU", "off")
+                    put("PROOT_FASTPATH", "off")
+                }
             }
             redirectErrorStream(true)
         }
 
     companion object {
+        private const val CPU_PINNING = "proot_cpu_pinning"
+
         const val GUEST_HOME = "/root"
 
         /** XDG_RUNTIME_DIR in the guest, bound to [runtimeDir]. */
         const val GUEST_RUNTIME_DIR = "/run/user/0"
+
+        private const val FAST_LANE = "/usr/local/lib/libfastpath.so"
 
         private const val GUEST_CJK_FONT = "/usr/share/fonts/android/NotoSansCJK-Regular.ttc"
     }
