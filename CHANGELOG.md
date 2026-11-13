@@ -68,7 +68,7 @@ when they were uploaded to Play.
   extras can't be read and a layout.toml tile placed past its own columns no longer crash the
   launcher.
 
-## 2.5.0-beta.1 (versionCode 36) – 2026-11-08
+## 2.5.0 (versionCode 37) – 2026-11-13
 
 - Each widget can have its own look: `opacity` (0 clear to 1 solid) and `border = false` on its tile in
   home's layout.toml, over the style's widgets.opacity and outline. Agents change them with the MCP tool
