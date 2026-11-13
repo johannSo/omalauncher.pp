@@ -4,7 +4,7 @@ The most important changes in each release. From 1.0.0 on they're OmaLauncher++'
 dated when they were released on GitHub. The ones before are Omalauncher's, dated
 when they were uploaded to Play.
 
-## Unreleased
+## 2.6.0-beta.1 (versionCode 38) – 2026-11-13
 
 ### From Omalauncher 1.4.0
 
