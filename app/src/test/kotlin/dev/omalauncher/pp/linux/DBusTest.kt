@@ -113,6 +113,9 @@ class DBusTest {
               <listen>tcp:host=127.0.0.1,port=0</listen>
               <auth>ANONYMOUS</auth>
               <allow_anonymous/>
+              <!-- Where AppArmor is on (GitHub's Ubuntu runners), dbus-daemon asks each peer's confinement, which a TCP
+                   socket can't give, and drops the connection. -->
+              <apparmor mode="disabled"/>
               <policy context="default"><allow user="*"/><allow send_destination="*" eavesdrop="true"/><allow eavesdrop="true"/><allow own="*"/></policy>
             </busconfig>
             """.trimIndent(),
