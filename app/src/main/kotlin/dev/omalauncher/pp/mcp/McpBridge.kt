@@ -53,7 +53,14 @@ class McpBridge(
             }
             try {
                 // The shim opens both ends at once, so the order here can't deadlock.
-                FileInputStream(requests).use { input -> FileOutputStream(answers).use { output -> server.serve(input, output) } }
+                FileInputStream(requests).use { input ->
+                    FileOutputStream(answers).use { output ->
+                        // A FIFO opens once both its ends do, so the shim holds its ends by now and the folder can go;
+                        // the shim ends in exec, with no trap left to remove it.
+                        dir.deleteRecursively()
+                        server.serve(input, output)
+                    }
+                }
             } catch (e: Exception) {
                 Log.w(TAG, "session in $dir ended", e)
             }
@@ -62,39 +69,10 @@ class McpBridge(
 
     private fun isFifo(file: File) = runCatching { OsConstants.S_ISFIFO(Os.lstat(file.path).st_mode) }.getOrDefault(false)
 
-    /**
-     * `omalauncher-mcp`. Both FIFOs are opened together (cat in the background reads answers), so the launcher can
-     * open them in either order; stdin closing ends the session, and the launcher closing its end ends the shim.
-     */
+    /** `omalauncher-mcp`, the [shim]. */
     fun managed(guestFifo: String): List<Managed> =
         listOf(
-            Managed.text(File(proot.rootfs, "usr/local/bin/$COMMAND"), Policy.Owned, executable = true) {
-                """
-                #!/bin/bash
-                # omalauncher: $COMMAND, OmaLauncher++'s MCP server for coding agents, on stdin and stdout. The launcher
-                # serves it through two FIFOs it's told about on xdg-open's FIFO (see McpBridge.kt).
-                set -u
-                if [ -t 0 ] || [ "${'$'}{1:-}" = -h ] || [ "${'$'}{1:-}" = --help ]; then
-                  echo "usage: $COMMAND (started by coding agents: the Model Context Protocol on stdin and stdout)" >&2
-                  exit 2
-                fi
-                dir=${'$'}(mktemp -d ${Proot.GUEST_RUNTIME_DIR}/${DIR_PREFIX}XXXXXX) || exit 1
-                reader=
-                trap '[ -n "${'$'}reader" ] && kill "${'$'}reader" 2>/dev/null; rm -rf "${'$'}dir"' EXIT
-                trap 'exit 143' INT TERM HUP
-                mkfifo -m 600 "${'$'}dir/in" "${'$'}dir/out" || exit 1
-                # No FIFO there: the write would make a file of it and the launcher would never answer.
-                if [ ! -p $guestFifo ] || ! timeout 2 sh -c 'printf "%s\n" "${'$'}1" > $guestFifo' sh "$PREFIX${'$'}dir"; then
-                  echo "$COMMAND: the launcher didn't answer; is it running?" >&2
-                  exit 1
-                fi
-                cat "${'$'}dir/out" &
-                reader=${'$'}!
-                cat >"${'$'}dir/in"
-                wait "${'$'}reader"
-                reader=
-                """.trimIndent() + "\n"
-            },
+            Managed.text(File(proot.rootfs, "usr/local/bin/$COMMAND"), Policy.Owned, executable = true) { shim(guestFifo) },
         )
 
     /** Agents we've added the server to, kept in the guest so a new Linux starts over; one we did is never added again. */
@@ -149,6 +127,39 @@ class McpBridge(
         /** What the shim writes on xdg-open's FIFO, before its folder's guest path. */
         const val PREFIX = "$COMMAND:"
         private const val DIR_PREFIX = "mcp."
+
+        /**
+         * `omalauncher-mcp`. Both FIFOs are opened together (cat in the background writes requests, the shim reads
+         * answers), so the launcher can open them in either order; stdin closing ends the session, and the launcher
+         * closing its end ends the shim. The shim ends as that cat rather than waiting for one: under proot, a `wait`
+         * for an exited reader was seen spinning a core long after the agent had gone, deaf to SIGTERM. Folders
+         * go in [runtimeDir], the guest's except in tests.
+         */
+        internal fun shim(guestFifo: String, runtimeDir: String = Proot.GUEST_RUNTIME_DIR): String =
+            """
+            #!/bin/bash
+            # omalauncher: $COMMAND, OmaLauncher++'s MCP server for coding agents, on stdin and stdout. The launcher
+            # serves it through two FIFOs it's told about on xdg-open's FIFO (see McpBridge.kt).
+            set -u
+            if [ -t 0 ] || [ "${'$'}{1:-}" = -h ] || [ "${'$'}{1:-}" = --help ]; then
+              echo "usage: $COMMAND (started by coding agents: the Model Context Protocol on stdin and stdout)" >&2
+              exit 2
+            fi
+            dir=${'$'}(mktemp -d $runtimeDir/${DIR_PREFIX}XXXXXX) || exit 1
+            trap 'rm -rf "${'$'}dir"' EXIT
+            trap 'exit 143' INT TERM HUP
+            mkfifo -m 600 "${'$'}dir/in" "${'$'}dir/out" || exit 1
+            # No FIFO there: the write would make a file of it and the launcher would never answer.
+            if [ ! -p $guestFifo ] || ! timeout 2 sh -c 'printf "%s\n" "${'$'}1" > $guestFifo' sh "$PREFIX${'$'}dir"; then
+              echo "$COMMAND: the launcher didn't answer; is it running?" >&2
+              exit 1
+            fi
+            # Requests go in through cat in the background (stdin named, as a background job's is /dev/null otherwise),
+            # answers come out of the shim turned into cat: no shell is left waiting for a child. The launcher removes
+            # the folder once it has both FIFOs open.
+            cat <&0 >"${'$'}dir/in" &
+            exec cat "${'$'}dir/out"
+            """.trimIndent() + "\n"
 
         private val NAME = McpServer.NAME
 
