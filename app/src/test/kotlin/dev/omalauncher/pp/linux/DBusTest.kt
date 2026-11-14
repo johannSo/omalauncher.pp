@@ -104,6 +104,9 @@ class DBusTest {
         val daemon = which("dbus-daemon")
         val gdbus = which("gdbus")
         assumeTrue("needs dbus-daemon and gdbus", daemon != null && gdbus != null)
+        // Where SELinux is on (Fedora), dbus-daemon asks each peer for its SELinux context, which a TCP socket can't
+        // give, and drops the connection; unlike AppArmor, busconfig has no switch to turn that off.
+        assumeTrue("dbus-daemon drops TCP peers where SELinux is on", !File("/sys/fs/selinux/enforce").exists())
         val dir = Files.createTempDirectory("dbus").toFile()
         val config = File(dir, "bus.conf")
         config.writeText(
