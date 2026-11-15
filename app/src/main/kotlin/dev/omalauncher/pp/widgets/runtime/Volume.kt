@@ -1,7 +1,7 @@
 package dev.omalauncher.pp.widgets.runtime
 
-import dev.omalauncher.pp.registerNotExported
-import dev.omalauncher.pp.changeObserver
+import dev.omalauncher.pp.system.changeObserver
+import dev.omalauncher.pp.system.registerNotExported
 import android.content.Context
 import android.content.IntentFilter
 import android.media.AudioDeviceCallback

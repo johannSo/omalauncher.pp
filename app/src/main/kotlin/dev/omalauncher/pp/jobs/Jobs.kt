@@ -17,7 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import dev.omalauncher.pp.LauncherData
+import dev.omalauncher.pp.storage.LauncherData
 import dev.omalauncher.pp.R
 import dev.omalauncher.pp.SettingsActivity
 import dev.omalauncher.pp.linux.AGENTS
@@ -26,9 +26,9 @@ import dev.omalauncher.pp.linux.LinuxState
 import dev.omalauncher.pp.linux.OutputTail
 import dev.omalauncher.pp.linux.Proot
 import dev.omalauncher.pp.linux.forEachOutputLine
-import dev.omalauncher.pp.registerNotExported
+import dev.omalauncher.pp.system.registerNotExported
 import dev.omalauncher.pp.theme.Toml
-import dev.omalauncher.pp.ui.SettingsPage
+import dev.omalauncher.pp.ui.settings.SettingsPage
 import dev.omalauncher.pp.upgrade.Managed
 import dev.omalauncher.pp.upgrade.Policy
 import dev.omalauncher.pp.upgrade.SyncedFile

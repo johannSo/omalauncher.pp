@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- settings › values from other apps (ui/OtherAppsRow.kt, widgets/ExternalValues.kt). -->
+<resources>
+    <string name="owl_intents_setting">значения из других приложений</string>
+    <string name="owl_intents_setting_off">выкл: никакое приложение не может менять то, что показывают виджеты</string>
+    <string name="owl_intents_setting_on">вкл: tasker и другие приложения могут задавать значения в виджетах, которые их принимают</string>
+    <string name="owl_intents_allow">разрешить</string>
+    <string name="owl_intents_deny">выкл</string>
+</resources>

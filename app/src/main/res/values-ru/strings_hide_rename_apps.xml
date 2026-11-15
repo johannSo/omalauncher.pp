@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hiding and renaming apps (AppTweakStore, ui/HiddenAppsScreen.kt): settings › hidden apps, and the apps' long-press menus. -->
+<resources>
+    <!-- Long-press menu entries of an app in the drawer, the recent apps and on home. -->
+    <string name="app_tweaks_rename">переименовать</string>
+    <string name="app_tweaks_hide">скрыть</string>
+    <string name="app_tweaks_unhide">показать</string>
+
+    <string name="app_tweaks_settings">скрытые приложения</string>
+    <plurals name="app_tweaks_settings_subtitle">
+        <item quantity="one">скрыто: %1$d · скрыть и переименовать приложения</item>
+        <item quantity="few">скрыто: %1$d · скрыть и переименовать приложения</item>
+        <item quantity="many">скрыто: %1$d · скрыть и переименовать приложения</item>
+        <item quantity="other">скрыто: %1$d · скрыть и переименовать приложения</item>
+    </plurals>
+    <string name="app_tweaks_settings_none">скрыть и переименовать приложения</string>
+
+    <string name="app_tweaks_title">скрытые приложения</string>
+    <string name="app_tweaks_search">поиск приложений</string>
+    <string name="app_tweaks_intro">Скрытые приложения не видны в списке приложений, недавних приложениях и поиске строки ввода; приложение на главном экране там и останется. Переименованное приложение везде называется по-новому. Агенты могут менять и то и другое в ~/.config/omalauncher/apps/apps.toml.</string>
+    <!-- Whether typing a hidden app's whole name in the bar still finds it. -->
+    <string name="app_tweaks_find_hidden">находить скрытые по полному названию</string>
+    <string name="app_tweaks_on">вкл</string>
+    <string name="app_tweaks_off">выкл</string>
+    <string name="app_tweaks_hidden_section">скрытые</string>
+    <string name="app_tweaks_shown_section">видимые</string>
+    <string name="app_tweaks_show">показать</string>
+    <string name="app_tweaks_none">нет подходящих приложений</string>
+    <!-- Under a renamed app's name: the name it has of its own. -->
+    <string name="app_tweaks_own_name">было: %1$s</string>
+    <string name="app_tweaks_kind_linux">linux</string>
+    <string name="app_tweaks_kind_owl">owl-приложение</string>
+    <string name="app_tweaks_kind_shortcut">ярлык</string>
+    <string name="app_tweaks_kind_work">рабочее</string>
+    <string name="app_tweaks_kind_clone">клон</string>
+
+    <!-- %1$s is the app's own name. -->
+    <string name="app_tweaks_rename_title">переименовать %1$s</string>
+    <string name="app_tweaks_rename_hint">везде: главный экран, список приложений, недавние приложения и поиск</string>
+    <string name="app_tweaks_rename_confirm">переименовать</string>
+    <string name="app_tweaks_rename_reset">исходное название</string>
+</resources>

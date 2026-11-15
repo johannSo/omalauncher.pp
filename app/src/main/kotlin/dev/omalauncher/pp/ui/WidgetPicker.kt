@@ -34,6 +34,7 @@ import dev.omalauncher.pp.AddWidgetActivity
 import dev.omalauncher.pp.AppWidgetCatalog
 import dev.omalauncher.pp.R
 import dev.omalauncher.pp.Runtime
+import dev.omalauncher.pp.ui.home.SearchField
 
 /** Which apps' widgets the picker lists: one app's, from its long-press menu, or with a null [packageName] every app's. */
 data class WidgetPick(

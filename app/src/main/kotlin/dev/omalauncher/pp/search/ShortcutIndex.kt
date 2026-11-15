@@ -5,12 +5,13 @@ import android.content.pm.LauncherApps
 import android.content.pm.LauncherApps.ShortcutQuery
 import android.os.SystemClock
 import android.util.Log
-import dev.omalauncher.pp.AndroidApp
-import dev.omalauncher.pp.AndroidAppCatalog
+import dev.omalauncher.pp.apps.AndroidApp
+import dev.omalauncher.pp.apps.AndroidAppCatalog
 import dev.omalauncher.pp.AppTweakStore
-import dev.omalauncher.pp.ShortcutRef
-import dev.omalauncher.pp.shortcutLabel
+import dev.omalauncher.pp.apps.ShortcutRef
+import dev.omalauncher.pp.apps.shortcutLabel
 import dev.omalauncher.pp.widgets.lang.matchScore
+import dev.omalauncher.pp.ui.home.open
 
 /** A shortcut an app offers ("New incognito tab"), and the app offering it, for its name and icon. */
 class OfferedEntry(

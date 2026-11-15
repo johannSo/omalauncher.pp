@@ -1,0 +1,103 @@
+package dev.omalauncher.pp.ui.settings
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import dev.omalauncher.pp.R
+import dev.omalauncher.pp.Runtime
+import dev.omalauncher.pp.linux.AGENTS
+import dev.omalauncher.pp.linux.Agent
+import dev.omalauncher.pp.linux.JobState
+import kotlinx.coroutines.launch
+import dev.omalauncher.pp.ui.ActionsRow
+import dev.omalauncher.pp.ui.BracketAction
+import dev.omalauncher.pp.ui.JobLog
+import dev.omalauncher.pp.ui.Mono
+import dev.omalauncher.pp.ui.OverlayPanel
+import dev.omalauncher.pp.ui.Palette
+import dev.omalauncher.pp.ui.ReadingWidth
+import dev.omalauncher.pp.ui.TextSize
+import dev.omalauncher.pp.ui.card
+import dev.omalauncher.pp.ui.passesKeys
+import dev.omalauncher.pp.ui.takesPassedKeys
+import dev.omalauncher.pp.ui.AgentStatusSetting
+
+/** Install and launch coding agents (Claude Code, OpenCode, Codex, Grok, ...). */
+@Composable
+fun AgentsScreen(
+    runtime: Runtime,
+    onDismiss: () -> Unit,
+    onOpen: (Agent) -> Unit,
+    /** Opens the scheduled jobs, which run these agents. */
+    onJobs: () -> Unit = {},
+) {
+    val store = runtime.agents
+    val scope = rememberCoroutineScope()
+    OverlayPanel(
+        stringResource(R.string.agents_title),
+        onDismiss,
+        actions = { BracketAction(stringResource(R.string.jobs_open), Palette.accent, onClick = onJobs) },
+        contentWidth = ReadingWidth,
+    ) {
+        BasicText(
+            stringResource(R.string.agents_intro),
+            Modifier.padding(vertical = 8.dp),
+            style = Mono.copy(color = Palette.muted, fontSize = TextSize.Small),
+        )
+        AgentStatusSetting(runtime)
+        LazyColumn(Modifier.padding(top = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            items(AGENTS, key = { it.bin }) { agent ->
+                AgentRow(
+                    agent = agent,
+                    installed = agent in store.installed,
+                    state = store.states[agent.bin] ?: JobState.Idle,
+                    onInstall = { scope.launch { store.install(agent) } },
+                    onRemove = { scope.launch { store.remove(agent) } },
+                    onOpen = { onOpen(agent) },
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AgentRow(
+    agent: Agent,
+    installed: Boolean,
+    state: JobState,
+    onInstall: () -> Unit,
+    onRemove: () -> Unit,
+    onOpen: () -> Unit,
+) {
+    Column(
+        Modifier.card(10.dp),
+    ) {
+        ActionsRow(
+            actions = {
+                // Keys on install or remove wait out the job, for what it ends with.
+                when {
+                    state is JobState.Working -> BasicText("${stringResource(state.action)}…", style = Mono.copy(color = Palette.accent))
+                    installed -> {
+                        BracketAction(stringResource(R.string.agents_open), Palette.green, Modifier.takesPassedKeys(), onOpen)
+                        BracketAction(stringResource(R.string.agents_remove), Palette.red, Modifier.passesKeys(), onRemove)
+                    }
+                    else -> BracketAction(stringResource(R.string.agents_install), Palette.accent, Modifier.takesPassedKeys().passesKeys(), onInstall)
+                }
+            },
+        ) {
+            Column {
+                BasicText(agent.name, style = Mono.copy(fontSize = TextSize.Item))
+                BasicText(stringResource(agent.description), style = Mono.copy(color = Palette.muted, fontSize = TextSize.Small))
+            }
+        }
+        JobLog(state)
+    }
+}

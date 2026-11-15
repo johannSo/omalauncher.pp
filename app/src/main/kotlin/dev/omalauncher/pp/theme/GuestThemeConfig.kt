@@ -1,6 +1,6 @@
 package dev.omalauncher.pp.theme
 
-import dev.omalauncher.pp.LauncherData
+import dev.omalauncher.pp.storage.LauncherData
 import android.system.Os
 import dev.omalauncher.pp.linux.Proot
 import dev.omalauncher.pp.linux.TerminalFont

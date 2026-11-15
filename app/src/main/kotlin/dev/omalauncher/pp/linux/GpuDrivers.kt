@@ -1,6 +1,6 @@
 package dev.omalauncher.pp.linux
 
-import dev.omalauncher.pp.readUpTo
+import dev.omalauncher.pp.system.readUpTo
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.LinkOption

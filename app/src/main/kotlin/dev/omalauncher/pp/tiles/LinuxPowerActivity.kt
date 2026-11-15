@@ -10,11 +10,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.ui.res.stringResource
 import dev.omalauncher.pp.App
-import dev.omalauncher.pp.AppLanguage
+import dev.omalauncher.pp.system.AppLanguage
 import dev.omalauncher.pp.R
 import dev.omalauncher.pp.ui.ConfirmDialog
 import dev.omalauncher.pp.ui.KeyIndicated
-import dev.omalauncher.pp.ui.SettingsPage
+import dev.omalauncher.pp.ui.settings.SettingsPage
 
 /**
  * The Linux tile's "shut down?", while Linux windows are open: shutting down closes them and ends the agents working

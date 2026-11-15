@@ -2,8 +2,10 @@
 
 ## OmaLauncher++
 
-OmaLauncher++ is released on GitHub only, as an APK built locally from `main`
-and tagged `v<versionName>` (`v1.0.0`). Every release is signed with the same
+OmaLauncher++ is released on GitHub only, as the `foss` flavor's APK built
+locally from `main` and tagged `v<versionName>` (`v1.0.0`). Its settings ask
+this repo's GitHub releases for a newer version, counting only releases that
+aren't marked pre-release. Every release is signed with the same
 key, the one `keystore.properties` points at: a different key and phones can't
 update, so never change it.
 
@@ -13,8 +15,8 @@ update, so never change it.
 
    ```sh
    ./scripts/fetch-proot.sh
-   ./gradlew :owl:test :app:testDebugUnitTest :app:assembleRelease
-   cp app/build/outputs/apk/release/app-release.apk omalauncher.pp-v1.0.0.apk
+   ./gradlew :owl:test :app:testFossDebugUnitTest :app:assembleFossRelease
+   cp app/build/outputs/apk/foss/release/app-foss-release.apk omalauncher.pp-v1.0.0.apk
    sha256sum omalauncher.pp-v1.0.0.apk > SHA256SUMS
    ```
 
@@ -60,7 +62,13 @@ In Omalauncher's repo the tag starts its `.github/workflows/release.yml` (not
 kept in OmaLauncher++): it runs the tests, builds the
 signed APK and attaches it to a GitHub release with `SHA256SUMS` and the R8
 `mapping.txt`, using `changelogs/<versionCode>.txt` as the notes (it fails
-without one). The mapping matches the Play build's, so it retraces Play crashes.
+without one). That APK is the `foss` build, without Play's closed-source in-app
+update library, so F-Droid can build the same thing; fastlane uploads the `play`
+build. Their R8 mappings differ, so the release carries both:
+`mapping-<version>.txt` for the APK and `mapping-play-<version>.txt`, which
+retraces Play crashes (the workflow builds the play AAB for it; the same commit
+gives the same mapping as the one fastlane uploaded). A trace's `r8-map-id`
+matches the `# pg_map_id` at the top of the right one.
 
 Bump `versionCode` for every upload and add its changelog. Add the release's
 most important changes to `CHANGELOG.md` as they land under "Unreleased", and

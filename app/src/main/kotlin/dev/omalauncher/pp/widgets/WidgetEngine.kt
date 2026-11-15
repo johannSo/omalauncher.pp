@@ -15,9 +15,9 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
-import dev.omalauncher.pp.AppLanguage
+import dev.omalauncher.pp.system.AppLanguage
 import dev.omalauncher.pp.BuildConfig
-import dev.omalauncher.pp.LauncherData
+import dev.omalauncher.pp.storage.LauncherData
 import dev.omalauncher.pp.Runtime
 import dev.omalauncher.pp.linux.Agent
 import dev.omalauncher.pp.linux.Proot

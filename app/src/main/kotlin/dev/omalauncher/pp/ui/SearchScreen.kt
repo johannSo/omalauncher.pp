@@ -28,6 +28,12 @@ import dev.omalauncher.pp.search.BarSearch
 import dev.omalauncher.pp.search.ContactSearch
 import dev.omalauncher.pp.search.WebSearch
 import dev.omalauncher.pp.theme.SearchStyle
+import dev.omalauncher.pp.ui.home.LauncherState
+import dev.omalauncher.pp.ui.settings.Flag
+import dev.omalauncher.pp.ui.settings.Heading
+import dev.omalauncher.pp.ui.settings.OptionHint
+import dev.omalauncher.pp.ui.settings.SettingsPage
+import dev.omalauncher.pp.ui.settings.StyleOption
 
 /** Lets [BarSearch] read the bar's text and leave the drawer as opening an app does; Launcher calls it once. */
 internal fun BarSearch.bind(state: LauncherState) {

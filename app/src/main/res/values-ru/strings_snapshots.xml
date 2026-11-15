@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Settings › linux › snapshots: snapshots of the Linux system to roll back to. -->
+<resources>
+    <string name="snapshots_title">снимки</string>
+    <string name="snapshots_row_none">пока нет · откатите обновление, которое что-то сломало</string>
+    <plurals name="snapshots_row">
+        <item quantity="one">%d снимок для отката</item>
+        <item quantity="few">%d снимка для отката</item>
+        <item quantity="many">%d снимков для отката</item>
+        <item quantity="other">%d снимка для отката</item>
+    </plurals>
+    <string name="snapshots_body">Снимок сохраняет систему Linux как есть: её пакеты и всё в /etc, /usr, /var и /opt. Восстановление снимка откатывает обновление, которое что-то сломало. /root и /home, ваши собственные файлы, остаются как есть, если вы не выберете иначе. Снимки делят между собой то, что не менялось, поэтому снимок после обновления занимает лишь столько места, сколько обновление изменило.</string>
+    <string name="snapshots_storage">свободно %1$s · снимки занимают %2$s</string>
+    <string name="snapshots_take">сделать снимок</string>
+    <string name="snapshots_low_space">мало места: снимок перед обновлением пропускается, если для него нет места</string>
+    <string name="snapshots_list">снимки</string>
+    <string name="snapshots_none">пока нет</string>
+    <string name="snapshots_options">параметры</string>
+    <string name="snapshots_option_before_update">перед обновлениями</string>
+    <string name="snapshots_option_on">снимок</string>
+    <string name="snapshots_option_off">нет</string>
+    <string name="snapshots_option_keep">хранить</string>
+    <string name="snapshots_option_keep_hint">самые новые; следующий снимок удалит более старые</string>
+    <string name="snapshots_option_home">/root, /home</string>
+    <string name="snapshots_option_home_in">в снимках</string>
+    <string name="snapshots_option_home_out">не включать</string>
+    <string name="snapshots_reason_update">перед обновлением</string>
+    <string name="snapshots_reason_manual">сделан вручную</string>
+    <!-- Why it was taken, what deleting it frees, how big the system it holds is. -->
+    <string name="snapshots_details">%1$s · %2$s собственных · система %3$s</string>
+    <string name="snapshots_restore">восстановить</string>
+    <string name="snapshots_delete">удалить</string>
+    <string name="snapshots_restore_ask">откатить Linux к этому снимку?</string>
+    <string name="snapshots_restore_body">Linux выключится, вернётся к тому состоянию и запустится снова: пакеты, установленные или обновлённые с тех пор, тоже откатятся. /root и /home останутся как есть.</string>
+    <string name="snapshots_restore_body_home">Linux выключится, вернётся к тому состоянию и запустится снова: пакеты, установленные или обновлённые с тех пор, тоже откатятся, как и /root и /home. Изменения файлов там с тех пор будут потеряны.</string>
+    <string name="snapshots_restore_home">/root, /home</string>
+    <string name="snapshots_restore_home_keep">оставить</string>
+    <string name="snapshots_restore_home_back">откатить</string>
+    <string name="snapshots_delete_ask">удалить этот снимок?</string>
+    <string name="snapshots_job_taking">создание снимка</string>
+    <string name="snapshots_job_restoring">восстановление снимка</string>
+    <string name="snapshots_step_scanning">чтение системы…</string>
+    <string name="snapshots_step_storing">сохранено %1$s из %2$s</string>
+    <string name="snapshots_step_saving">сохранение…</string>
+    <string name="snapshots_step_unpacking">файлов: %1$d из %2$d</string>
+    <string name="snapshots_step_swapping">установка на место…</string>
+    <string name="snapshots_no_room">снимок не создан: нужно %1$s свободного места, а есть %2$s</string>
+    <string name="snapshots_no_room_restore">не хватает места для восстановления: нужно %1$s свободного места, а есть %2$s</string>
+    <string name="snapshots_ran_out">место заканчивалось, поэтому снимок остановлен</string>
+    <string name="snapshots_gone">этого снимка больше нет</string>
+    <string name="snapshots_damaged">файл снимка повреждён (%1$s); ничего не изменено</string>
+</resources>

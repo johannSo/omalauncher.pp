@@ -38,6 +38,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.text.DateFormat
 import java.util.Date
+import dev.omalauncher.pp.ui.settings.Flag
+import dev.omalauncher.pp.ui.settings.Heading
+import dev.omalauncher.pp.ui.settings.LinuxScreen
+import dev.omalauncher.pp.ui.settings.OptionHint
+import dev.omalauncher.pp.ui.settings.StyleOption
 
 /** Settings › linux's row for [SnapshotsScreen]: how many there are, or what they're for while there are none. */
 @Composable

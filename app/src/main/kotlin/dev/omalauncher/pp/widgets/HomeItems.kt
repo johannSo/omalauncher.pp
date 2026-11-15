@@ -2,9 +2,9 @@ package dev.omalauncher.pp.widgets
 
 import android.content.ComponentName
 import android.content.Context
-import dev.omalauncher.pp.AndroidApp
-import dev.omalauncher.pp.AndroidShortcut
-import dev.omalauncher.pp.ShortcutRef
+import dev.omalauncher.pp.apps.AndroidApp
+import dev.omalauncher.pp.apps.AndroidShortcut
+import dev.omalauncher.pp.apps.ShortcutRef
 import androidx.compose.runtime.mutableStateListOf
 import dev.omalauncher.pp.linux.LinuxApp
 import dev.omalauncher.pp.upgrade.Versioned

@@ -18,6 +18,7 @@ import dev.omalauncher.pp.ui.readSmallText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import dev.omalauncher.pp.system.AppLanguage
 
 /**
  * "Add as SSH key" in the share sheet: a public key's text or .pub file shared from another app goes into

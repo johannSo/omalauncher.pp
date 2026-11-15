@@ -39,6 +39,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.RandomAccessFile
+import dev.omalauncher.pp.storage.LauncherData
 
 private const val TAG = "agent-status"
 

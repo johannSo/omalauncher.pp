@@ -6,6 +6,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import dev.omalauncher.pp.R
 import dev.omalauncher.pp.widgets.ExternalValues
+import dev.omalauncher.pp.ui.settings.SettingsRow
 
 /**
  * settings › values from other apps: whether Tasker and the like may set values in widgets that take them (a

@@ -36,11 +36,12 @@ import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.viewinterop.AndroidView
 import dev.omalauncher.pp.BuildConfig
-import dev.omalauncher.pp.openUrl
+import dev.omalauncher.pp.system.openUrl
 import dev.omalauncher.pp.widgets.render.LocalHomeCovered
 import kotlinx.coroutines.flow.distinctUntilChanged
 import java.io.ByteArrayInputStream
 import kotlin.math.roundToInt
+import dev.omalauncher.pp.ui.home.TerminalTiles
 
 /**
  * Web pages in home-screen tiles (the widgets' `Browser` node), drawn by

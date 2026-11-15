@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Focus mode and app timers (focus/): settings › focus, the time's-up screen, the bar's "focus …" and FocusGuard. -->
+<resources>
+    <string name="focus_title">фокус</string>
+    <!-- Settings' row: the profile that's on. -->
+    <string name="focus_subtitle_on">вкл: %1$s</string>
+    <plurals name="focus_timers_count">
+        <item quantity="one">%1$d таймер приложения</item>
+        <item quantity="few">%1$d таймера приложений</item>
+        <item quantity="many">%1$d таймеров приложений</item>
+        <item quantity="other">%1$d таймера приложений</item>
+    </plurals>
+
+    <string name="focus_profiles">режим фокусировки</string>
+    <string name="focus_profiles_hint">Пока профиль включён, приложения, которых в нём нет, скрыты из списка приложений, поиска, недавних приложений и главного экрана. В строке ввода можно также набрать focus и название профиля или focus off; focus work 25m включает его на 25 минут.</string>
+    <string name="focus_new_profile">новый профиль</string>
+    <string name="focus_create">создать</string>
+    <string name="focus_name_taken">профиль с таким названием уже есть, или это слово занято строкой ввода (off)</string>
+    <string name="focus_turn_on">включить</string>
+    <string name="focus_turn_off">выключить</string>
+    <string name="focus_edit">изменить</string>
+    <string name="focus_delete">удалить</string>
+    <string name="focus_delete_title">удалить %1$s?</string>
+    <string name="focus_delete_message">Профиль будет удалён вместе со списком приложений и расписанием. Сами приложения не изменятся.</string>
+    <string name="focus_until_off">пока не выключите</string>
+    <!-- How long a profile is turned on for: "for 25m". -->
+    <string name="focus_for">на %1$s</string>
+    <string name="focus_status_off">выкл</string>
+    <string name="focus_status_on">вкл</string>
+    <string name="focus_status_until">вкл до %1$s</string>
+    <string name="focus_status_scheduled">вкл по расписанию до %1$s</string>
+    <plurals name="focus_allows_apps">
+        <item quantity="one">пропускает %1$d приложение</item>
+        <item quantity="few">пропускает %1$d приложения</item>
+        <item quantity="many">пропускает %1$d приложений</item>
+        <item quantity="other">пропускает %1$d приложения</item>
+    </plurals>
+    <plurals name="focus_blocks_apps">
+        <item quantity="one">скрывает %1$d приложение</item>
+        <item quantity="few">скрывает %1$d приложения</item>
+        <item quantity="many">скрывает %1$d приложений</item>
+        <item quantity="other">скрывает %1$d приложения</item>
+    </plurals>
+
+    <string name="focus_rename">переименовать</string>
+    <string name="focus_apps_mode">приложения</string>
+    <string name="focus_apps_only">только эти</string>
+    <string name="focus_apps_except">все, кроме этих</string>
+    <string name="focus_dnd">не беспокоить</string>
+    <string name="focus_yes">вкл</string>
+    <string name="focus_no">выкл</string>
+    <string name="focus_dnd_needed">Сначала Android должен разрешить лаунчеру управлять режимом «Не беспокоить».</string>
+    <string name="focus_schedule">расписание</string>
+    <string name="focus_schedule_none">нет</string>
+    <string name="focus_schedule_weekly">еженедельно</string>
+    <string name="focus_schedule_from">с</string>
+    <string name="focus_schedule_to">до</string>
+    <string name="focus_schedule_no_days">Выберите дни, в которые он включается.</string>
+    <string name="focus_apps">приложения</string>
+    <string name="focus_search_apps">найти приложение</string>
+    <string name="focus_kind_linux">linux</string>
+    <string name="focus_kind_owl">owl</string>
+    <string name="focus_kind_shortcut">ярлык</string>
+
+    <string name="focus_timers">таймеры приложений</string>
+    <string name="focus_timers_hint">Дневной лимит для каждого Android-приложения. Когда он исчерпан, при открытии приложения из лаунчера сначала появляется экран «время вышло». Таймер можно задать и долгим нажатием на приложение.</string>
+    <string name="focus_add_timer">добавить таймер</string>
+    <string name="focus_pick_app">выберите приложение</string>
+    <string name="focus_limit_title">%1$s в день</string>
+    <string name="focus_no_limit">без лимита</string>
+    <string name="focus_remove">убрать</string>
+    <!-- Used today, of the app's limit: "12m of 30m today". -->
+    <string name="focus_timer_used">%1$s из %2$s сегодня</string>
+    <string name="focus_usage_needed">Таймеры учитывают время использования каждого приложения, а Android сообщает его только при наличии доступа к истории использования.</string>
+    <string name="focus_allow">разрешить</string>
+    <string name="focus_action_timer">таймер приложения</string>
+
+    <string name="focus_outside">вне лаунчера</string>
+    <string name="focus_guard_explain">Таймеры и режим фокусировки останавливают приложения, открытые из OmaLauncher++. Чтобы останавливать их, откуда бы они ни открывались — из уведомления, другого приложения или недавних, — включите OmaLauncher++ focus в настройках специальных возможностей Android. Он видит только, какое приложение выходит на передний план, но не то, что на экране, и не то, что вы вводите; настройки, телефон и клавиатура никогда не останавливаются. Android может сначала попросить разрешить ограниченные настройки в разделе «О приложении» лаунчера, как для приложений не из магазина. Пока вы его не включите, он выключен.</string>
+    <string name="focus_guard_on">вкл</string>
+    <string name="focus_guard_off">выкл</string>
+    <string name="focus_guard_open">специальные возможности</string>
+    <string name="focus_file_hint">Агенты могут изменить всё это в ~/.config/omalauncher/focus/focus.toml.</string>
+
+    <string name="focus_guard_label">OmaLauncher++ focus</string>
+    <string name="focus_guard_summary">Режим фокусировки и таймеры для приложений, открытых вне лаунчера</string>
+    <string name="focus_guard_description">Позволяет режиму фокусировки и таймерам OmaLauncher++ останавливать приложения, открытые вне лаунчера: из уведомления, другого приложения или недавних. Он видит только, какое приложение выходит на передний план, но не то, что на экране, и не то, что вы вводите, и ничего не покидает телефон. Настройки, телефон и клавиатура никогда не останавливаются.</string>
+
+    <string name="focus_times_up_title">время вышло</string>
+    <!-- The app, how long it was used today, its daily limit. -->
+    <string name="focus_times_up_message">%1$s: %2$s сегодня из %3$s в день</string>
+    <string name="focus_times_up_hint">«всё равно открыть» снимает ограничение до конца дня</string>
+    <string name="focus_hidden_title">не сейчас</string>
+    <string name="focus_hidden_message">%1$s нет в профиле фокусировки %2$s</string>
+    <string name="focus_one_more_minute">ещё 1 минута</string>
+    <string name="focus_open_anyway">всё равно открыть</string>
+    <string name="focus_close">закрыть</string>
+    <string name="focus_duration_hours">%1$d ч %2$d мин</string>
+    <string name="focus_duration_minutes">%1$d мин</string>
+
+    <string name="focus_toast_on">фокус: %1$s</string>
+    <string name="focus_toast_until">фокус: %1$s до %2$s</string>
+    <string name="focus_toast_off">фокус выкл</string>
+</resources>

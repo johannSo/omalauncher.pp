@@ -10,7 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.edit
-import dev.omalauncher.pp.LauncherData
+import dev.omalauncher.pp.storage.LauncherData
 import dev.omalauncher.pp.upgrade.writeAtomically
 import dev.omalauncher.pp.widgets.lang.Compiler
 import dev.omalauncher.pp.widgets.lang.Global

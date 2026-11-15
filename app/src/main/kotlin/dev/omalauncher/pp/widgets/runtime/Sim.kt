@@ -11,13 +11,14 @@ import android.telephony.ServiceState
 import android.telephony.SignalStrength
 import android.telephony.TelephonyCallback
 import android.telephony.TelephonyManager
+import dev.omalauncher.pp.system.changeObserver
 import dev.omalauncher.pp.widgets.lang.Null
 import dev.omalauncher.pp.widgets.lang.Num
 import dev.omalauncher.pp.widgets.lang.Obj
 import dev.omalauncher.pp.widgets.lang.Str
 import dev.omalauncher.pp.widgets.lang.Value
 import dev.omalauncher.pp.widgets.lang.bool
-import dev.omalauncher.pp.changeObserver
+import dev.omalauncher.pp.system.changeObserver
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow

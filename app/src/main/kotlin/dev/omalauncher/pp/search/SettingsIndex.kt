@@ -8,7 +8,7 @@ import android.content.res.Resources
 import android.os.LocaleList
 import android.provider.Settings
 import android.util.Log
-import dev.omalauncher.pp.AppLanguage
+import dev.omalauncher.pp.system.AppLanguage
 import dev.omalauncher.pp.R
 import dev.omalauncher.pp.widgets.lang.matchScore
 import java.util.Locale

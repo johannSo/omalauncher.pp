@@ -30,6 +30,12 @@ import dev.omalauncher.pp.theme.ForkStyle
 import dev.omalauncher.pp.theme.Style
 import dev.omalauncher.pp.theme.StyleStore
 import dev.omalauncher.pp.theme.TintSetting
+import dev.omalauncher.pp.ui.settings.Flag
+import dev.omalauncher.pp.ui.settings.Heading
+import dev.omalauncher.pp.ui.settings.NumberOption
+import dev.omalauncher.pp.ui.settings.OptionHint
+import dev.omalauncher.pp.ui.settings.OptionLabel
+import dev.omalauncher.pp.ui.settings.StyleOption
 
 /** How big app icons draw (style.toml's icons.size), as a multiple of each place's own size. */
 val LauncherStyle.iconScale get() = style[ForkStyle.ICON_SIZE].toFloat()

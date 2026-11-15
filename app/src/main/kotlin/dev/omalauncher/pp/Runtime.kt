@@ -47,14 +47,14 @@ import dev.omalauncher.pp.theme.Style
 import dev.omalauncher.pp.theme.StyleStore
 import dev.omalauncher.pp.theme.ThemeStore
 import dev.omalauncher.pp.tiles.QuickTiles
-import dev.omalauncher.pp.ui.Gestures
 import dev.omalauncher.pp.ui.IconLook
 import dev.omalauncher.pp.ui.IconPackStore
+import dev.omalauncher.pp.ui.home.Gestures
 import dev.omalauncher.pp.ui.KeyboardBridge
-import dev.omalauncher.pp.ui.SettingsPage
-import dev.omalauncher.pp.ui.Speaker
+import dev.omalauncher.pp.ui.settings.SettingsPage
+import dev.omalauncher.pp.ui.voice.Speaker
 import dev.omalauncher.pp.voice.VoiceSession
-import dev.omalauncher.pp.ui.TerminalTiles
+import dev.omalauncher.pp.ui.home.TerminalTiles
 import dev.omalauncher.pp.ui.WindowManager
 import dev.omalauncher.pp.ui.bitmapMask
 import dev.omalauncher.pp.ui.Palette
@@ -91,6 +91,13 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.thread
+import dev.omalauncher.pp.apps.AndroidAppCatalog
+import dev.omalauncher.pp.apps.AppUsage
+import dev.omalauncher.pp.apps.androidAppKey
+import dev.omalauncher.pp.apps.androidShortcutKey
+import dev.omalauncher.pp.linux.LinuxAppCatalog
+import dev.omalauncher.pp.storage.LauncherData
+import dev.omalauncher.pp.storage.PhoneFolders
 
 /**
  * Process-wide state: the launcher (themes, widgets, Android apps) and the
@@ -173,6 +180,13 @@ class Runtime(
             updates.forget()
         }
     val updates: SystemUpdates = SystemUpdates(proot, pacman, agents, snapshots::beforeUpdate)
+
+    /** A newer launcher: on Google Play in the play build, on GitHub releases in the foss build. */
+    val launcherUpdates = LauncherUpdates(context)
+
+    /** Messages from the developer, shown on home. */
+    val announcements = dev.omalauncher.pp.net.Announcements(context)
+
     val gpu = Gpu(context, proot, pacman)
 
     /** The SSH server into Linux and its local servers on the LAN; settings › linux › ssh. */
@@ -544,6 +558,7 @@ class Runtime(
     /** Checks for updates now, on the runtime's scope: leaving settings doesn't cancel it. */
     fun checkUpdates() {
         if (linux) scope.launch { updates.check(force = true) }
+        launcherUpdates.check(force = true)
     }
 
     /** Runs every pending update (packages and agents); the drawer then lists what changed. */

@@ -12,14 +12,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
-import dev.omalauncher.pp.registerNotExported
+import dev.omalauncher.pp.system.changeObserver
+import dev.omalauncher.pp.system.registerNotExported
 import dev.omalauncher.pp.widgets.lang.Lst
 import dev.omalauncher.pp.widgets.lang.Num
 import dev.omalauncher.pp.widgets.lang.Obj
 import dev.omalauncher.pp.widgets.lang.Str
 import dev.omalauncher.pp.widgets.lang.Value
 import dev.omalauncher.pp.widgets.lang.bool
-import dev.omalauncher.pp.changeObserver
+import dev.omalauncher.pp.system.changeObserver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
@@ -36,7 +37,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
 import java.util.TimeZone
-import dev.omalauncher.pp.hasPermission
+import dev.omalauncher.pp.system.hasPermission
 
 /**
  * The events in the phone's calendars, local and synced, for widgets: `source c = android.calendar`, and

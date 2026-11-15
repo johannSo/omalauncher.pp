@@ -10,12 +10,12 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
-import dev.omalauncher.pp.ui.OwlAppWindow
+import dev.omalauncher.pp.ui.WidgetAsks
+import dev.omalauncher.pp.ui.home.OwlAppWindow
 import dev.omalauncher.pp.ui.Palette
 import dev.omalauncher.pp.ui.holdsKeys
 import dev.omalauncher.pp.ui.showStatusBar
 import dev.omalauncher.pp.widgets.render.LocalInputFocus
-import dev.omalauncher.pp.ui.WidgetAsks
 
 /**
  * An owl app (`app "name" { }`) as its own task and Recents card, named after it and with its icon,

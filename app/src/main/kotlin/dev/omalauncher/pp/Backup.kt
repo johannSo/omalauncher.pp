@@ -19,6 +19,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 import kotlin.system.exitProcess
+import dev.omalauncher.pp.storage.LauncherData
 
 /**
  * Settings › backup: the launcher's own data as one zip, to bring it back on a new phone or this one. Home (its

@@ -2,8 +2,8 @@ package dev.omalauncher.pp.widgets.runtime
 
 import android.content.Context
 import androidx.compose.runtime.snapshotFlow
-import dev.omalauncher.pp.LanAddress
-import dev.omalauncher.pp.LocalNetwork
+import dev.omalauncher.pp.net.LanAddress
+import dev.omalauncher.pp.net.LocalNetwork
 import dev.omalauncher.pp.linux.JobState
 import dev.omalauncher.pp.linux.Ssh
 import dev.omalauncher.pp.linux.sshCommand

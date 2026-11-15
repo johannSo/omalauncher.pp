@@ -23,12 +23,12 @@ import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import dev.omalauncher.pp.ui.KeybarPreview
-import dev.omalauncher.pp.ui.LocalOffscreen
-import dev.omalauncher.pp.ui.OwlAppWindow
-import dev.omalauncher.pp.ui.PanelPreview
-import dev.omalauncher.pp.ui.WidgetScreenPanel
+import dev.omalauncher.pp.ui.home.LocalOffscreen
+import dev.omalauncher.pp.ui.home.OwlAppWindow
+import dev.omalauncher.pp.ui.home.PanelPreview
+import dev.omalauncher.pp.ui.home.WidgetScreenPanel
 import dev.omalauncher.pp.widgets.lang.OwlKind
-import dev.omalauncher.pp.ui.WidgetTile
+import dev.omalauncher.pp.ui.home.WidgetTile
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import kotlinx.coroutines.Dispatchers

@@ -1,8 +1,8 @@
 package dev.omalauncher.pp.widgets
 
-import dev.omalauncher.pp.copyText
-import dev.omalauncher.pp.registerNotExported
-import dev.omalauncher.pp.shareText
+import dev.omalauncher.pp.system.copyText
+import dev.omalauncher.pp.system.registerNotExported
+import dev.omalauncher.pp.system.shareText
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -39,6 +39,7 @@ import android.util.Log
 import android.widget.Toast
 import dev.omalauncher.pp.MainActivity
 import dev.omalauncher.pp.R
+import dev.omalauncher.pp.system.postNotification
 import dev.omalauncher.pp.Runtime
 import dev.omalauncher.pp.linux.Agent
 import dev.omalauncher.pp.linux.LinuxState
@@ -47,8 +48,7 @@ import dev.omalauncher.pp.linux.GuestShell
 import dev.omalauncher.pp.linux.Proot
 import dev.omalauncher.pp.linux.ShellPool
 import dev.omalauncher.pp.linux.ShellResult
-import dev.omalauncher.pp.SecretBox
-import dev.omalauncher.pp.postNotification
+import dev.omalauncher.pp.widgets.runtime.SecretBox
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.resume
 import kotlin.concurrent.thread
@@ -56,12 +56,12 @@ import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlinx.coroutines.suspendCancellableCoroutine
-import dev.omalauncher.pp.WebSocket
-import dev.omalauncher.pp.LocalNetwork
-import dev.omalauncher.pp.openHttp
-import dev.omalauncher.pp.pin
-import dev.omalauncher.pp.openUrl
-import dev.omalauncher.pp.readUpTo
+import dev.omalauncher.pp.net.WebSocket
+import dev.omalauncher.pp.net.LocalNetwork
+import dev.omalauncher.pp.net.openHttp
+import dev.omalauncher.pp.net.pin
+import dev.omalauncher.pp.system.openUrl
+import dev.omalauncher.pp.system.readUpTo
 import dev.omalauncher.pp.widgets.lang.sha256Hex
 import dev.omalauncher.pp.upgrade.writeAtomically
 import dev.omalauncher.pp.widgets.lang.Builtins
@@ -76,25 +76,28 @@ import dev.omalauncher.pp.widgets.lang.Value
 import dev.omalauncher.pp.widgets.lang.IntentSpec
 import dev.omalauncher.pp.widgets.lang.WidgetError
 import dev.omalauncher.pp.widgets.lang.bool
-import dev.omalauncher.pp.androidAppKey
-import dev.omalauncher.pp.OfferedShortcut
-import dev.omalauncher.pp.ui.AppHandlers
-import dev.omalauncher.pp.ui.ShortcutMenu
-import dev.omalauncher.pp.ui.initials
-import dev.omalauncher.pp.ui.AppHit
-import dev.omalauncher.pp.ui.act
-import dev.omalauncher.pp.ui.actionWords
-import dev.omalauncher.pp.ui.kind
-import dev.omalauncher.pp.ui.profileKind
-import dev.omalauncher.pp.ui.profileWord
+import dev.omalauncher.pp.apps.androidAppKey
+import dev.omalauncher.pp.apps.OfferedShortcut
+import dev.omalauncher.pp.ui.home.AppHandlers
+import dev.omalauncher.pp.ui.home.ShortcutMenu
+import dev.omalauncher.pp.ui.home.initials
+import dev.omalauncher.pp.ui.home.AppHit
+import dev.omalauncher.pp.ui.EmbeddedBrowser
+import dev.omalauncher.pp.ui.home.act
+import dev.omalauncher.pp.ui.home.actionWords
+import dev.omalauncher.pp.ui.home.kind
+import dev.omalauncher.pp.ui.home.profileKind
 import dev.omalauncher.pp.ui.LauncherStyle
+import dev.omalauncher.pp.ui.settings.SettingsPage
+import dev.omalauncher.pp.ui.home.allApps
+import dev.omalauncher.pp.ui.home.appIconOf
+import dev.omalauncher.pp.ui.home.open
+import dev.omalauncher.pp.ui.home.recentApps
+import dev.omalauncher.pp.widgets.runtime.battery
+import dev.omalauncher.pp.widgets.runtime.AirPods
+import dev.omalauncher.pp.ui.home.profileWord
 import dev.omalauncher.pp.ui.drawerLabels
 import dev.omalauncher.pp.ui.iconScale
-import dev.omalauncher.pp.ui.SettingsPage
-import dev.omalauncher.pp.ui.allApps
-import dev.omalauncher.pp.ui.appIconOf
-import dev.omalauncher.pp.ui.open
-import dev.omalauncher.pp.ui.recentApps
 import dev.omalauncher.pp.focus.act
 import dev.omalauncher.pp.focus.focusValue
 import dev.omalauncher.pp.focus.usageUpdates
@@ -114,9 +117,6 @@ import dev.omalauncher.pp.widgets.runtime.SystemPanels
 import dev.omalauncher.pp.widgets.runtime.Volume
 import dev.omalauncher.pp.widgets.runtime.WidgetPermissions
 import dev.omalauncher.pp.widgets.runtime.watchFile
-import dev.omalauncher.pp.ui.EmbeddedBrowser
-import dev.omalauncher.pp.widgets.runtime.AirPods
-import dev.omalauncher.pp.widgets.runtime.battery
 import dev.omalauncher.pp.widgets.runtime.Motion
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -345,7 +345,7 @@ class WidgetServices(
     private fun profileKind(user: UserHandle): String? =
         if (user == Process.myUserHandle()) null else profileKind(context.getSystemService(UserManager::class.java).getSerialNumberForUser(user))
 
-    /** As above, by [profile]'s serial number (see [dev.omalauncher.pp.AndroidApp.profile]): no binder call. */
+    /** As above, by [profile]'s serial number (see [dev.omalauncher.pp.apps.AndroidApp.profile]): no binder call. */
     private fun profileKind(profile: Long?): String? {
         val apps = runtime.androidApps
         return profile?.let { profileWord(it, apps.cloned(it), apps.isPrivate(it)) }
@@ -513,9 +513,9 @@ class WidgetServices(
 
     /**
      * Launchable Android apps for `source a = android.apps`, updated as apps come and go and are opened, each `{key, name, package, component, profile, system, icon, score, last}`.
-     * `key` is [dev.omalauncher.pp.AndroidApp.key], unique across profiles, for `androidApp(a.key)`; `profile` is `work` or
+     * `key` is [dev.omalauncher.pp.apps.AndroidApp.key], unique across profiles, for `androidApp(a.key)`; `profile` is `work` or
      * `clone` as on notifications, else null; `icon` is the `app:` src for that copy. `score` and `last` are what the
-     * search ranks by ([dev.omalauncher.pp.AppUsage]), so a widget can rank apps the same way. The private space's apps
+     * search ranks by ([dev.omalauncher.pp.apps.AppUsage]), so a widget can rank apps the same way. The private space's apps
      * are left out: only the drawer lists them, and only while it's unlocked. So are apps hidden in apps.toml, and
      * `name` is the one it gives an app.
      */
@@ -756,7 +756,16 @@ class WidgetServices(
                     }
                 }
             "share" -> share(arg)
-            "haptic" -> view?.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            // Android's own touch feedback effects, so the user's setting still decides; a word from a value it doesn't
+            // know is medium, as haptic() was before it took one.
+            "haptic" ->
+                view?.performHapticFeedback(
+                    when (args.firstOrNull().textOrNull()) {
+                        "light" -> HapticFeedbackConstants.CLOCK_TICK
+                        "strong" -> HapticFeedbackConstants.LONG_PRESS
+                        else -> HapticFeedbackConstants.VIRTUAL_KEY
+                    },
+                )
             "open" -> openApp(arg)
             "ask" -> ask(arg, args.getOrNull(1).textOrNull())
             "appAction" -> args.getOrNull(1).textOrNull()?.let { appAction(arg, it) }

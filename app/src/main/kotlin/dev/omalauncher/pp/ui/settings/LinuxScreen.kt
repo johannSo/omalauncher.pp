@@ -1,0 +1,323 @@
+package dev.omalauncher.pp.ui.settings
+
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import dev.omalauncher.pp.Runtime
+import dev.omalauncher.pp.R
+import dev.omalauncher.pp.linux.AGENTS
+import dev.omalauncher.pp.linux.JobState
+import dev.omalauncher.pp.linux.LinuxState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.IOException
+import java.nio.file.FileVisitResult
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.SimpleFileVisitor
+import java.nio.file.attribute.BasicFileAttributes
+import dev.omalauncher.pp.system.hasPermission
+import dev.omalauncher.pp.ui.BracketAction
+import dev.omalauncher.pp.ui.JobLog
+import dev.omalauncher.pp.ui.Mono
+import dev.omalauncher.pp.ui.OverlayPanel
+import dev.omalauncher.pp.ui.Palette
+import dev.omalauncher.pp.ui.ReadingWidth
+import dev.omalauncher.pp.ui.TextSize
+import dev.omalauncher.pp.ui.card
+import dev.omalauncher.pp.ui.passesKeys
+import dev.omalauncher.pp.ui.takesPassedKeys
+import dev.omalauncher.pp.ui.SnapshotsRow
+import dev.omalauncher.pp.ui.SshRow
+
+/**
+ * Everything about the optional Linux system in one place: what it adds and
+ * an install button, the install's progress, or, once installed, its size
+ * and ways to shut it down, start it again and remove it. Every feature that needs Linux opens this.
+ */
+@Composable
+fun LinuxScreen(
+    runtime: Runtime,
+    onDismiss: () -> Unit,
+    /** Opens settings › linux › ssh; null where Linux is only offered (the agents screen without it). */
+    onSsh: (() -> Unit)? = null,
+    /** Opens settings › linux › snapshots; without it, the row isn't there. */
+    onSnapshots: (() -> Unit)? = null,
+) {
+    val state by runtime.bootstrap.state.collectAsState()
+    OverlayPanel(stringResource(R.string.linux_title), onDismiss, contentWidth = ReadingWidth) {
+        Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(horizontal = 4.dp)) {
+            when (val s = state) {
+                LinuxState.Checking -> BasicText(stringResource(R.string.settings_checking), style = Mono.copy(color = Palette.muted))
+                LinuxState.NotInstalled -> InstallOffer(runtime)
+                is LinuxState.Installing, is LinuxState.Failed -> LinuxProgress(s, runtime.bootstrap.chosenAgents, runtime::retryLinux, runtime::cancelLinux.takeIf { runtime.bootstrap.cancellable })
+                LinuxState.Installed -> Installed(runtime, running = true, onSsh = onSsh, onSnapshots = onSnapshots)
+                LinuxState.Off -> Installed(runtime, running = false, onSnapshots = onSnapshots)
+                LinuxState.Removing -> BasicText(stringResource(R.string.linux_removing), style = Mono.copy(color = Palette.accent))
+            }
+        }
+    }
+}
+
+/**
+ * Starts the Linux install and asks (Android 13+) to post notifications: the foreground
+ * service's notification shows the install's progress and that Linux is running.
+ * The install doesn't wait for the answer, which may never come back: on the welcome
+ * screen, becoming the home app moves home to a new task, away from the dialog.
+ */
+@Composable
+fun rememberLinuxInstall(runtime: Runtime): (List<String>) -> Unit {
+    val context = LocalContext.current
+    val ask = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {}
+    return { bins ->
+        runtime.installLinux(AGENTS.filter { it.bin in bins })
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            !context.hasPermission(Manifest.permission.POST_NOTIFICATIONS)
+        ) {
+            ask.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
+}
+
+@Composable
+private fun InstallOffer(runtime: Runtime) {
+    var picked by rememberSaveable { mutableStateOf(listOf(AGENTS.first().bin)) }
+    val install = rememberLinuxInstall(runtime)
+    BasicText(stringResource(R.string.linux_offer_title), style = Mono.copy(fontSize = TextSize.Large))
+    Spacer(Modifier.height(8.dp))
+    BasicText(
+        stringResource(R.string.linux_offer_body),
+        style = Mono.copy(color = Palette.muted, fontSize = TextSize.Small),
+    )
+    Spacer(Modifier.height(16.dp))
+    // Above the agent list, so it's in reach without scrolling.
+    PrimaryButton(if (picked.isEmpty()) stringResource(R.string.linux_install) else pluralStringResource(R.plurals.linux_install_with_agents, picked.size, picked.size), Modifier.takesPassedKeys().passesKeys()) {
+        install(picked)
+    }
+    Spacer(Modifier.height(24.dp))
+    AgentPicker(picked) { bin -> picked = if (bin in picked) picked - bin else picked + bin }
+}
+
+/** Installed Linux, [running] or shut down. */
+@Composable
+private fun Installed(
+    runtime: Runtime,
+    running: Boolean,
+    onSsh: (() -> Unit)? = null,
+    onSnapshots: (() -> Unit)? = null,
+) {
+    var size by remember { mutableStateOf<Long?>(null) }
+    LaunchedEffect(Unit) { size = withContext(Dispatchers.IO) { diskUsage(runtime.proot.rootfs) } }
+    var confirm by remember { mutableStateOf(false) }
+    PowerCard(runtime, running, size)
+    if (!running) {
+        Spacer(Modifier.height(16.dp))
+        PrimaryButton(stringResource(if (runtime.starting) R.string.fork_linux_starting else R.string.fork_linux_start), onClick = runtime::startLinux)
+    }
+    if (running && runtime.gpu.supported) {
+        Spacer(Modifier.height(8.dp))
+        GpuRow(runtime)
+    }
+    if (running && onSsh != null) {
+        Spacer(Modifier.height(8.dp))
+        SshRow(runtime, onSsh)
+    }
+    if (onSnapshots != null) {
+        Spacer(Modifier.height(8.dp))
+        SnapshotsRow(runtime, onSnapshots)
+    }
+    Spacer(Modifier.height(8.dp))
+    CpuPinningRow(runtime)
+    Spacer(Modifier.height(16.dp))
+    // Keys go between remove linux and its cancel as they swap, and wait out the removal for the install it ends with.
+    val ask = remember { FocusRequester() }
+    val cancel = remember { FocusRequester() }
+    if (!confirm) {
+        BracketAction(stringResource(R.string.linux_remove), Palette.red, Modifier.focusRequester(ask).passesKeys(cancel)) { confirm = true }
+    } else {
+        Column(
+            Modifier.card(),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            BasicText(stringResource(R.string.linux_remove_ask), style = Mono.copy(color = Palette.red))
+            BasicText(
+                stringResource(R.string.linux_remove_body),
+                style = Mono.copy(color = Palette.muted, fontSize = TextSize.Small),
+            )
+            Row {
+                BracketAction(stringResource(R.string.linux_remove_confirm), Palette.red, Modifier.passesKeys(), runtime::removeLinux)
+                BracketAction(stringResource(R.string.linux_cancel), Palette.muted, Modifier.focusRequester(cancel).passesKeys(ask)) { confirm = false }
+            }
+        }
+    }
+}
+
+/**
+ * What Linux is doing and its size; while it runs, "shut down", which asks first: it closes Linux apps and
+ * terminals, and ends agents working in them.
+ */
+@Composable
+private fun PowerCard(
+    runtime: Runtime,
+    running: Boolean,
+    size: Long?,
+) {
+    var confirm by remember { mutableStateOf(false) }
+    val status =
+        when {
+            runtime.shuttingDown -> stringResource(R.string.fork_linux_shutting_down)
+            running -> stringResource(R.string.fork_linux_running)
+            else -> stringResource(R.string.fork_linux_off)
+        }
+    Column(
+        Modifier.card(),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) {
+                BasicText(stringResource(R.string.linux_arch), style = Mono.copy(fontSize = TextSize.Item))
+                BasicText(
+                    stringResource(R.string.fork_linux_status, status, size?.let(::formatSize) ?: stringResource(R.string.linux_measuring)),
+                    style = Mono.copy(color = if (running && !runtime.shuttingDown) Palette.green else Palette.muted, fontSize = TextSize.Small),
+                )
+            }
+            if (running && !runtime.shuttingDown && !confirm) BracketAction(stringResource(R.string.fork_linux_shut_down), Palette.accent) { confirm = true }
+        }
+        if (!running) {
+            BasicText(
+                stringResource(R.string.fork_linux_off_body),
+                style = Mono.copy(color = Palette.muted, fontSize = TextSize.Small),
+            )
+        }
+        if (running && !runtime.shuttingDown && confirm) {
+            BasicText(
+                stringResource(R.string.fork_linux_shut_down_body),
+                style = Mono.copy(color = Palette.muted, fontSize = TextSize.Small),
+            )
+            Row {
+                BracketAction(stringResource(R.string.fork_linux_shut_down), Palette.red) {
+                    confirm = false
+                    runtime.shutDownLinux()
+                }
+                BracketAction(stringResource(R.string.linux_cancel), Palette.muted) { confirm = false }
+            }
+        }
+    }
+}
+
+/** Opt-in GPU acceleration for Linux apps; see [dev.omalauncher.pp.linux.Gpu]. */
+@Composable
+private fun GpuRow(runtime: Runtime) {
+    val gpu = runtime.gpu
+    val state = gpu.state
+    val status =
+        when {
+            state is JobState.Working -> stringResource(R.string.linux_job_working, stringResource(state.action))
+            gpu.active -> stringResource(R.string.linux_gpu_on, gpu.device ?: "GPU")
+            gpu.wanted && state is JobState.Failed -> stringResource(R.string.linux_gpu_off_failed)
+            gpu.wanted -> stringResource(R.string.linux_gpu_waiting)
+            state is JobState.Failed -> stringResource(R.string.linux_gpu_failed)
+            else -> stringResource(R.string.linux_gpu_offer, gpu.driverLabel)
+        }
+    Column(Modifier.card()) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) {
+                BasicText(stringResource(R.string.linux_gpu_title), style = Mono.copy(fontSize = TextSize.Item))
+                BasicText(
+                    status,
+                    style = Mono.copy(color = if (gpu.active) Palette.green else Palette.muted, fontSize = TextSize.Small),
+                )
+            }
+            // Keys on one wait out its job, for the one it ends with.
+            val passed = Modifier.takesPassedKeys().passesKeys()
+            when {
+                state is JobState.Working -> {}
+                gpu.wanted -> {
+                    if (state is JobState.Failed) BracketAction(stringResource(R.string.linux_retry), Palette.accent, passed) { runtime.setGpu(true) }
+                    BracketAction(stringResource(R.string.linux_gpu_turn_off), Palette.red, passed) { runtime.setGpu(false) }
+                }
+                else -> BracketAction(stringResource(R.string.linux_gpu_turn_on), Palette.accent, passed) { runtime.setGpu(true) }
+            }
+        }
+        JobLog(state)
+    }
+}
+
+/** The switch for proot's CPU pinning; see [dev.omalauncher.linux.Proot.cpuPinning]. */
+@Composable
+private fun CpuPinningRow(runtime: Runtime) {
+    val proot = runtime.proot
+    val on = proot.cpuPinning
+    Row(Modifier.card(), verticalAlignment = Alignment.CenterVertically) {
+        Column(Modifier.weight(1f)) {
+            BasicText(stringResource(R.string.linux_cpu_pinning_title), style = Mono.copy(fontSize = TextSize.Item))
+            BasicText(
+                stringResource(if (on) R.string.linux_cpu_pinning_on else R.string.linux_cpu_pinning_off),
+                style = Mono.copy(color = if (on) Palette.green else Palette.muted, fontSize = TextSize.Small),
+            )
+        }
+        val passed = Modifier.takesPassedKeys().passesKeys()
+        if (on) {
+            BracketAction(stringResource(R.string.linux_gpu_turn_off), Palette.red, passed) { proot.changeCpuPinning(false) }
+        } else {
+            BracketAction(stringResource(R.string.linux_gpu_turn_on), Palette.accent, passed) { proot.changeCpuPinning(true) }
+        }
+    }
+}
+
+/** Bytes in [dir], without following symlinks (the rootfs is full of absolute guest links). */
+private fun diskUsage(dir: File): Long {
+    var total = 0L
+    runCatching {
+        Files.walkFileTree(
+            dir.toPath(),
+            object : SimpleFileVisitor<Path>() {
+                override fun visitFile(
+                    file: Path,
+                    attrs: BasicFileAttributes,
+                ): FileVisitResult {
+                    if (attrs.isRegularFile) total += attrs.size()
+                    return FileVisitResult.CONTINUE
+                }
+
+                override fun visitFileFailed(
+                    file: Path,
+                    exc: IOException,
+                ) = FileVisitResult.CONTINUE
+            },
+        )
+    }
+    return total
+}
+
+private fun formatSize(bytes: Long): String =
+    if (bytes >= 1L shl 30) "%.1f GB".format(bytes / (1L shl 30).toDouble()) else "${bytes shr 20} MB"

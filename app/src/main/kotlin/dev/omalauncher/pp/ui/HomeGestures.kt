@@ -21,6 +21,13 @@ import dev.omalauncher.pp.Runtime
 import dev.omalauncher.pp.linux.LinuxState
 import dev.omalauncher.pp.linux.agentInvocation
 import dev.omalauncher.pp.theme.GestureAction
+import dev.omalauncher.pp.ui.home.GestureDistance
+import dev.omalauncher.pp.ui.home.HomeGesture
+import dev.omalauncher.pp.ui.home.LauncherState
+import dev.omalauncher.pp.ui.home.open
+import dev.omalauncher.pp.ui.home.panelOf
+import dev.omalauncher.pp.ui.home.withAgent
+import dev.omalauncher.pp.ui.settings.SettingsPage
 
 /**
  * Which press home's grid last found on empty space, not on a tile: the grid knows where its tiles are, so it says

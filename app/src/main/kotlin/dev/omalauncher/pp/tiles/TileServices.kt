@@ -17,7 +17,7 @@ import dev.omalauncher.pp.R
 import dev.omalauncher.pp.Runtime
 import dev.omalauncher.pp.SettingsActivity
 import dev.omalauncher.pp.theme.TileStyle
-import dev.omalauncher.pp.ui.SettingsPage
+import dev.omalauncher.pp.ui.settings.SettingsPage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel

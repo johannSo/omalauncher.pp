@@ -104,6 +104,22 @@ panel "app drawer" {
       rename: "重命名"; hide: "隐藏"; unhide: "取消隐藏"
       timer: "应用计时器"
     }
+    ru {
+      personal: "личные"; work: "рабочие"; apps: "приложения"; linux: "linux"; shortcuts: "ярлыки"; android: "android"
+      workApps: "рабочие приложения"; workPaused: "рабочие приложения приостановлены"; linuxApps: "приложения linux"
+      pin: "добавить на главный экран"; info: "о приложении"; uninstall: "удалить"; remove: "убрать"; edit: "изменить"; share: "поделиться"
+      settings: "настройки"; turnOn: "включить"; pause: "приостановить"; installing: "установка…"; installLinux: "установить linux"
+      open: "открыть"; ask: "спросить"; askInstallLinux: "спросить агента · установить linux"; askInstallAgent: "спросить агента · установить агента"
+      askAgent: (bin, text) => "спросить ${bin}: ${text}"
+      private: "личное"; privateApps: "приложения личного пространства"; privateLocked: "личное пространство заблокировано"; privateSpace: "личное пространство"
+      widgets: "виджеты"; install: "установить"; lock: "заблокировать"; unlock: "разблокировать"; unlockPrivate: "разблокировать личное пространство"; hideWhileLocked: "скрывать, когда заблокировано"
+      shownOn: "вкл."; shownOff: "выкл."; startLinux: "запустить linux"
+      copy: "копировать"; call: "позвонить"; message: "сообщение"; search: "поиск"; webFor: (text) => "искать в интернете: ${text}"
+      groupCalc: "калькулятор"; groupSettings: "настройки android"; groupShortcuts: "ярлыки приложений"; groupContacts: "контакты"
+      groupFiles: "файлы"; groupPackages: "пакеты"; groupWeb: "интернет"
+      rename: "переименовать"; hide: "скрыть"; unhide: "показать"
+      timer: "таймер приложения"
+    }
   }
   source d = android.drawer
   source ag = android.agents

@@ -1,7 +1,7 @@
 package dev.omalauncher.pp.theme
 
-import dev.omalauncher.pp.LauncherData
-import dev.omalauncher.pp.httpGet
+import dev.omalauncher.pp.net.httpGet
+import dev.omalauncher.pp.storage.LauncherData
 import dev.omalauncher.pp.upgrade.writeAtomically
 import java.io.File
 

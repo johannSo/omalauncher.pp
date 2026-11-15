@@ -5,7 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import dev.omalauncher.pp.R
-import dev.omalauncher.pp.httpGet
+import dev.omalauncher.pp.net.httpGet
 import dev.omalauncher.pp.upgrade.writeAtomically
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

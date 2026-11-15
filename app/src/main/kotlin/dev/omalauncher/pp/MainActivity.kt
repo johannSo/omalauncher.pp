@@ -31,17 +31,19 @@ import dev.omalauncher.pp.ui.keyPressed
 import dev.omalauncher.pp.ui.keysFocused
 import dev.omalauncher.pp.ui.keysStartAgain
 import dev.omalauncher.pp.ui.movesFocus
-import dev.omalauncher.pp.ui.panelOf
+import dev.omalauncher.pp.ui.home.panelOf
 import dev.omalauncher.pp.ui.LauncherStyle
 import dev.omalauncher.pp.ui.SystemBarsEffect
 import dev.omalauncher.pp.ui.applySystemBars
 import dev.omalauncher.pp.ui.showStatusBar
-import dev.omalauncher.pp.ui.LauncherRoot
-import dev.omalauncher.pp.ui.LauncherState
-import dev.omalauncher.pp.ui.PromptRequest
+import dev.omalauncher.pp.ui.home.LauncherRoot
+import dev.omalauncher.pp.ui.home.LauncherState
+import dev.omalauncher.pp.ui.home.PromptRequest
 import dev.omalauncher.pp.widgets.market.Share
 import dev.omalauncher.pp.ui.BrowserPages
 import dev.omalauncher.pp.ui.WidgetAsks
+import dev.omalauncher.pp.storage.LauncherData
+import dev.omalauncher.pp.system.AppLanguage
 
 /** The home screen: widgets, pinned apps and the drawer; Linux windows open as their own tasks. */
 class MainActivity : ComponentActivity() {

@@ -4,10 +4,10 @@ import android.content.Context
 import android.os.FileObserver
 import android.util.Log
 import dev.omalauncher.pp.BuildConfig
-import dev.omalauncher.pp.PhoneFolders
+import dev.omalauncher.pp.storage.PhoneFolders
 import dev.omalauncher.pp.PickActivity
 import dev.omalauncher.pp.R
-import dev.omalauncher.pp.ui.mimeOf
+import dev.omalauncher.pp.ui.files.mimeOf
 import dev.omalauncher.pp.widgets.lang.Str
 import dev.omalauncher.pp.widgets.runtime.battery
 import android.content.ActivityNotFoundException
@@ -16,7 +16,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.PowerManager
 import androidx.core.content.FileProvider
-import dev.omalauncher.pp.postNotification
+import dev.omalauncher.pp.system.postNotification
 import dev.omalauncher.pp.upgrade.Managed
 import dev.omalauncher.pp.upgrade.Policy
 import dev.omalauncher.pp.upgrade.writeAtomically

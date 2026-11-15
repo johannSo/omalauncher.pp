@@ -3,7 +3,7 @@ package dev.omalauncher.pp.mcp
 import android.content.Context
 import android.widget.Toast
 import dev.omalauncher.pp.AppTweakStore
-import dev.omalauncher.pp.LauncherData
+import dev.omalauncher.pp.storage.LauncherData
 import dev.omalauncher.pp.Runtime
 import dev.omalauncher.pp.focus.FocusRules
 import dev.omalauncher.pp.linux.Proot

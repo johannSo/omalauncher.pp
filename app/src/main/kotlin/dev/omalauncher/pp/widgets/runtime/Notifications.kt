@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.Build
 import android.os.UserHandle
 import android.service.notification.StatusBarNotification
+import dev.omalauncher.pp.apps.AppLabels
 import dev.omalauncher.pp.widgets.lang.Lst
 import dev.omalauncher.pp.widgets.lang.Null
 import dev.omalauncher.pp.widgets.lang.Num
@@ -18,7 +19,6 @@ import dev.omalauncher.pp.widgets.lang.Str
 import dev.omalauncher.pp.widgets.lang.Value
 import dev.omalauncher.pp.widgets.lang.bool
 import dev.omalauncher.pp.widgets.lang.num
-import dev.omalauncher.pp.AppLabels
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged

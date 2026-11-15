@@ -27,7 +27,8 @@ import androidx.compose.ui.graphics.toArgb
 import dev.omalauncher.pp.linux.ShellResult
 import dev.omalauncher.pp.theme.Setting
 import dev.omalauncher.pp.theme.Style
-import dev.omalauncher.pp.ui.EmbeddedTerminal
+import dev.omalauncher.pp.ui.home.EmbeddedTerminal
+import dev.omalauncher.pp.ui.EmbeddedBrowser
 import dev.omalauncher.pp.ui.LauncherStyle
 import dev.omalauncher.pp.ui.Palette
 import dev.omalauncher.pp.widgets.HTTP_TOO_BIG
@@ -59,7 +60,6 @@ import dev.omalauncher.pp.widgets.lang.Trigger
 import dev.omalauncher.pp.widgets.lang.WidgetError
 import dev.omalauncher.pp.widgets.lang.bool
 import dev.omalauncher.pp.widgets.lang.num
-import dev.omalauncher.pp.ui.EmbeddedBrowser
 import dev.omalauncher.pp.widgets.lang.ASKS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

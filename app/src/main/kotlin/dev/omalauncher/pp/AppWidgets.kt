@@ -31,6 +31,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.ceil
+import dev.omalauncher.pp.apps.AndroidApp
 
 /**
  * The phone's apps' widgets (app widgets: a clock, the weather, a calendar) and the host that shows them on home.

@@ -7,6 +7,8 @@ import androidx.compose.runtime.setValue
 import dev.omalauncher.pp.theme.Toml
 import dev.omalauncher.pp.upgrade.SyncedFile
 import java.io.File
+import dev.omalauncher.pp.apps.AndroidAppCatalog
+import dev.omalauncher.pp.storage.LauncherData
 
 /**
  * Apps hidden and renamed ([AppTweaks]), kept in apps.toml ([AppTweaksFile]) in the launcher's data, which Linux sees

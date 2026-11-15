@@ -30,6 +30,13 @@ import dev.omalauncher.pp.Runtime
 import dev.omalauncher.pp.widgets.HomeItem
 import dev.omalauncher.pp.widgets.Shortcut
 import dev.omalauncher.pp.widgets.app
+import dev.omalauncher.pp.ui.home.AppHit
+import dev.omalauncher.pp.ui.home.SearchField
+import dev.omalauncher.pp.ui.home.allApps
+import dev.omalauncher.pp.ui.home.icons
+import dev.omalauncher.pp.ui.home.initials
+import dev.omalauncher.pp.ui.home.profileKind
+import dev.omalauncher.pp.ui.settings.StyleOption
 
 /**
  * Settings › hidden apps: every app but the private space's, the hidden ones first, each to show or hide and to

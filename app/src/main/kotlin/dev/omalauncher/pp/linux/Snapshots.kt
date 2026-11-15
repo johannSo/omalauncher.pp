@@ -8,7 +8,7 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import dev.omalauncher.pp.LauncherData
+import dev.omalauncher.pp.storage.LauncherData
 import dev.omalauncher.pp.R
 import dev.omalauncher.pp.theme.SnapshotStyle
 import dev.omalauncher.pp.theme.StyleStore

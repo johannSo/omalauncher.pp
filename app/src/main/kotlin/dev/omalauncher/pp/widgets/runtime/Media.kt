@@ -22,13 +22,16 @@ import android.provider.Settings
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
+import dev.omalauncher.pp.apps.AppLabels
+import dev.omalauncher.pp.widgets.lang.Lst
 import dev.omalauncher.pp.widgets.lang.Null
 import dev.omalauncher.pp.widgets.lang.Num
 import dev.omalauncher.pp.widgets.lang.Obj
 import dev.omalauncher.pp.widgets.lang.Str
 import dev.omalauncher.pp.widgets.lang.Value
 import dev.omalauncher.pp.widgets.lang.bool
-import dev.omalauncher.pp.AppLabels
+import dev.omalauncher.pp.widgets.lang.num
+import dev.omalauncher.pp.widgets.lang.textOrNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
@@ -201,6 +204,9 @@ class Media(
                 "state" to Str(stateWord(s?.state)),
                 // A live stream or an ad can't be moved through; media("seek", ...) does nothing then.
                 "canSeek" to bool(duration != null && s != null && s.actions and PlaybackState.ACTION_SEEK_TO != 0L),
+                // Its speed and the app's own buttons (like, shuffle, skip 30 s), owl 23.
+                "speed" to (s?.playbackSpeed?.takeIf { it > 0f }?.let { Num(it.toDouble()) } ?: Null),
+                "actions" to Lst(s?.customActions.orEmpty().map { Obj(mapOf("id" to Str(it.action), "title" to Str(it.name.toString()))) }),
             ),
         )
     }
@@ -294,12 +300,13 @@ class Media(
         }
 
     /**
-     * media("toggle"), "play", "pause", "next", "previous", "open", or "seek" with [seconds] from the start; without access,
-     * opens the setting that grants it.
+     * media("toggle"), "play", "pause", "next", "previous", "open", "seek" with [value] seconds from the start, and
+     * (owl 23) media("speed", 1.5) and media("action", id) for one of the app's own buttons; without access, opens the
+     * setting that grants it.
      */
     fun control(
         command: String,
-        seconds: Value? = null,
+        value: Value? = null,
     ) {
         if (!granted) {
             openAccessSettings()
@@ -319,8 +326,12 @@ class Media(
             "toggle" -> if (s?.state == PlaybackState.STATE_PLAYING) t.pause() else if (canPlay) play(c) else open(c)
             "next" -> t.skipToNext()
             "previous" -> t.skipToPrevious()
+            // A session that can't seek ignores it, as Android's own seek bar does then.
+            "seek" -> value?.num()?.takeIf { it.isFinite() }?.let { t.seekTo((it.coerceAtLeast(0.0) * 1000).toLong()) }
+            "speed" -> value?.num()?.takeIf { it.isFinite() && it > 0 }?.let { t.setPlaybackSpeed(it.toFloat()) }
+            // By its id, not its place: players swap buttons (like and unlike) between reading the list and the tap.
+            "action" -> s?.customActions?.firstOrNull { it.action == value.textOrNull() }?.let { t.sendCustomAction(it, null) }
             "open" -> open(c)
-            "seek" -> (seconds as? Num)?.v?.takeIf { it.isFinite() }?.let { t.seekTo((it.coerceAtLeast(0.0) * 1000).toLong()) }
         }
     }
 

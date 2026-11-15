@@ -11,12 +11,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import dev.omalauncher.pp.AndroidAppCatalog
+import dev.omalauncher.pp.apps.AndroidAppCatalog
 import dev.omalauncher.pp.InstantActivity
-import dev.omalauncher.pp.LauncherData
+import dev.omalauncher.pp.storage.LauncherData
 import dev.omalauncher.pp.R
 import dev.omalauncher.pp.theme.Toml
-import dev.omalauncher.pp.ui.AppHit
+import dev.omalauncher.pp.ui.home.AppHit
 import dev.omalauncher.pp.upgrade.SyncedFile
 import dev.omalauncher.pp.widgets.Shortcut
 import dev.omalauncher.pp.widgets.runtime.MediaListener
@@ -29,6 +29,7 @@ import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
+import dev.omalauncher.pp.widgets.app
 
 /**
  * Focus mode and app timers on the phone. focus.toml ([FocusFile]) in the launcher's data, which Linux sees as

@@ -4,7 +4,7 @@ import android.content.Context
 import android.system.Os
 import android.util.Log
 import dev.omalauncher.pp.mcp.McpBridge
-import dev.omalauncher.pp.openUrl
+import dev.omalauncher.pp.system.openUrl
 import dev.omalauncher.pp.upgrade.Managed
 import dev.omalauncher.pp.upgrade.Policy
 import java.io.File

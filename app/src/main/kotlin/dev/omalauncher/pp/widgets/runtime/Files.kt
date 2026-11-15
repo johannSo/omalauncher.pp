@@ -1,7 +1,7 @@
 package dev.omalauncher.pp.widgets.runtime
 
 import android.os.FileObserver
-import dev.omalauncher.pp.readUpTo
+import dev.omalauncher.pp.system.readUpTo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.awaitClose

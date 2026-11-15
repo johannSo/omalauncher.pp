@@ -35,6 +35,8 @@ import dev.omalauncher.pp.theme.GestureAction
 import dev.omalauncher.pp.theme.needsAccessibility
 import dev.omalauncher.pp.widgets.WidgetSpec
 import dev.omalauncher.pp.widgets.editWidgetCommand
+import dev.omalauncher.pp.ui.home.HomeGesture
+import dev.omalauncher.pp.ui.home.SearchField
 
 /** What a gesture's list offers: an action to set, or one that asks for what it takes first (which app, the command). */
 private sealed interface Pick {

@@ -11,7 +11,7 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import dev.omalauncher.pp.AppLanguage
+import dev.omalauncher.pp.system.AppLanguage
 import dev.omalauncher.pp.R
 import dev.omalauncher.pp.linux.AGENTS
 import dev.omalauncher.pp.linux.Agent
@@ -19,8 +19,8 @@ import dev.omalauncher.pp.linux.AgentStore
 import dev.omalauncher.pp.linux.JobState
 import dev.omalauncher.pp.linux.Proot
 import dev.omalauncher.pp.linux.killTree
-import dev.omalauncher.pp.ui.Speaker
-import dev.omalauncher.pp.ui.Speech
+import dev.omalauncher.pp.ui.voice.Speaker
+import dev.omalauncher.pp.ui.voice.Speech
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.json.JSONArray

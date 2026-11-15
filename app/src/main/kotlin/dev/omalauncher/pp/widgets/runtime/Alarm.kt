@@ -1,6 +1,6 @@
 package dev.omalauncher.pp.widgets.runtime
 
-import dev.omalauncher.pp.registerNotExported
+import dev.omalauncher.pp.system.registerNotExported
 import android.app.AlarmManager
 import android.content.Context
 import android.content.IntentFilter

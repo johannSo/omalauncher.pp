@@ -14,9 +14,9 @@ import androidx.lifecycle.lifecycleScope
 import dev.omalauncher.pp.R
 import dev.omalauncher.pp.Runtime
 import dev.omalauncher.pp.linux.LinuxState
-import dev.omalauncher.pp.ui.LauncherState
-import dev.omalauncher.pp.ui.PromptRequest
-import dev.omalauncher.pp.ui.SettingsPage
+import dev.omalauncher.pp.ui.home.LauncherState
+import dev.omalauncher.pp.ui.home.PromptRequest
+import dev.omalauncher.pp.ui.settings.SettingsPage
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine

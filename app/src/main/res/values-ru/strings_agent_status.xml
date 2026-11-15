@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Coding agents reporting to Android (AgentStatus.kt): their notifications, and the switch in settings › agents. -->
+<resources>
+    <string name="agent_status_channel">ИИ-агенты</string>
+    <string name="agent_status_channel_description">Что делает каждый ИИ-агент в терминале: закончил, ждёт вас или просит разрешения</string>
+    <!-- A notification's title: the agent, then the folder it works in. -->
+    <string name="agent_status_title">%1$s · %2$s</string>
+    <!-- A notification's text: the status, then what it's about (the prompt, the tool, the last message). -->
+    <string name="agent_status_line">%1$s · %2$s</string>
+    <string name="agent_status_running">Работает</string>
+    <string name="agent_status_input">Ждёт вас</string>
+    <string name="agent_status_permission">Просит разрешения</string>
+    <string name="agent_status_permission_terminal">Просит разрешения в терминале</string>
+    <string name="agent_status_done">Готово</string>
+    <string name="agent_status_allow">Разрешить</string>
+    <string name="agent_status_deny">Запретить</string>
+    <string name="agent_status_setting">уведомления</string>
+    <string name="agent_status_setting_description">Каждый сеанс в терминале получает уведомление, когда он закончил или ждёт вас; на запрос разрешения можно ответить прямо в нём. Как они звучат, решают ваши настройки уведомлений.</string>
+    <string name="agent_status_on">вкл</string>
+    <string name="agent_status_off">выкл</string>
+</resources>

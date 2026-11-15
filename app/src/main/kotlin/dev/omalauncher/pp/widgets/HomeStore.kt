@@ -1,8 +1,8 @@
 package dev.omalauncher.pp.widgets
 
 import android.content.Context
+import dev.omalauncher.pp.storage.LauncherData
 import androidx.compose.runtime.mutableStateMapOf
-import dev.omalauncher.pp.LauncherData
 import dev.omalauncher.pp.Runtime
 import dev.omalauncher.pp.widgets.lang.sha256Hex
 import dev.omalauncher.pp.theme.Toml

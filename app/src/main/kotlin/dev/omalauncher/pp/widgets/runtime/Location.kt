@@ -13,7 +13,7 @@ import android.os.CancellationSignal
 import android.os.Looper
 import android.os.SystemClock
 import android.util.Log
-import dev.omalauncher.pp.registerNotExported
+import dev.omalauncher.pp.system.registerNotExported
 import dev.omalauncher.pp.widgets.lang.Null
 import dev.omalauncher.pp.widgets.lang.Num
 import dev.omalauncher.pp.widgets.lang.Obj

@@ -30,6 +30,8 @@ import dev.omalauncher.pp.linux.findNotifyingApp
 import dev.omalauncher.pp.linux.notifyImagePath
 import dev.omalauncher.pp.linux.resolveLinuxIcon
 import dev.omalauncher.pp.ui.decodeIcon
+import dev.omalauncher.pp.linux.LinuxAppCatalog
+import dev.omalauncher.pp.ui.home.icons
 
 /**
  * Linux apps' notifications as Android's: what [NotificationServer] receives on the guest's session

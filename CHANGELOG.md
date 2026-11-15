@@ -4,6 +4,25 @@ The most important changes in each release. From 1.0.0 on they're OmaLauncher++'
 dated when they were released on GitHub. The ones before are Omalauncher's, dated
 when they were uploaded to Play.
 
+## Unreleased
+
+- Fixes: omalauncher-mcp no longer stays behind spinning a CPU core after the agent that started it
+  is gone.
+
+### From Omalauncher 1.5.0
+
+- Settings tells you when a newer OmaLauncher++ is out on GitHub releases, with a link to the
+  release.
+- Settings can show a message from Omalauncher's developer once, like a widget contest with a
+  countdown, from announcements.json in the store repo; "don't show news again" turns them off.
+- The launcher comes in Russian.
+- Owl 23: widgets pick how strong a haptic is (`haptic("light")`, `"medium"`, `"strong"`), change
+  the speed of what's playing (`media("speed", 1.5)`) and press its notification buttons
+  (`media("action", id)`, from `android.media`'s `actions`) (#287, #291).
+- Fixes: 3D models no longer flicker where their parts overlap, and one with a long thin sliver no
+  longer runs the launcher out of memory; pacman works again after the app was killed mid-install
+  (#273).
+
 ## 2.6.0-beta.2 (versionCode 39) – 2026-11-13
 
 ### From Omalauncher 1.4.0

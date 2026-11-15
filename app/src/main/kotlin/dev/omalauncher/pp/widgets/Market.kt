@@ -14,7 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import dev.omalauncher.pp.R
-import dev.omalauncher.pp.httpGet
+import dev.omalauncher.pp.net.httpGet
 import dev.omalauncher.pp.ui.decodeImageIcon
 import dev.omalauncher.pp.ui.decodeSvgIcon
 import dev.omalauncher.pp.upgrade.Versioned

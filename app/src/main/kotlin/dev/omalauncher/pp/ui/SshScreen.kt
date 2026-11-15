@@ -50,7 +50,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import dev.omalauncher.pp.LocalNetwork
+import dev.omalauncher.pp.net.LocalNetwork
 import dev.omalauncher.pp.R
 import dev.omalauncher.pp.Runtime
 import dev.omalauncher.pp.linux.AuthorizedKey
@@ -64,6 +64,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import dev.omalauncher.pp.ui.store.QrCode
+import dev.omalauncher.pp.ui.store.qrCode
 
 /** settings › linux's row for [SshScreen]: whether sshd is on, and the command to log in with. */
 @Composable
