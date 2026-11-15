@@ -4,7 +4,7 @@ The most important changes in each release. From 1.0.0 on they're OmaLauncher++'
 dated when they were released on GitHub. The ones before are Omalauncher's, dated
 when they were uploaded to Play.
 
-## Unreleased
+## 2.6.0-beta.3 (versionCode 40) – 2026-11-15
 
 - Fixes: omalauncher-mcp no longer stays behind spinning a CPU core after the agent that started it
   is gone.
