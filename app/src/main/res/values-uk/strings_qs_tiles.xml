@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="qs_tiles_linux">Linux</string>
+    <string name="qs_tiles_terminal">Термінал</string>
+    <string name="qs_tiles_ask">Спитати агента</string>
+    <string name="qs_tiles_not_installed">не встановлено</string>
+    <string name="qs_tiles_installing">встановлення…</string>
+    <string name="qs_tiles_failed">встановлення зупинилося</string>
+    <string name="qs_tiles_removing">видалення…</string>
+    <string name="qs_tiles_off">вимкнено</string>
+    <string name="qs_tiles_starting">запуск…</string>
+    <string name="qs_tiles_running">працює</string>
+    <string name="qs_tiles_stopping">вимкнення…</string>
+    <string name="qs_tiles_starts_linux">запускає Linux</string>
+    <string name="qs_tiles_needs_linux">встановіть Linux</string>
+    <string name="qs_tiles_starting_linux">Запуск Linux…</string>
+    <string name="qs_tiles_shut_down_title">вимкнути linux?</string>
+    <string name="qs_tiles_shut_down_body">Закриває додатки Linux і термінали та зупиняє агентів, що в них працюють; файли й пакети залишаться. Linux лишатиметься вимкненим, навіть після перезапуску, доки ви не запустите його знову.</string>
+    <string name="qs_tiles_title">плитки швидких налаштувань</string>
+    <string name="qs_tiles_subtitle">linux, термінал і «спитати агента» у швидких налаштуваннях android</string>
+    <string name="qs_tiles_linux_about">Показує, чи працює Linux. Натискання запускає або вимикає його; довге натискання відкриває налаштування › linux.</string>
+    <string name="qs_tiles_terminal_about">Відкриває термінал, спершу запустивши Linux, якщо його вимкнено.</string>
+    <string name="qs_tiles_ask_about">Відкриває головний екран з рядком, готовим до запиту вашому агенту.</string>
+    <string name="qs_tiles_add">додати</string>
+    <string name="qs_tiles_added">додано до швидких налаштувань</string>
+    <string name="qs_tiles_already_added">уже у швидких налаштуваннях</string>
+    <string name="qs_tiles_add_failed">android не додав плитку; додайте її в режимі редагування панелі сповіщень</string>
+    <string name="qs_tiles_ask_opens">«спитати агента» відкриває</string>
+    <string name="qs_tiles_ask_type">клавіатуру</string>
+    <string name="qs_tiles_ask_voice">голосове введення</string>
+    <string name="qs_tiles_ask_no_mic">доступ до мікрофона не дозволено, тож відкриється клавіатура</string>
+    <string name="qs_tiles_hint">Або потягніть панель сповіщень до кінця вниз, торкніться олівця й перетягніть плитки.</string>
+</resources>

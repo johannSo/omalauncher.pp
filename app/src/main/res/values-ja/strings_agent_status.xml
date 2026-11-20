@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="agent_status_channel">コーディングエージェント</string>
+    <string name="agent_status_channel_description">ターミナル内の各コーディングエージェントの状況：完了、入力待ち、許可の確認中</string>
+    <string name="agent_status_title">%1$s · %2$s</string>
+    <string name="agent_status_line">%1$s · %2$s</string>
+    <string name="agent_status_running">作業中</string>
+    <string name="agent_status_input">入力待ち</string>
+    <string name="agent_status_permission">許可を求めています</string>
+    <string name="agent_status_permission_terminal">ターミナルで許可を求めています</string>
+    <string name="agent_status_done">完了</string>
+    <string name="agent_status_allow">許可</string>
+    <string name="agent_status_deny">拒否</string>
+    <string name="agent_status_setting">通知</string>
+    <string name="agent_status_setting_description">ターミナルの各セッションが完了したときや入力待ちになったときに通知が届きます。許可の確認には通知から答えられます。音などは通知の設定に従います。</string>
+    <string name="agent_status_on">オン</string>
+    <string name="agent_status_off">オフ</string>
+</resources>

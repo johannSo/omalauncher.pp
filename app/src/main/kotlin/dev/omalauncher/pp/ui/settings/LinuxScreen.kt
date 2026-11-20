@@ -272,7 +272,7 @@ private fun GpuRow(runtime: Runtime) {
     }
 }
 
-/** The switch for proot's CPU pinning; see [dev.omalauncher.linux.Proot.cpuPinning]. */
+/** The switch for proot's CPU pinning; see [dev.omalauncher.pp.linux.Proot.cpuPinning]. */
 @Composable
 private fun CpuPinningRow(runtime: Runtime) {
     val proot = runtime.proot

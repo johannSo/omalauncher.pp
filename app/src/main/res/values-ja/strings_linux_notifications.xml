@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="linux_notifications_channel">Linux アプリ</string>
+    <string name="linux_notifications_channel_urgent">Linux アプリ：緊急</string>
+    <string name="linux_notifications_channel_quiet">Linux アプリ：低優先度</string>
+    <string name="linux_step_dbus">D-Bus のインストール</string>
+</resources>

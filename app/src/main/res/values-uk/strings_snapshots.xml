@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="snapshots_title">знімки</string>
+    <string name="snapshots_row_none">поки немає · відкотіть оновлення, яке щось зламало</string>
+    <plurals name="snapshots_row">
+        <item quantity="one">%d знімок для відкату</item>
+        <item quantity="few">%d знімки для відкату</item>
+        <item quantity="many">%d знімків для відкату</item>
+        <item quantity="other">%d знімка для відкату</item>
+    </plurals>
+    <string name="snapshots_body">Знімок зберігає систему Linux такою, як вона є: її пакети й усе в /etc, /usr, /var і /opt. Відновлення знімка відкочує оновлення, яке щось зламало. /root і /home, ваші власні файли, лишаються як є, якщо ви не виберете інакше. Знімки мають спільне те, що між ними не змінилося, тож знімок після оновлення займає лише стільки місця, скільки оновлення змінило.</string>
+    <string name="snapshots_storage">вільно %1$s · знімки займають %2$s</string>
+    <string name="snapshots_take">зробити знімок</string>
+    <string name="snapshots_low_space">мало місця: знімок перед оновленням пропускається, якщо для нього немає місця</string>
+    <string name="snapshots_list">знімки</string>
+    <string name="snapshots_none">поки немає</string>
+    <string name="snapshots_options">параметри</string>
+    <string name="snapshots_option_before_update">перед оновленнями</string>
+    <string name="snapshots_option_on">знімок</string>
+    <string name="snapshots_option_off">ні</string>
+    <string name="snapshots_option_keep">зберігати</string>
+    <string name="snapshots_option_keep_hint">найновіші; наступний знімок видалить старіші</string>
+    <string name="snapshots_option_home">/root, /home</string>
+    <string name="snapshots_option_home_in">у знімках</string>
+    <string name="snapshots_option_home_out">не включати</string>
+    <string name="snapshots_reason_update">перед оновленням</string>
+    <string name="snapshots_reason_manual">зроблено вручну</string>
+    <string name="snapshots_details">%1$s · %2$s власних · система %3$s</string>
+    <string name="snapshots_restore">відновити</string>
+    <string name="snapshots_delete">видалити</string>
+    <string name="snapshots_restore_ask">відкотити Linux до цього знімка?</string>
+    <string name="snapshots_restore_body">Linux вимкнеться, повернеться до того стану й запуститься знову: пакети, встановлені чи оновлені відтоді, теж відкотяться. /root і /home лишаться як є.</string>
+    <string name="snapshots_restore_body_home">Linux вимкнеться, повернеться до того стану й запуститься знову: пакети, встановлені чи оновлені відтоді, теж відкотяться, як і /root та /home. Зміни у файлах там відтоді буде втрачено.</string>
+    <string name="snapshots_restore_home">/root, /home</string>
+    <string name="snapshots_restore_home_keep">залишити</string>
+    <string name="snapshots_restore_home_back">відкотити</string>
+    <string name="snapshots_delete_ask">видалити цей знімок?</string>
+    <string name="snapshots_job_taking">створення знімка</string>
+    <string name="snapshots_job_restoring">відновлення знімка</string>
+    <string name="snapshots_step_scanning">читання системи…</string>
+    <string name="snapshots_step_storing">збережено %1$s з %2$s</string>
+    <string name="snapshots_step_saving">збереження…</string>
+    <string name="snapshots_step_unpacking">файлів: %1$d з %2$d</string>
+    <string name="snapshots_step_swapping">встановлення на місце…</string>
+    <string name="snapshots_no_room">знімок не створено: потрібно %1$s вільного місця, а є %2$s</string>
+    <string name="snapshots_no_room_restore">замало місця для відновлення: потрібно %1$s вільного місця, а є %2$s</string>
+    <string name="snapshots_ran_out">місце закінчувалося, тож знімок зупинено</string>
+    <string name="snapshots_gone">цього знімка більше немає</string>
+    <string name="snapshots_damaged">файл знімка пошкоджено (%1$s); нічого не змінено</string>
+</resources>

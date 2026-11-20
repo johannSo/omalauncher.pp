@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="focus_title">集中</string>
+    <string name="focus_subtitle_on">オン：%1$s</string>
+    <plurals name="focus_timers_count">
+        <item quantity="other">アプリタイマー %1$d 個</item>
+    </plurals>
+
+    <string name="focus_profiles">集中モード</string>
+    <string name="focus_profiles_hint">プロフィールがオンの間は、含まれていないアプリがドロワー、検索、最近のアプリ、ホームから隠れます。バーに focus とプロフィール名、または focus off と入力しても切り替えられます。focus work 25m と入力すると 25 分間オンになります。</string>
+    <string name="focus_new_profile">新しいプロフィール</string>
+    <string name="focus_create">作成</string>
+    <string name="focus_name_taken">同じ名前のプロフィールがあるか、バーで予約されている語（off）です</string>
+    <string name="focus_turn_on">オンにする</string>
+    <string name="focus_turn_off">オフにする</string>
+    <string name="focus_edit">編集</string>
+    <string name="focus_delete">削除</string>
+    <string name="focus_delete_title">%1$s を削除しますか？</string>
+    <string name="focus_delete_message">プロフィールは、そのアプリとスケジュールごと削除されます。アプリ自体はそのまま残ります。</string>
+    <string name="focus_until_off">オフにするまで</string>
+    <string name="focus_for">%1$s 間</string>
+    <string name="focus_status_off">オフ</string>
+    <string name="focus_status_on">オン</string>
+    <string name="focus_status_until">%1$s までオン</string>
+    <string name="focus_status_scheduled">スケジュールにより %1$s までオン</string>
+    <plurals name="focus_allows_apps">
+        <item quantity="other">%1$d 個のアプリを許可</item>
+    </plurals>
+    <plurals name="focus_blocks_apps">
+        <item quantity="other">%1$d 個のアプリを非表示</item>
+    </plurals>
+
+    <string name="focus_rename">名前を変更</string>
+    <string name="focus_apps_mode">アプリ</string>
+    <string name="focus_apps_only">これらのみ</string>
+    <string name="focus_apps_except">これら以外すべて</string>
+    <string name="focus_dnd">サイレントモード</string>
+    <string name="focus_yes">オン</string>
+    <string name="focus_no">オフ</string>
+    <string name="focus_dnd_needed">先に、ランチャーがサイレントモードを切り替えられるよう Android で許可する必要があります。</string>
+    <string name="focus_schedule">スケジュール</string>
+    <string name="focus_schedule_none">なし</string>
+    <string name="focus_schedule_weekly">毎週</string>
+    <string name="focus_schedule_from">開始</string>
+    <string name="focus_schedule_to">終了</string>
+    <string name="focus_schedule_no_days">オンにする曜日を選んでください。</string>
+    <string name="focus_apps">アプリ</string>
+    <string name="focus_search_apps">アプリを検索</string>
+    <string name="focus_kind_linux">linux</string>
+    <string name="focus_kind_owl">owl</string>
+    <string name="focus_kind_shortcut">ショートカット</string>
+
+    <string name="focus_timers">アプリタイマー</string>
+    <string name="focus_timers_hint">Android アプリごとの 1 日の上限です。上限に達すると、ランチャーからアプリを開いたときに、先に時間切れの画面が表示されます。アプリを長押ししてタイマーを設定することもできます。</string>
+    <string name="focus_add_timer">タイマーを追加</string>
+    <string name="focus_pick_app">アプリを選択</string>
+    <string name="focus_limit_title">1 日 %1$s</string>
+    <string name="focus_no_limit">上限なし</string>
+    <string name="focus_remove">削除</string>
+    <string name="focus_timer_used">今日 %1$s / %2$s</string>
+    <string name="focus_usage_needed">タイマーは各アプリの利用時間を数えます。Android はこの情報を使用状況へのアクセスを許可されたアプリにのみ提供します。</string>
+    <string name="focus_allow">許可</string>
+    <string name="focus_action_timer">アプリタイマー</string>
+
+    <string name="focus_outside">ランチャーの外</string>
+    <string name="focus_guard_explain">タイマーと集中モードが止めるのは、OmaLauncher++ から開いたアプリです。通知、ほかのアプリ、最近のアプリなど、どこから開いても止めるには、Android のユーザー補助の設定で OmaLauncher++ 集中をオンにしてください。読み取るのは前面に来たアプリだけで、画面の内容や入力した文字は読み取りません。設定、電話アプリ、キーボードが止められることはありません。ストア以外から入れたアプリと同様に、先にランチャーのアプリ情報で制限付き設定を許可するよう Android から求められる場合があります。オンにしない限りオフのままです。</string>
+    <string name="focus_guard_on">オン</string>
+    <string name="focus_guard_off">オフ</string>
+    <string name="focus_guard_open">ユーザー補助の設定</string>
+    <string name="focus_file_hint">エージェントは ~/.config/omalauncher/focus/focus.toml でこれらすべてを編集できます。</string>
+    <string name="focus_guard_label">OmaLauncher++ 集中</string>
+    <string name="focus_guard_summary">ランチャーの外で開いたアプリにも集中モードとアプリタイマーを適用します</string>
+    <string name="focus_guard_description">OmaLauncher++ の集中モードとアプリタイマーで、通知、ほかのアプリ、最近のアプリなど、ランチャーの外から開いたアプリも止められるようにします。読み取るのは前面に来たアプリだけで、画面の内容や入力した文字は読み取らず、データがスマートフォンの外に出ることもありません。設定、電話アプリ、キーボードが止められることはありません。</string>
+
+    <string name="focus_times_up_title">時間切れです</string>
+    <string name="focus_times_up_message">%1$s：今日 %2$s 使用 · 1 日の上限 %3$s</string>
+    <string name="focus_times_up_hint">「それでも開く」を選ぶと、今日はこれ以上止めません</string>
+    <string name="focus_hidden_title">今はだめです</string>
+    <string name="focus_hidden_message">%1$s は集中プロフィール %2$s に含まれていません</string>
+    <string name="focus_one_more_minute">あと 1 分</string>
+    <string name="focus_open_anyway">それでも開く</string>
+    <string name="focus_close">閉じる</string>
+
+    <string name="focus_duration_hours">%1$d 時間 %2$d 分</string>
+    <string name="focus_duration_minutes">%1$d 分</string>
+    <string name="focus_toast_on">集中：%1$s</string>
+    <string name="focus_toast_until">集中：%1$s（%2$s まで）</string>
+    <string name="focus_toast_off">集中モード オフ</string>
+</resources>

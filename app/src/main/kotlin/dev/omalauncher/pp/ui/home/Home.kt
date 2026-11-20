@@ -212,6 +212,7 @@ fun HomeScreen(
                 "agents" -> state.show(SettingsPage.Agents)
                 "jobs" -> state.show(SettingsPage.Jobs)
                 "store" -> state.show(SettingsPage.Store)
+                "store:apps" -> state.show(SettingsPage.AppStore)
                 "linux" -> state.show(SettingsPage.Linux)
                 "ssh" -> state.show(SettingsPage.Ssh)
                 "focus" -> state.show(SettingsPage.Focus)
@@ -376,7 +377,7 @@ fun HomeScreen(
     val side = homeSide()
     val focusManager = LocalFocusManager.current
     val turned = homeTurned()
-    val sideRoom = sideWidth()
+    val sideRoom = sideWidth(runtime)
     val barRoom = with(density) { state.barHeight.takeIf { it > 0 }?.toDp() ?: (PromptBarHeight + HomeGap + EdgeGap) }
     LaunchedEffect(extraKeys) { if (!extraKeys) terminals.extraKeys = null }
     Box(
@@ -551,7 +552,7 @@ fun HomeScreen(
             render = { item, placed, selected -> HomeTile(item, placed, selected, runtime, state, arrange, turned, linuxState) },
             // The recent apps strip's room: kept while it's empty, so tiles don't reflow when it fills, and still
             // home's to swipe and long-press there until it does.
-            room = if (LauncherStyle.recentApps && side == null) RecentStripHeight else 0.dp,
+            room = if (LauncherStyle.recentApps && side == null) stripRoom(runtime, vertical = false) else 0.dp,
             turned = turned,
             side = side,
             per = per,

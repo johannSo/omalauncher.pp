@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="owl_data_allow_location">щоб показати, де ви, дозвольте місцезнаходження в розділі дозволів</string>
+    <string name="owl_data_allow_steps">щоб рахувати ваші кроки, дозвольте фізичну активність у розділі дозволів</string>
+</resources>

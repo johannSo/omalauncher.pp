@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_tweaks_rename">名前を変更</string>
+    <string name="app_tweaks_hide">非表示</string>
+    <string name="app_tweaks_unhide">再表示</string>
+    <string name="app_tweaks_settings">非表示のアプリ</string>
+    <plurals name="app_tweaks_settings_subtitle">
+        <item quantity="other">%1$d 個を非表示 · アプリの非表示と名前の変更</item>
+    </plurals>
+    <string name="app_tweaks_settings_none">アプリの非表示と名前の変更</string>
+    <string name="app_tweaks_title">非表示のアプリ</string>
+    <string name="app_tweaks_search">アプリを検索</string>
+    <string name="app_tweaks_intro">非表示のアプリは、ドロワー、最近のアプリ、バーの検索に表示されません。ホームに置いたものはそのまま残ります。名前を変更したアプリは、どこでも新しい名前で表示されます。エージェントは ~/.config/omalauncher/apps/apps.toml でどちらも変更できます。</string>
+    <string name="app_tweaks_find_hidden">非表示のアプリは正式名で検索</string>
+    <string name="app_tweaks_on">オン</string>
+    <string name="app_tweaks_off">オフ</string>
+    <string name="app_tweaks_hidden_section">非表示</string>
+    <string name="app_tweaks_shown_section">表示中</string>
+    <string name="app_tweaks_show">表示</string>
+    <string name="app_tweaks_none">一致するアプリはありません</string>
+    <string name="app_tweaks_own_name">元の名前：%1$s</string>
+    <string name="app_tweaks_kind_linux">linux</string>
+    <string name="app_tweaks_kind_owl">owl アプリ</string>
+    <string name="app_tweaks_kind_shortcut">ショートカット</string>
+    <string name="app_tweaks_kind_work">仕事用</string>
+    <string name="app_tweaks_kind_clone">クローン</string>
+    <string name="app_tweaks_rename_title">%1$s の名前を変更</string>
+    <string name="app_tweaks_rename_hint">ホーム、ドロワー、最近のアプリ、検索のすべてで使われます</string>
+    <string name="app_tweaks_rename_confirm">変更</string>
+    <string name="app_tweaks_rename_reset">元の名前</string>
+</resources>

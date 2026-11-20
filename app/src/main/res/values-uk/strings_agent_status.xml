@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="agent_status_channel">Агенти для коду</string>
+    <string name="agent_status_channel_description">Що робить кожен агент для коду в терміналі: завершив, чекає на вас або просить дозволу</string>
+    <string name="agent_status_title">%1$s · %2$s</string>
+    <string name="agent_status_line">%1$s · %2$s</string>
+    <string name="agent_status_running">Працює</string>
+    <string name="agent_status_input">Чекає на вас</string>
+    <string name="agent_status_permission">Просить дозволу</string>
+    <string name="agent_status_permission_terminal">Просить дозволу в терміналі</string>
+    <string name="agent_status_done">Готово</string>
+    <string name="agent_status_allow">Дозволити</string>
+    <string name="agent_status_deny">Заборонити</string>
+    <string name="agent_status_setting">сповіщення</string>
+    <string name="agent_status_setting_description">Кожен сеанс у терміналі отримує сповіщення, коли він завершив роботу або чекає на вас; на запит дозволу можна відповісти просто в ньому. Як вони звучать, визначають ваші налаштування сповіщень.</string>
+    <string name="agent_status_on">увімк</string>
+    <string name="agent_status_off">вимк</string>
+</resources>

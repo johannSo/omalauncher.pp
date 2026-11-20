@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="focus_title">фокус</string>
+    <string name="focus_subtitle_on">увімк: %1$s</string>
+    <plurals name="focus_timers_count">
+        <item quantity="one">%1$d таймер додатка</item>
+        <item quantity="few">%1$d таймери додатків</item>
+        <item quantity="many">%1$d таймерів додатків</item>
+        <item quantity="other">%1$d таймера додатків</item>
+    </plurals>
+
+    <string name="focus_profiles">режим фокусування</string>
+    <string name="focus_profiles_hint">Поки профіль увімкнено, додатки, яких у ньому немає, приховано зі списку додатків, пошуку, нещодавніх додатків і головного екрана. У рядку також можна ввести focus і назву профілю або focus off; focus work 25m вмикає його на 25 хвилин.</string>
+    <string name="focus_new_profile">новий профіль</string>
+    <string name="focus_create">створити</string>
+    <string name="focus_name_taken">профіль із такою назвою вже є, або це слово зайняте рядком (off)</string>
+    <string name="focus_turn_on">увімкнути</string>
+    <string name="focus_turn_off">вимкнути</string>
+    <string name="focus_edit">змінити</string>
+    <string name="focus_delete">видалити</string>
+    <string name="focus_delete_title">видалити %1$s?</string>
+    <string name="focus_delete_message">Профіль буде видалено разом зі списком додатків і розкладом. Самі додатки не зміняться.</string>
+    <string name="focus_until_off">доки не вимкнете</string>
+    <string name="focus_for">на %1$s</string>
+    <string name="focus_status_off">вимк</string>
+    <string name="focus_status_on">увімк</string>
+    <string name="focus_status_until">увімк до %1$s</string>
+    <string name="focus_status_scheduled">увімк за розкладом до %1$s</string>
+    <plurals name="focus_allows_apps">
+        <item quantity="one">пропускає %1$d додаток</item>
+        <item quantity="few">пропускає %1$d додатки</item>
+        <item quantity="many">пропускає %1$d додатків</item>
+        <item quantity="other">пропускає %1$d додатка</item>
+    </plurals>
+    <plurals name="focus_blocks_apps">
+        <item quantity="one">приховує %1$d додаток</item>
+        <item quantity="few">приховує %1$d додатки</item>
+        <item quantity="many">приховує %1$d додатків</item>
+        <item quantity="other">приховує %1$d додатка</item>
+    </plurals>
+
+    <string name="focus_rename">перейменувати</string>
+    <string name="focus_apps_mode">додатки</string>
+    <string name="focus_apps_only">лише ці</string>
+    <string name="focus_apps_except">усі, крім цих</string>
+    <string name="focus_dnd">не турбувати</string>
+    <string name="focus_yes">увімк</string>
+    <string name="focus_no">вимк</string>
+    <string name="focus_dnd_needed">Спершу Android має дозволити лаунчеру керувати режимом «Не турбувати».</string>
+    <string name="focus_schedule">розклад</string>
+    <string name="focus_schedule_none">немає</string>
+    <string name="focus_schedule_weekly">щотижня</string>
+    <string name="focus_schedule_from">з</string>
+    <string name="focus_schedule_to">до</string>
+    <string name="focus_schedule_no_days">Виберіть дні, у які він вмикається.</string>
+    <string name="focus_apps">додатки</string>
+    <string name="focus_search_apps">знайти додаток</string>
+    <string name="focus_kind_linux">linux</string>
+    <string name="focus_kind_owl">owl</string>
+    <string name="focus_kind_shortcut">ярлик</string>
+
+    <string name="focus_timers">таймери додатків</string>
+    <string name="focus_timers_hint">Денний ліміт для кожного Android-додатка. Коли його вичерпано, відкриття додатка з лаунчера спершу показує екран «час вийшов». Таймер можна задати й довгим натисканням на додаток.</string>
+    <string name="focus_add_timer">додати таймер</string>
+    <string name="focus_pick_app">виберіть додаток</string>
+    <string name="focus_limit_title">%1$s на день</string>
+    <string name="focus_no_limit">без ліміту</string>
+    <string name="focus_remove">прибрати</string>
+    <string name="focus_timer_used">%1$s з %2$s сьогодні</string>
+    <string name="focus_usage_needed">Таймери враховують час використання кожного додатка, а Android надає його лише з доступом до даних про використання.</string>
+    <string name="focus_allow">дозволити</string>
+    <string name="focus_action_timer">таймер додатка</string>
+
+    <string name="focus_outside">поза лаунчером</string>
+    <string name="focus_guard_explain">Таймери й режим фокусування зупиняють додатки, відкриті з OmaLauncher++. Щоб зупиняти їх, хоч звідки їх відкрито — зі сповіщення, іншого додатка чи нещодавніх, — увімкніть OmaLauncher++ focus у налаштуваннях спеціальних можливостей Android. Служба бачить лише, який додаток виходить на передній план, але ніколи не те, що на екрані, чи що ви вводите; налаштування, телефон і клавіатура ніколи не зупиняються. Android може спершу попросити дозволити обмежені налаштування в розділі «Про додаток» лаунчера, як для додатків не з магазину. Доки ви її не ввімкнете, її вимкнено.</string>
+    <string name="focus_guard_on">увімк</string>
+    <string name="focus_guard_off">вимк</string>
+    <string name="focus_guard_open">спеціальні можливості</string>
+    <string name="focus_file_hint">Агенти можуть змінити все це в ~/.config/omalauncher/focus/focus.toml.</string>
+
+    <string name="focus_guard_label">OmaLauncher++ focus</string>
+    <string name="focus_guard_summary">Режим фокусування й таймери для додатків, відкритих поза лаунчером</string>
+    <string name="focus_guard_description">Дозволяє режиму фокусування й таймерам OmaLauncher++ зупиняти додатки, відкриті поза лаунчером: зі сповіщення, іншого додатка чи нещодавніх. Служба бачить лише, який додаток виходить на передній план, але ніколи не те, що на екрані, чи що ви вводите, і нічого не залишає телефон. Налаштування, телефон і клавіатура ніколи не зупиняються.</string>
+
+    <string name="focus_times_up_title">час вийшов</string>
+    <string name="focus_times_up_message">%1$s: %2$s сьогодні з %3$s на день</string>
+    <string name="focus_times_up_hint">«усе одно відкрити» знімає обмеження до кінця дня</string>
+    <string name="focus_hidden_title">не зараз</string>
+    <string name="focus_hidden_message">%1$s немає в профілі фокусування %2$s</string>
+    <string name="focus_one_more_minute">ще 1 хвилина</string>
+    <string name="focus_open_anyway">усе одно відкрити</string>
+    <string name="focus_close">закрити</string>
+    <string name="focus_duration_hours">%1$d год %2$d хв</string>
+    <string name="focus_duration_minutes">%1$d хв</string>
+
+    <string name="focus_toast_on">фокус: %1$s</string>
+    <string name="focus_toast_until">фокус: %1$s до %2$s</string>
+    <string name="focus_toast_off">фокус вимк</string>
+</resources>

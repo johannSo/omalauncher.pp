@@ -134,10 +134,11 @@ private fun LinuxPlaceholder(
     linux: LinuxPhase,
     onInstall: () -> Unit,
 ) {
+    val stopped = linux == LinuxPhase.Off
     Column(Modifier.fillMaxSize().padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
         BasicText(name, style = Mono.copy(color = Palette.muted), maxLines = 1)
         Spacer(Modifier.weight(1f))
-        BasicText(stringResource(R.string.home_widget_needs_linux), style = Mono.copy(color = Palette.accent))
+        BasicText(stringResource(if (stopped) R.string.home_widget_linux_stopped else R.string.home_widget_needs_linux), style = Mono.copy(color = Palette.accent))
         BasicText(
             stringResource(R.string.home_widget_needs_linux_text),
             style = Mono.copy(color = Palette.muted, fontSize = TextSize.Small),

@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import dev.omalauncher.pp.ui.voice.VoiceScreen
+import dev.omalauncher.pp.ui.settings.SettingsPage
 
 /** The voice screen, a spoken conversation with a coding agent: its own task and Recents card, opened from the AI bar's mic. */
 class VoiceActivity : InstantActivity() {
@@ -20,6 +21,12 @@ class VoiceActivity : InstantActivity() {
         super.onCreate(savedInstanceState)
         // The agents run in Linux; without it there's no one to talk to.
         if (!runtime.bootstrap.wanted) {
+            finishAndRemoveTask()
+            return
+        }
+        // Shut down in settings: it's started there.
+        if (runtime.bootstrap.isOff) {
+            runtime.openSettings(SettingsPage.Linux)
             finishAndRemoveTask()
             return
         }

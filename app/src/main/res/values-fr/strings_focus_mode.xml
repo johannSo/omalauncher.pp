@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="focus_title">concentration</string>
+    <string name="focus_subtitle_on">activé : %1$s</string>
+    <plurals name="focus_timers_count">
+        <item quantity="one">%1$d minuteur d’appli</item>
+        <item quantity="many">%1$d minuteurs d’applis</item>
+        <item quantity="other">%1$d minuteurs d’applis</item>
+    </plurals>
+
+    <string name="focus_profiles">mode concentration</string>
+    <string name="focus_profiles_hint">Tant qu’un profil est activé, les applis qu’il laisse de côté sont masquées du tiroir, de la recherche, des applis récentes et de l’accueil. Tu peux aussi taper focus et le nom d’un profil, ou focus off, dans la barre ; focus travail 25m le garde activé pendant 25 minutes.</string>
+    <string name="focus_new_profile">nouveau profil</string>
+    <string name="focus_create">créer</string>
+    <string name="focus_name_taken">un autre profil porte ce nom, ou c’est un mot réservé par la barre (off)</string>
+    <string name="focus_turn_on">activer</string>
+    <string name="focus_turn_off">désactiver</string>
+    <string name="focus_edit">modifier</string>
+    <string name="focus_delete">supprimer</string>
+    <string name="focus_delete_title">supprimer %1$s ?</string>
+    <string name="focus_delete_message">Le profil disparaît, avec ses applis et son planning. Tes applis restent comme elles sont.</string>
+    <string name="focus_until_off">jusqu’à désactivation</string>
+    <string name="focus_for">pendant %1$s</string>
+    <string name="focus_status_off">désactivé</string>
+    <string name="focus_status_on">activé</string>
+    <string name="focus_status_until">activé jusqu’à %1$s</string>
+    <string name="focus_status_scheduled">activé par son planning jusqu’à %1$s</string>
+    <plurals name="focus_allows_apps">
+        <item quantity="one">laisse passer %1$d appli</item>
+        <item quantity="many">laisse passer %1$d applis</item>
+        <item quantity="other">laisse passer %1$d applis</item>
+    </plurals>
+    <plurals name="focus_blocks_apps">
+        <item quantity="one">masque %1$d appli</item>
+        <item quantity="many">masque %1$d applis</item>
+        <item quantity="other">masque %1$d applis</item>
+    </plurals>
+
+    <string name="focus_rename">renommer</string>
+    <string name="focus_apps_mode">applis</string>
+    <string name="focus_apps_only">seulement celles-ci</string>
+    <string name="focus_apps_except">toutes sauf celles-ci</string>
+    <string name="focus_dnd">ne pas déranger</string>
+    <string name="focus_yes">oui</string>
+    <string name="focus_no">non</string>
+    <string name="focus_dnd_needed">Android doit d’abord laisser le launcher activer Ne pas déranger.</string>
+    <string name="focus_schedule">planning</string>
+    <string name="focus_schedule_none">aucun</string>
+    <string name="focus_schedule_weekly">chaque semaine</string>
+    <string name="focus_schedule_from">de</string>
+    <string name="focus_schedule_to">à</string>
+    <string name="focus_schedule_no_days">Choisis les jours où il s’active.</string>
+    <string name="focus_apps">applis</string>
+    <string name="focus_search_apps">chercher une appli</string>
+    <string name="focus_kind_linux">linux</string>
+    <string name="focus_kind_owl">owl</string>
+    <string name="focus_kind_shortcut">raccourci</string>
+
+    <string name="focus_timers">minuteurs d’applis</string>
+    <string name="focus_timers_hint">Une limite quotidienne par appli Android. Une fois épuisée, ouvrir l’appli depuis le launcher affiche d’abord un écran « temps écoulé ». Tu peux aussi appuyer longuement sur une appli pour son minuteur.</string>
+    <string name="focus_add_timer">ajouter un minuteur</string>
+    <string name="focus_pick_app">choisis une appli</string>
+    <string name="focus_limit_title">%1$s par jour</string>
+    <string name="focus_no_limit">pas de limite</string>
+    <string name="focus_remove">retirer</string>
+    <string name="focus_timer_used">%1$s sur %2$s aujourd’hui</string>
+    <string name="focus_usage_needed">Les minuteurs comptent le temps d’écran de chaque appli, qu’Android ne partage qu’avec l’accès aux données d’utilisation.</string>
+    <string name="focus_allow">autoriser</string>
+    <string name="focus_action_timer">minuteur d’appli</string>
+
+    <string name="focus_outside">hors du launcher</string>
+    <string name="focus_guard_explain">Les minuteurs et le mode concentration arrêtent les applis ouvertes depuis OmaLauncher++. Pour les arrêter d’où qu’elles soient ouvertes, depuis une notification, une autre appli ou les applis récentes, active OmaLauncher++ focus dans les paramètres d’accessibilité d’Android. Il lit seulement quelle appli passe au premier plan, jamais ce qui est à l’écran ni ce que tu tapes, et les paramètres, l’appli Téléphone et le clavier ne sont jamais arrêtés. Android peut d’abord te demander d’autoriser les paramètres restreints dans les infos de l’appli du launcher, comme pour les applis qui ne viennent pas d’une boutique. Il reste désactivé tant que tu ne l’actives pas.</string>
+    <string name="focus_guard_on">activé</string>
+    <string name="focus_guard_off">désactivé</string>
+    <string name="focus_guard_open">paramètres d’accessibilité</string>
+    <string name="focus_file_hint">Les agents peuvent modifier tout ça dans ~/.config/omalauncher/focus/focus.toml.</string>
+
+    <string name="focus_guard_label">OmaLauncher++ focus</string>
+    <string name="focus_guard_summary">Mode concentration et minuteurs d’applis pour les applis ouvertes hors du launcher</string>
+    <string name="focus_guard_description">Permet au mode concentration et aux minuteurs d’applis d’OmaLauncher++ d’arrêter les applis ouvertes hors du launcher : depuis une notification, une autre appli ou les applis récentes. Il lit seulement quelle appli passe au premier plan, jamais ce qui est à l’écran ni ce que tu tapes, et rien ne quitte le téléphone. Les paramètres, l’appli Téléphone et le clavier ne sont jamais arrêtés.</string>
+
+    <string name="focus_times_up_title">temps écoulé</string>
+    <string name="focus_times_up_message">%1$s : %2$s aujourd’hui, sur %3$s par jour</string>
+    <string name="focus_times_up_hint">ouvrir quand même la laisse tranquille pour le reste de la journée</string>
+    <string name="focus_hidden_title">pas maintenant</string>
+    <string name="focus_hidden_message">%1$s n’est pas dans le profil de concentration %2$s</string>
+    <string name="focus_one_more_minute">encore 1 minute</string>
+    <string name="focus_open_anyway">ouvrir quand même</string>
+    <string name="focus_close">fermer</string>
+    <string name="focus_duration_hours">%1$d h %2$d min</string>
+    <string name="focus_duration_minutes">%1$d min</string>
+
+    <string name="focus_toast_on">concentration : %1$s</string>
+    <string name="focus_toast_until">concentration : %1$s jusqu’à %2$s</string>
+    <string name="focus_toast_off">concentration désactivée</string>
+</resources>

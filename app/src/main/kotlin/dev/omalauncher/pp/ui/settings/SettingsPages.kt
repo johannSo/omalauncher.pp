@@ -48,6 +48,9 @@ enum class SettingsPage {
 
     /** The store on its faces, from the empty page left of page 1. */
     FaceStore,
+
+    /** The store on its apps alone, from the drawer's app store tile. */
+    AppStore,
     Packages,
 
     /** Install, progress, remove; opened by anything that needs Linux. */
@@ -194,6 +197,7 @@ private fun SettingsPage(
             }
         SettingsPage.Store -> StoreScreen(runtime.widgets, runtime.agents.installed, homePage, runtime.themes.picked, onDismiss = close, onOpenApp = runtime::openOwlApp)
         SettingsPage.FaceStore -> StoreScreen(runtime.widgets, runtime.agents.installed, homePage, runtime.themes.picked, onDismiss = close, initialKind = OwlKind.Face, onOpenApp = runtime::openOwlApp)
+        SettingsPage.AppStore -> StoreScreen(runtime.widgets, runtime.agents.installed, homePage, runtime.themes.picked, onDismiss = close, initialKind = OwlKind.App, onOpenApp = runtime::openOwlApp)
         SettingsPage.Packages -> PackagesScreen(runtime, onDismiss = close)
         SettingsPage.Linux -> LinuxScreen(runtime, onDismiss = close, onSsh = { stack.push(SettingsPage.Ssh) }, onSnapshots = { stack.push(SettingsPage.Snapshots) })
         SettingsPage.Ssh -> SshScreen(runtime, onDismiss = close)

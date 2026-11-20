@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_tweaks_rename">перейменувати</string>
+    <string name="app_tweaks_hide">сховати</string>
+    <string name="app_tweaks_unhide">показати</string>
+
+    <string name="app_tweaks_settings">приховані додатки</string>
+    <plurals name="app_tweaks_settings_subtitle">
+        <item quantity="one">приховано: %1$d · приховування й перейменування додатків</item>
+        <item quantity="few">приховано: %1$d · приховування й перейменування додатків</item>
+        <item quantity="many">приховано: %1$d · приховування й перейменування додатків</item>
+        <item quantity="other">приховано: %1$d · приховування й перейменування додатків</item>
+    </plurals>
+    <string name="app_tweaks_settings_none">приховування й перейменування додатків</string>
+
+    <string name="app_tweaks_title">приховані додатки</string>
+    <string name="app_tweaks_search">пошук додатків</string>
+    <string name="app_tweaks_intro">Приховані додатки не видно в списку додатків, нещодавніх додатках і пошуку в рядку; додаток на головному екрані там і залишиться. Перейменований додаток усюди має нову назву. Агенти можуть змінювати і те, і інше в ~/.config/omalauncher/apps/apps.toml.</string>
+    <string name="app_tweaks_find_hidden">знаходити приховані за повною назвою</string>
+    <string name="app_tweaks_on">увімк</string>
+    <string name="app_tweaks_off">вимк</string>
+    <string name="app_tweaks_hidden_section">приховані</string>
+    <string name="app_tweaks_shown_section">видимі</string>
+    <string name="app_tweaks_show">показати</string>
+    <string name="app_tweaks_none">немає відповідних додатків</string>
+    <string name="app_tweaks_own_name">було: %1$s</string>
+    <string name="app_tweaks_kind_linux">linux</string>
+    <string name="app_tweaks_kind_owl">owl-додаток</string>
+    <string name="app_tweaks_kind_shortcut">ярлик</string>
+    <string name="app_tweaks_kind_work">робочий</string>
+    <string name="app_tweaks_kind_clone">клон</string>
+
+    <string name="app_tweaks_rename_title">перейменувати %1$s</string>
+    <string name="app_tweaks_rename_hint">усюди: головний екран, список додатків, нещодавні додатки й пошук</string>
+    <string name="app_tweaks_rename_confirm">перейменувати</string>
+    <string name="app_tweaks_rename_reset">власна назва</string>
+</resources>

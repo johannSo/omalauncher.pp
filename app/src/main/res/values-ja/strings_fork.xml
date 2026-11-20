@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fork_settings_linux_running">実行中 · シャットダウン、削除</string>
+    <string name="fork_settings_linux_shutting_down">シャットダウン中…</string>
+    <string name="fork_settings_linux_off">停止中 · 開始</string>
+
+    <string name="fork_home_start">開始</string>
+    <string name="fork_home_widgets">ウィジェット</string>
+    <string name="fork_home_widget_settings">設定</string>
+    <string name="fork_home_android_widgets">android ウィジェット</string>
+    <string name="fork_app_widget_gone">アプリがアンインストールされています</string>
+    <string name="fork_widget_picker_app">%1$s のウィジェット</string>
+    <string name="fork_widget_picker_search">ウィジェットを検索</string>
+    <string name="fork_widget_picker_none">このスマートフォンにはウィジェットを提供するアプリがありません</string>
+    <string name="fork_widget_picker_no_match">一致するウィジェットはありません</string>
+
+    <string name="fork_linux_start">linux を開始</string>
+    <string name="fork_linux_starting">起動中…</string>
+    <string name="fork_linux_running">実行中</string>
+    <string name="fork_linux_shutting_down">シャットダウン中…</string>
+    <string name="fork_linux_shut_down">シャットダウン</string>
+    <string name="fork_linux_off">停止中</string>
+    <string name="fork_linux_status">%1$s · %2$s</string>
+    <string name="fork_linux_off_body">Linux アプリ、ターミナルウィジェット、エージェントは、開始するまで待機します。</string>
+    <string name="fork_linux_shut_down_body">Linux アプリとターミナルを閉じ、その中で作業しているエージェントを停止します。ファイルとパッケージは残ります。ここで開始するまで、再起動後もオフのままです。</string>
+
+    <string name="fork_gestures_shade">通知シェード</string>
+
+    <string name="fork_style_icons">アプリアイコン</string>
+    <string name="fork_style_icon_pack">アイコンパック</string>
+    <string name="fork_style_icon_pack_none">各アプリのアイコン</string>
+    <string name="fork_style_icon_pack_hint">アイコンパックがインストールされていません。アプリストアから入手して、ここで選んでください</string>
+    <string name="fork_style_icon_size">サイズ</string>
+    <string name="fork_style_icon_small">小</string>
+    <string name="fork_style_icon_normal">標準</string>
+    <string name="fork_style_icon_large">大</string>
+    <string name="fork_style_icon_shape">形</string>
+    <string name="fork_style_shape_system">システム</string>
+    <string name="fork_style_shape_circle">円</string>
+    <string name="fork_style_shape_squircle">角丸四角</string>
+    <string name="fork_style_icon_backdrop">背景プレート</string>
+    <string name="fork_style_grayscale">グレースケール</string>
+    <string name="fork_style_tint">色合い</string>
+    <string name="fork_style_tint_bottom">グラデーション先</string>
+    <string name="fork_style_tint_none">なし</string>
+    <string name="fork_style_tint_accent">アクセント</string>
+    <string name="fork_style_tint_set">設定</string>
+    <string name="fork_style_home_labels">ホームに名前を表示</string>
+    <string name="fork_style_drawer_labels">ドロワーに名前を表示</string>
+    <string name="fork_style_icons_monochrome">モノクロアイコンがオンです。アイコンパック、形、グレースケール、色合いは、アイコンをカラーにすると反映されます</string>
+
+    <string name="fork_settings_backup">バックアップ</string>
+    <string name="fork_settings_backup_subtitle">ホーム、ウィジェット、スタイルをエクスポート・インポート</string>
+    <string name="fork_backup_export">ファイルにエクスポート</string>
+    <string name="fork_backup_import">ファイルからインポート</string>
+    <string name="fork_backup_exported">バックアップを保存しました</string>
+    <string name="fork_backup_export_failed">バックアップを保存できませんでした：%1$s</string>
+    <string name="fork_backup_import_title">このバックアップをインポートしますか？</string>
+    <string name="fork_backup_import_message">ホーム、スタイル、ウィジェット、全画面ウィジェット、owl アプリ、テーマがバックアップの内容に置き換わり、ランチャーが再起動します。Linux アプリとターミナルは閉じます。別のスマートフォンの Android ウィジェットはタイルとして戻るので、タップしてもう一度追加してください。ウィジェットの機密情報は入力し直す必要があります。Linux 自体はバックアップに含まれません。</string>
+    <string name="fork_backup_import_confirm">インポート</string>
+    <string name="fork_backup_not_a_backup">このファイルは OmaLauncher++ のバックアップではありません</string>
+    <string name="fork_backup_newer">このバックアップは新しいバージョンの OmaLauncher++ で作成されています。先にこのランチャーを更新してください</string>
+    <string name="fork_backup_import_failed">バックアップをインポートできませんでした：%1$s</string>
+    <string name="fork_app_widget_restore">タップしてもう一度追加</string>
+</resources>

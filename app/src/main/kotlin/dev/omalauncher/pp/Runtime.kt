@@ -248,12 +248,25 @@ class Runtime(
     var linux by mutableStateOf(false)
         private set
 
-    /** The Linux install and removal; one at a time. */
+    /** Whether Linux is up: false while it starts, and while it's stopped or not installed. */
+    val linuxRunning get() = linux
+
+    /** The Linux install and removal, its stop and start; one at a time. */
     private var linuxJob: Job? = null
 
     init {
         // Saved, so removing Linux later doesn't bring the first-run screen back.
         if (launcherReady) prefs.edit().putBoolean(SETUP_DONE, true).apply()
+        // Android's share sheet lists Linux only while it's installed; ShareInActivity's alias starts off
+        scope.launch {
+            bootstrap.state.collect { state ->
+                when (state) {
+                    LinuxState.Installed -> ShareInActivity.listedInShareSheet(context, true)
+                    LinuxState.NotInstalled, LinuxState.Removing -> ShareInActivity.listedInShareSheet(context, false)
+                    else -> Unit
+                }
+            }
+        }
         themes.loadPalette()
         // An agent or the user edited style.toml; the rest of the style is read where it's drawn.
         style.onExternalChange = { old, new ->
@@ -373,18 +386,19 @@ class Runtime(
     /** Runs [work] with the foreground service up, so it goes on outside the app; then starts Linux if it's installed. */
     private fun runLinux(work: suspend () -> Unit) {
         if (linuxJob?.isActive == true) return
-        linuxJob =
-            scope.launch {
-                setService(true)
-                withContext(Dispatchers.IO) {
-                    if (!prepared) {
-                        proot.prepare()
-                        prepared = true
-                    }
-                }
-                work()
-                if (bootstrap.isInstalled) onLinuxReady() else setService(false)
+        linuxJob = scope.launch { withService(work) }
+    }
+
+    private suspend fun withService(work: suspend () -> Unit) {
+        setService(true)
+        withContext(Dispatchers.IO) {
+            if (!prepared) {
+                proot.prepare()
+                prepared = true
             }
+        }
+        work()
+        if (bootstrap.isInstalled) onLinuxReady() else setService(false)
     }
 
     /**

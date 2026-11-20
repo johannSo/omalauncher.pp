@@ -118,6 +118,8 @@ import dev.omalauncher.pp.widgets.runtime.Volume
 import dev.omalauncher.pp.widgets.runtime.WidgetPermissions
 import dev.omalauncher.pp.widgets.runtime.watchFile
 import dev.omalauncher.pp.widgets.runtime.Motion
+import dev.omalauncher.pp.widgets.lang.Col
+import androidx.compose.ui.graphics.toArgb
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -166,6 +168,9 @@ private val REDIRECTS = setOf(301, 302, 303, 307, 308)
  */
 private const val DRAWER_EVERY_MS = 200L
 
+/** How many recent apps `android.strip` lists, as the strip always has. */
+private const val STRIP_APPS = 20
+
 /** How many shortcuts from shortcuts(...) stay openable by key: a few menus' worth. */
 private const val MAX_OFFERED = 64
 
@@ -196,7 +201,8 @@ class WidgetServices(
     /** What's playing on the phone. */
     val media = Media(context)
     private val notifications = Notifications(context, media, ::profileKind)
-    private val volume = Volume(context)
+    /** android.volume and volume(...); volume("request") asks the activity in front for Bluetooth, for the battery. */
+    val volume = Volume(context)
     private val alarm = Alarm(context)
     private val modes = Modes(context)
     private val sim = Sim(context)
@@ -209,7 +215,7 @@ class WidgetServices(
     /** Lazy: the runtime makes its widget engine before its SSH server, so runtime.ssh is still null while this is built. */
     private val sshSource by lazy { SshSource(context, runtime.ssh) }
 
-    /** Opens launcher screens ("style" or "themes", "agents", "drawer"); set by the UI. */
+    /** Opens launcher screens ("style" or "themes", "agents", "store" or "store:apps", "drawer"); set by the UI. */
     var launcherAction: ((String) -> Unit)? = null
 
     /** What the drawer's long-press menu does, for appAction(...); set by the UI. */
@@ -258,6 +264,7 @@ class WidgetServices(
             "agents" -> agents()
             "recent" -> recent()
             "drawer" -> drawer()
+            "strip" -> strip()
             "modifiers" -> modifiers()
             "location" -> location.value()
             "steps" -> steps.value()
@@ -291,6 +298,7 @@ class WidgetServices(
             "apps" -> snapshotFlow { apps() }.flowOn(Dispatchers.Default)
             "agents" -> snapshotFlow { agents() }
             "recent" -> snapshotFlow { recent() }
+            "strip" -> snapshotFlow { strip() }
             "modifiers" -> snapshotFlow { modifiers() }
             "usage" -> runtime.focus.usageUpdates()
             "focus" -> snapshotFlow { runtime.focus.focusValue() }
@@ -376,6 +384,8 @@ class WidgetServices(
 
     override fun launcherIcon(key: String) =
         offered[key]?.let { (_, s) -> if (LauncherStyle.monochromeIcons) s.mask else s.icon } ?: appIconOf(runtime, key, LauncherStyle.monochromeIcons)
+
+    override fun launcherMask(key: String) = offered[key]?.let { (_, s) -> s.mask } ?: appIconOf(runtime, key, mono = true)
 
     /**
      * Shortcuts handed out by shortcuts(...), by the key they got ("x:3"): open(...), appAction("pin", ...) and
@@ -594,6 +604,54 @@ class WidgetServices(
             },
         )
 
+    /** One app as `android.drawer` and `android.strip` list them; see [drawer]. */
+    private fun appValue(hit: AppHit): Value {
+        val dot = hit.hasDot
+        return Obj(
+            mapOf(
+                "key" to Str(hit.key),
+                "kind" to Str(hit.kind),
+                "name" to Str(hit.label),
+                "own" to Str(hit.own),
+                "label" to Str(if (dot) context.getString(R.string.home_app_has_notifications, hit.spoken) else hit.spoken),
+                "dot" to bool(dot),
+                "icon" to Str("icon:" + hit.key),
+                // Its silhouette whether or not icons are monochrome, to tint any color (owl 24).
+                "mask" to Str("mask:" + hit.key),
+                "profile" to (hit.profileKind?.let(::Str) ?: Null),
+                "alias" to (hit.alias?.let(::Str) ?: Null),
+                "paused" to bool(hit.paused(runtime)),
+                // Whether `icon` draws anything: its silhouette, with monochrome icons. Without one, the drawer shows the initials.
+                "hasIcon" to bool(appIconOf(runtime, hit.key, LauncherStyle.monochromeIcons) != null),
+                "initials" to Str(initials(hit.label)),
+                "actions" to Lst(hit.actionWords().map(::Str)),
+                "score" to Num(Math.round(runtime.usage.score(hit.key) * 10.0) / 10.0),
+                "last" to (runtime.usage.last(hit.key)?.let { Num((it / 1000).toDouble()) } ?: Null),
+            ),
+        )
+    }
+
+    /**
+     * The strip above home's prompt bar for `source s = android.strip` (owl 24): `{apps, vertical, monochrome, bare,
+     * border}`. `apps` are the recent apps, last opened first, each as `android.drawer` lists its apps; like
+     * `android.recent` they reorder only once home is out of sight. `vertical` while the strip stands beside the grid in
+     * landscape; `monochrome` while icons are silhouettes; `bare` while home's apps show as icons only, without a tile
+     * (settings › style › home apps); `border` the color of the tiles' outline.
+     */
+    private fun strip(): Value {
+        // Not before every kind of app is listed: the ones missing would push in as their kind arrived.
+        val apps = if (runtime.appsListed) recentApps(runtime, STRIP_APPS) else emptyList()
+        return Obj(
+            mapOf(
+                "apps" to Lst(apps.map(::appValue)),
+                "vertical" to bool(runtime.widgets.stripVertical),
+                "monochrome" to bool(LauncherStyle.monochromeIcons),
+                "bare" to bool(LauncherStyle.bareAppIcons),
+                "border" to Col(null, LauncherStyle.tileBorder.toArgb()),
+            ),
+        )
+    }
+
     /**
      * The drawer for `source d = android.drawer`: `{apps, hidden, findHidden, linux, monochrome, work, private, updates, labels, iconSize}`. `apps` is every app in the drawer's
      * order (owl apps, Linux apps, shortcuts, Android apps, then the work profile's shortcuts and apps, then the private
@@ -615,33 +673,11 @@ class WidgetServices(
         val apps = runtime.androidApps
         val personal = { p: Long? -> p == null || apps.cloned(p) }
         val hits =
-            runtime.widgets.apps().map { AppHit.Owl(it) } + runtime.linuxApps.apps.map { AppHit.Linux(it) } +
+            // By name, as Linux and Android apps come: the files' order put a sideloaded app's shared- name among the rest.
+            runtime.widgets.apps().sortedBy { it.name.lowercase() }.map { AppHit.Owl(it) } + runtime.linuxApps.apps.map { AppHit.Linux(it) } +
                 apps.shortcuts.filter { personal(it.profile) }.map { AppHit.Shortcut(it) } + apps.apps.filter { personal(it.profile) }.map { AppHit.Android(it, runtime.appWidgets.offers(it)) } +
                 apps.shortcuts.filter { it.work }.map { AppHit.Shortcut(it) } + apps.apps.filter { it.work }.map { AppHit.Android(it, runtime.appWidgets.offers(it)) } +
                 apps.shortcuts.filter { it.privateSpace }.map { AppHit.Shortcut(it) } + apps.apps.filter { it.privateSpace }.map { AppHit.Android(it, runtime.appWidgets.offers(it)) }
-        fun entry(hit: AppHit): Obj {
-            val dot = hit.hasDot
-            return Obj(
-                mapOf(
-                    "key" to Str(hit.key),
-                    "kind" to Str(hit.kind),
-                    "name" to Str(hit.label),
-                    "own" to Str(hit.own),
-                    "label" to Str(if (dot) context.getString(R.string.home_app_has_notifications, hit.spoken) else hit.spoken),
-                    "dot" to bool(dot),
-                    "icon" to Str("icon:" + hit.key),
-                    "profile" to (hit.profileKind?.let(::Str) ?: Null),
-                    "alias" to (hit.alias?.let(::Str) ?: Null),
-                    "paused" to bool(hit.paused(runtime)),
-                    // Whether `icon` draws anything: its silhouette, with monochrome icons. Without one, the drawer shows the initials.
-                    "hasIcon" to bool(appIconOf(runtime, hit.key, LauncherStyle.monochromeIcons) != null),
-                    "initials" to Str(initials(hit.label)),
-                    "actions" to Lst(hit.actionWords().map(::Str)),
-                    "score" to Num(Math.round(runtime.usage.score(hit.key) * 10.0) / 10.0),
-                    "last" to (runtime.usage.last(hit.key)?.let { Num((it / 1000).toDouble()) } ?: Null),
-                ),
-            )
-        }
         // Focus mode hides the apps the profile on leaves out, from the drawer and its search alike, hidden ones too.
         val focus = runtime.focus.active?.profile
         val (hidden, shown) = hits.filter { runtime.focus.allows(it, focus) }.partition { it.hidden }
@@ -649,8 +685,8 @@ class WidgetServices(
         val space = apps.privateSpace?.let { Obj(mapOf("locked" to bool(it.locked), "hidden" to bool(it.hidden), "settings" to bool(apps.privateSettings))) } ?: Null
         return Obj(
             mapOf(
-                "apps" to Lst(shown.take(Builtins.MAX_LIST).map(::entry)),
-                "hidden" to Lst(hidden.take(Builtins.MAX_LIST).map(::entry)),
+                "apps" to Lst(shown.take(Builtins.MAX_LIST).map(::appValue)),
+                "hidden" to Lst(hidden.take(Builtins.MAX_LIST).map(::appValue)),
                 "findHidden" to bool(AppTweakStore.current.findHidden),
                 "linux" to Str(linuxWord(runtime.bootstrap.state.value)),
                 "monochrome" to bool(LauncherStyle.monochromeIcons),

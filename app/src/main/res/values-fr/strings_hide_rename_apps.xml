@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_tweaks_rename">renommer</string>
+    <string name="app_tweaks_hide">masquer</string>
+    <string name="app_tweaks_unhide">afficher</string>
+
+    <string name="app_tweaks_settings">applis masquées</string>
+    <plurals name="app_tweaks_settings_subtitle">
+        <item quantity="one">%1$d masquée · masquer et renommer des applis</item>
+        <item quantity="many">%1$d masquées · masquer et renommer des applis</item>
+        <item quantity="other">%1$d masquées · masquer et renommer des applis</item>
+    </plurals>
+    <string name="app_tweaks_settings_none">masquer et renommer des applis</string>
+
+    <string name="app_tweaks_title">applis masquées</string>
+    <string name="app_tweaks_search">chercher des applis</string>
+    <string name="app_tweaks_intro">Les applis masquées restent hors du tiroir, des applis récentes et de la recherche de la barre ; une appli sur l’accueil y reste. Une appli renommée porte son nouveau nom partout. Les agents peuvent modifier les deux dans ~/.config/omalauncher/apps/apps.toml.</string>
+    <string name="app_tweaks_find_hidden">trouver les masquées par leur nom complet</string>
+    <string name="app_tweaks_on">activé</string>
+    <string name="app_tweaks_off">désactivé</string>
+    <string name="app_tweaks_hidden_section">masquées</string>
+    <string name="app_tweaks_shown_section">visibles</string>
+    <string name="app_tweaks_show">afficher</string>
+    <string name="app_tweaks_none">aucune appli ne correspond</string>
+    <string name="app_tweaks_own_name">avant : %1$s</string>
+    <string name="app_tweaks_kind_linux">linux</string>
+    <string name="app_tweaks_kind_owl">appli owl</string>
+    <string name="app_tweaks_kind_shortcut">raccourci</string>
+    <string name="app_tweaks_kind_work">pro</string>
+    <string name="app_tweaks_kind_clone">clone</string>
+
+    <string name="app_tweaks_rename_title">renommer %1$s</string>
+    <string name="app_tweaks_rename_hint">utilisé partout : l’accueil, le tiroir, les applis récentes et la recherche</string>
+    <string name="app_tweaks_rename_confirm">renommer</string>
+    <string name="app_tweaks_rename_reset">nom d’origine</string>
+</resources>

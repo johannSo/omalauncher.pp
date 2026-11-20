@@ -179,6 +179,9 @@ interface Services {
     /** A launcher app's icon by its `android.recent` key, `Image { src: "icon:l:foot" }`: Linux, Android, owl apps and shortcuts alike. */
     fun launcherIcon(key: String): ImageBitmap? = null
 
+    /** The same app's silhouette, whatever the icon style, `Image { src: "mask:l:foot"; tint: accent }` (owl 24). */
+    fun launcherMask(key: String): ImageBitmap? = null
+
     /** The shortcuts the app [key] offers in its long-press menu, each `{key, name, icon}`, given to [done] on the main thread. */
     fun shortcuts(
         key: String,
@@ -369,6 +372,9 @@ class WidgetInstance(
     }
 
     override fun read(slot: Int): Value = cells[slot]!!.value
+
+    /** What the file's `android.[name]` source holds now; null without such a source. */
+    fun androidValue(name: String): Value? = program.globals.indexOfFirst { it is Global.Source && it.kind == "android.$name" }.takeIf { it >= 0 }?.let(::read)
 
     override fun write(
         slot: Int,

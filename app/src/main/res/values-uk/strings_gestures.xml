@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gesture_double_tap">подвійне торкання</string>
+    <string name="gesture_two_finger_up">двома пальцями вгору</string>
+    <string name="gesture_two_finger_down">двома пальцями вниз</string>
+    <string name="gesture_pinch_in">зведення пальців</string>
+    <string name="gesture_pinch_out">розведення пальців</string>
+    <string name="gesture_opens_nothing">%1$s нічого не відкриває</string>
+
+    <string name="gesture_action_drawer">список додатків</string>
+    <string name="gesture_action_quick_settings">швидкі налаштування</string>
+    <string name="gesture_action_pages">сторінки</string>
+    <string name="gesture_action_lock">заблокувати екран</string>
+    <string name="gesture_action_recents">нещодавні додатки</string>
+    <string name="gesture_action_linux_label">виконати: %1$s</string>
+    <string name="gesture_action_terminal_label">термінал: %1$s</string>
+    <string name="gesture_action_agent_label">спитати: %1$s</string>
+
+    <string name="gesture_ask_app">додаток…</string>
+    <string name="gesture_ask_linux">команда Linux…</string>
+    <string name="gesture_ask_terminal">команда в терміналі…</string>
+    <string name="gesture_ask_agent">запит для агента…</string>
+    <string name="gesture_linux_title">команда: %1$s</string>
+    <string name="gesture_linux_hint">виконується в Linux без власного вікна; GUI-додаток, який вона запустить, відкриється як завжди</string>
+    <string name="gesture_terminal_title">команда в терміналі: %1$s</string>
+    <string name="gesture_terminal_hint">відкривається в окремому терміналі, який закриється, коли команда завершиться: додайте ; exec bash, щоб він лишався відкритим</string>
+    <string name="gesture_agent_title">запит: %1$s</string>
+    <string name="gesture_agent_hint">надсилається типовому агенту для коду, так само як із рядка</string>
+    <string name="gesture_save">зберегти</string>
+    <string name="gesture_pick_app_title">додаток: %1$s</string>
+    <string name="gesture_search_apps">пошук додатків</string>
+    <string name="gesture_app_android">android</string>
+    <string name="gesture_app_linux">linux</string>
+    <string name="gesture_no_apps">немає відповідних додатків</string>
+    <string name="gesture_hint_more">подвійне торкання працює на порожньому місці; свайпи й зведення двома пальцями — будь-де на сторінках головного екрана. style.toml приймає те саме в [gestures], зокрема для агентів: у defaults.toml перелічено всі дії</string>
+
+    <string name="gesture_panel_missing">%1$s не запускається як панель</string>
+    <string name="gesture_app_missing">%1$s не встановлено</string>
+    <string name="gesture_needs_accessibility">для цього увімкніть службу спеціальних можливостей</string>
+
+    <string name="gesture_accessibility_off">для блокування екрана й нещодавніх додатків потрібна служба спеціальних можливостей, а її вимкнено</string>
+    <string name="gesture_accessibility_turn_on">увімкнути</string>
+    <string name="gesture_accessibility_title">служба спеціальних можливостей</string>
+    <string name="gesture_accessibility_on">● увімк: блокування екрана й нещодавні додатки працюють</string>
+    <string name="gesture_accessibility_is_off">○ вимк</string>
+    <string name="gesture_accessibility_what">Android дозволяє додатку блокувати екран або показувати нещодавні додатки лише через службу спеціальних можливостей. В OmaLauncher++ є така служба, і вона робить лише це: коли ви робите жест, призначений на блокування екрана чи нещодавні додатки, вона просить про це Android, як це зробила б кнопка живлення або кнопка огляду.</string>
+    <string name="gesture_accessibility_not">Вона не запитує в Android жодних подій і не може читати, що на екрані чи що ви вводите. Android попередить, що служби спеціальних можливостей можуть бачити екран і керувати ним: це те, що служба могла б запитати, а не те, що робить ця. Вона лишається вимкненою, доки ви її не увімкнете, і вимкнути її там можна будь-коли.</string>
+    <string name="gesture_accessibility_steps">Щоб увімкнути її, відкрийте налаштування спеціальних можливостей, знайдіть OmaLauncher++ gestures серед встановлених додатків і увімкніть. Якщо Android повідомить, що це обмежене налаштування, відкрийте «Про додаток», торкніться ⋮, дозвольте обмежені налаштування й спробуйте ще раз.</string>
+    <string name="gesture_accessibility_open">відкрити налаштування спеціальних можливостей</string>
+    <string name="gesture_accessibility_app_info">про додаток</string>
+    <string name="gesture_accessibility_done">готово</string>
+    <string name="gesture_accessibility_label">OmaLauncher++ gestures</string>
+    <string name="gesture_accessibility_description">Дозволяє жестам головного екрана блокувати екран і показувати нещодавні додатки, і більше нічого. Нічого не читає на екрані й не бачить, що ви вводите.</string>
+</resources>

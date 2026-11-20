@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="snapshots_title">スナップショット</string>
+    <string name="snapshots_row_none">まだありません · 問題を起こしたアップデートを元に戻せます</string>
+    <plurals name="snapshots_row">
+        <item quantity="other">戻せるスナップショット %d 個</item>
+    </plurals>
+    <string name="snapshots_body">スナップショットは、Linux システムをその時点の状態で保存します。対象はパッケージと /etc、/usr、/var、/opt の中身すべてです。復元すると、問題を起こしたアップデートを元に戻せます。自分のファイルが入っている /root と /home は、別の設定にしない限りそのまま残ります。スナップショット同士は変わっていない部分を共有するため、アップデート後のスナップショットは変更された分の容量しか使いません。</string>
+    <string name="snapshots_storage">空き %1$s · スナップショットの使用量 %2$s</string>
+    <string name="snapshots_take">今すぐスナップショットを作成</string>
+    <string name="snapshots_low_space">ストレージの空きが少なくなっています。容量が足りない場合、アップデート前のスナップショットは作成されません</string>
+    <string name="snapshots_list">スナップショット</string>
+    <string name="snapshots_none">まだありません</string>
+    <string name="snapshots_options">オプション</string>
+    <string name="snapshots_option_before_update">アップデート前</string>
+    <string name="snapshots_option_on">作成する</string>
+    <string name="snapshots_option_off">作成しない</string>
+    <string name="snapshots_option_keep">保持数</string>
+    <string name="snapshots_option_keep_hint">新しいものから保持し、次のスナップショット作成時に古いものを削除します</string>
+    <string name="snapshots_option_home">/root、/home</string>
+    <string name="snapshots_option_home_in">含める</string>
+    <string name="snapshots_option_home_out">含めない</string>
+    <string name="snapshots_reason_update">アップデート前</string>
+    <string name="snapshots_reason_manual">手動で作成</string>
+    <string name="snapshots_details">%1$s · 固有 %2$s · システム %3$s</string>
+    <string name="snapshots_restore">復元</string>
+    <string name="snapshots_delete">削除</string>
+    <string name="snapshots_restore_ask">Linux をこのスナップショットの状態に戻しますか？</string>
+    <string name="snapshots_restore_body">Linux はシャットダウンし、その時点の状態に戻ってから再び起動します。その後にインストールや更新をしたパッケージも元に戻ります。/root と /home はそのまま残ります。</string>
+    <string name="snapshots_restore_body_home">Linux はシャットダウンし、その時点の状態に戻ってから再び起動します。その後にインストールや更新をしたパッケージも、/root と /home も元に戻ります。その後にそこで変更したファイルは失われます。</string>
+    <string name="snapshots_restore_home">/root、/home</string>
+    <string name="snapshots_restore_home_keep">そのまま</string>
+    <string name="snapshots_restore_home_back">元に戻す</string>
+    <string name="snapshots_delete_ask">このスナップショットを削除しますか？</string>
+    <string name="snapshots_job_taking">スナップショットを作成中</string>
+    <string name="snapshots_job_restoring">スナップショットを復元中</string>
+    <string name="snapshots_step_scanning">システムを読み取り中…</string>
+    <string name="snapshots_step_storing">%1$s / %2$s を保存済み</string>
+    <string name="snapshots_step_saving">保存中…</string>
+    <string name="snapshots_step_unpacking">%1$d / %2$d 個のファイル</string>
+    <string name="snapshots_step_swapping">所定の場所に配置中…</string>
+    <string name="snapshots_no_room">スナップショットは作成されませんでした。空きが %1$s 必要ですが、%2$s しかありません</string>
+    <string name="snapshots_no_room_restore">ストレージが足りないため復元できません。空きが %1$s 必要ですが、%2$s しかありません</string>
+    <string name="snapshots_ran_out">ストレージの空きが少なくなったため、スナップショットを中止しました</string>
+    <string name="snapshots_gone">このスナップショットはもうありません</string>
+    <string name="snapshots_damaged">スナップショットのファイルが破損しています（%1$s）。何も変更されていません</string>
+</resources>

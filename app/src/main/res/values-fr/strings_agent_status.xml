@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="agent_status_channel">Agents de code</string>
+    <string name="agent_status_channel_description">Ce que fait chaque agent de code dans un terminal : terminé, t’attend ou demande une autorisation</string>
+    <string name="agent_status_title">%1$s · %2$s</string>
+    <string name="agent_status_line">%1$s · %2$s</string>
+    <string name="agent_status_running">Au travail</string>
+    <string name="agent_status_input">T’attend</string>
+    <string name="agent_status_permission">Demande une autorisation</string>
+    <string name="agent_status_permission_terminal">Demande une autorisation dans le terminal</string>
+    <string name="agent_status_done">Terminé</string>
+    <string name="agent_status_allow">Autoriser</string>
+    <string name="agent_status_deny">Refuser</string>
+    <string name="agent_status_setting">notifications</string>
+    <string name="agent_status_setting_description">Chaque session dans un terminal reçoit une notification quand elle a terminé ou qu’elle t’attend ; une demande d’autorisation peut y être acceptée ou refusée. Tes paramètres de notification décident de leur son.</string>
+    <string name="agent_status_on">activées</string>
+    <string name="agent_status_off">désactivées</string>
+</resources>

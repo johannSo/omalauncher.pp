@@ -22,8 +22,8 @@ import dev.omalauncher.pp.widgets.runtime.WidgetPermissions
 /**
  * Asks for one runtime permission for a widget: the microphone for speech("start") (see
  * [dev.omalauncher.pp.widgets.runtime.Dictation]), calendar for calendar("request") (see
- * [dev.omalauncher.pp.widgets.runtime.PhoneCalendar]), Bluetooth for airpods(...) (see
- * [dev.omalauncher.pp.widgets.runtime.AirPods]). Each activity that shows widgets has one of each, in its [WidgetAsks], made
+ * [dev.omalauncher.pp.widgets.runtime.PhoneCalendar]), Bluetooth for airpods(...) and volume("request") (see
+ * [dev.omalauncher.pp.widgets.runtime.AirPods] and [dev.omalauncher.pp.widgets.runtime.Volume]). Each activity that shows widgets has one of each, in its [WidgetAsks], made
  * with it, as a launcher must be registered before the activity starts. With [orSettings], a tap once Android won't show its dialog
  * any more opens the app's own settings, where the switch then is, so the tap still does something.
  */
@@ -139,6 +139,8 @@ class WidgetAsks(
         runtime.calendar.recheck()
         runtime.widgets.airpods.ask = bluetooth::ask
         runtime.widgets.airpods.recheck()
+        runtime.widgets.volume.ask = bluetooth::ask
+        runtime.widgets.volume.recheck()
     }
 
     fun paused(runtime: Runtime) {
@@ -146,5 +148,6 @@ class WidgetAsks(
         WidgetPermissions.ask = null
         runtime.calendar.ask = null
         runtime.widgets.airpods.ask = null
+        runtime.widgets.volume.ask = null
     }
 }

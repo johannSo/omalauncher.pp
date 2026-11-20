@@ -115,7 +115,7 @@ internal fun Runtime.panelOf(choice: String) = GestureAction.parseOrNull(choice)
 internal fun Runtime.gestureLabel(choice: String) = actionLabel(GestureAction.parseOrNull(choice) ?: GestureAction.None)
 
 /**
- * Picked panels that don't compile, drawer.owl and keybar.owl, for home's error banner: without a tile, nothing else would say so,
+ * Picked panels that don't compile, drawer.owl, keybar.owl and strip.owl, for home's error banner: without a tile, nothing else would say so,
  * and the drawer quietly shows another until they're fixed.
  */
 internal fun Runtime.gestureProblems(): List<Pair<String, List<String>>> {
@@ -137,7 +137,11 @@ internal fun Runtime.gestureProblems(): List<Pair<String, List<String>>> {
         }
     // keybar.owl too: the stock keys stand in for it as quietly.
     val keys = widgets.specs.firstOrNull { it.file.name == WidgetEngine.KEYBAR && it.error != null }?.let { it.file.name to listOf(context.getString(R.string.gestures_keybar_until_fixed, it.error!!.lineSequence().first())) }
-    return panels + listOfNotNull(keys)
+    // strip.owl as well, while home shows a strip: the stock one stands in.
+    val strip =
+        widgets.specs.firstOrNull { it.file.name == WidgetEngine.STRIP && it.error != null && LauncherStyle.recentApps }
+            ?.let { it.file.name to listOf(context.getString(R.string.gestures_strip_until_fixed, it.error!!.lineSequence().first())) }
+    return panels + listOfNotNull(keys, strip)
 }
 
 /**

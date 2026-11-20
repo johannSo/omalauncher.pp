@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="owl_intents_setting">valeurs d’autres applis</string>
+    <string name="owl_intents_setting_off">désactivé : aucune appli ne peut régler ce qu’affichent les widgets</string>
+    <string name="owl_intents_setting_on">activé : tasker et d’autres applis peuvent régler des valeurs dans les widgets qui en acceptent</string>
+    <string name="owl_intents_allow">autoriser</string>
+    <string name="owl_intents_deny">désactivé</string>
+</resources>

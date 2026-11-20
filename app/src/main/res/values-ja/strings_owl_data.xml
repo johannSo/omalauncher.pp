@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="owl_data_allow_location">現在地を表示するには、権限で位置情報を許可してください</string>
+    <string name="owl_data_allow_steps">歩数を数えるには、権限で身体活動を許可してください</string>
+</resources>

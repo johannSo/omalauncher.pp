@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ssh_title">ssh とローカルサーバー</string>
+    <string name="ssh_row_title">ssh とローカルサーバー</string>
+    <string name="ssh_row_off">パソコンからログインしたり、Linux で動くサーバーを開いたりできます</string>
+    <string name="ssh_row_on">ssh オン · %1$s</string>
+    <string name="ssh_row_starting">ssh オン · 起動中…</string>
+    <string name="ssh_open">開く</string>
+
+    <string name="ssh_server">ssh サーバー</string>
+    <string name="ssh_offer">同じネットワーク上のパソコンから、鍵を使ってこの Linux にログインできます。初回は openssh をインストールします。</string>
+    <string name="ssh_on">オン · ポート %1$d</string>
+    <string name="ssh_starting">起動中…</string>
+    <string name="ssh_off">オフ</string>
+    <string name="ssh_failed">sshd が停止を繰り返しています。最後の出力を下に表示します</string>
+    <string name="ssh_turn_on">オンにする</string>
+    <string name="ssh_turn_off">オフにする</string>
+    <string name="ssh_retry">再試行</string>
+    <string name="ssh_job_setup">ssh をセットアップ中</string>
+    <string name="ssh_connect">接続</string>
+    <string name="ssh_no_network">ネットワークがありません。スマートフォンを Wi-Fi に接続するか、テザリングをオンにしてください</string>
+    <string name="ssh_copy">コピー</string>
+    <string name="ssh_fingerprint">ホスト鍵 %1$s</string>
+    <string name="ssh_fingerprint_hint">初回ログイン時にこの鍵を信頼するか確認されます。ここに表示されている鍵と同じはずです。</string>
+    <string name="ssh_port">ポート %1$d</string>
+    <string name="ssh_change">変更</string>
+    <string name="ssh_port_title">ssh ポート</string>
+    <string name="ssh_port_hint">%1$d〜65535。sshd がこのポートで再起動するため、開いているセッションは切断されます。</string>
+    <string name="ssh_set">設定</string>
+    <string name="ssh_cancel">キャンセル</string>
+    <string name="ssh_local_network">Android がランチャーのローカルネットワークへのアクセスを止めているため、ほかのデバイスから接続できません。</string>
+    <string name="ssh_allow">許可</string>
+
+    <string name="ssh_keys">鍵</string>
+    <string name="ssh_keys_none">鍵はまだありません。パソコンの公開鍵（~/.ssh/id_ed25519.pub。ssh-keygen -t ed25519 で作成できます）を追加してください。</string>
+    <string name="ssh_paste_key">鍵を貼り付け</string>
+    <string name="ssh_key_file">ファイルから</string>
+    <string name="ssh_keys_share_hint">.pub ファイルや鍵のテキストを OmaLauncher++ に共有して追加することもできます。</string>
+    <string name="ssh_remove">削除</string>
+    <string name="ssh_remove_confirm">削除する</string>
+    <string name="ssh_key_title">公開鍵を追加</string>
+    <string name="ssh_key_hint">.pub ファイルと同じ形式で 1 行に 1 つ：ssh-ed25519 AAAA… you@computer</string>
+    <string name="ssh_add">追加</string>
+    <plurals name="ssh_keys_added">
+        <item quantity="other">鍵を %d 個追加しました</item>
+    </plurals>
+    <string name="ssh_key_there">その鍵はすでに追加されています</string>
+    <string name="ssh_key_private">それは秘密鍵です。絶対に共有しないでください。隣にある .pub ファイルを追加してください。</string>
+    <string name="ssh_key_none">公開鍵が含まれていません</string>
+    <string name="ssh_key_no_comment">コメントなし</string>
+
+    <string name="ssh_password">パスワードでのログイン</string>
+    <string name="ssh_password_off">オフ · 鍵のみ</string>
+    <string name="ssh_password_on">オン · 安全性が低い</string>
+    <string name="ssh_password_warning">鍵より安全性が低くなります。ネットワーク上の誰でもパスワードを試せます。長いパスワードを使い、信頼できるネットワークでのみ使ってください。</string>
+    <string name="ssh_password_allow">許可</string>
+    <string name="ssh_password_title">root のパスワード</string>
+    <string name="ssh_password_hint">%1$d 文字以上。root が ssh でこのパスワードを使ってログインできるようになります。</string>
+    <string name="ssh_password_failed">パスワードを設定できませんでした</string>
+    <string name="ssh_show">表示</string>
+    <string name="ssh_hide">非表示</string>
+
+    <string name="ssh_servers">ローカルサーバー</string>
+    <string name="ssh_servers_hint">Linux が待ち受けているものです。proot はスマートフォンのネットワークを共有しているため、スマートフォンの localhost で開けます。</string>
+    <string name="ssh_servers_none">待ち受けているものはありません。Linux で開発サーバーを起動すると、ここに表示されます</string>
+    <string name="ssh_servers_hidden">Android の制限で、Linux がどのポートで待ち受けているかをランチャーから確認できません（Android 12 以降が必要です）。ポート番号を指定して開いてください：</string>
+    <string name="ssh_server_local">localhost のみ</string>
+    <string name="ssh_server_lan">LAN 上</string>
+    <string name="ssh_server_bound">%1$s 上</string>
+    <string name="ssh_share_lan">LAN に公開</string>
+    <string name="ssh_share_failed">LAN のそのポートで待ち受けできませんでした</string>
+    <string name="ssh_stop_sharing">公開を停止</string>
+    <string name="ssh_shared_at">%1$s で公開中</string>
+    <string name="ssh_share_url">共有</string>
+    <string name="ssh_port_field">ポート</string>
+
+    <string name="ssh_share_title">ssh 鍵として追加</string>
+    <string name="ssh_share_body">対応する秘密鍵を持つ人が、ssh で Linux に root としてログインできるようになります。</string>
+    <string name="ssh_share_no_linux">Linux がインストールされていません</string>
+    <string name="ssh_share_label">SSH 鍵</string>
+</resources>

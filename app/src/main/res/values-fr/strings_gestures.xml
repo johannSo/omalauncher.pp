@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gesture_double_tap">double appui</string>
+    <string name="gesture_two_finger_up">deux doigts vers le haut</string>
+    <string name="gesture_two_finger_down">deux doigts vers le bas</string>
+    <string name="gesture_pinch_in">pincer</string>
+    <string name="gesture_pinch_out">écarter</string>
+    <string name="gesture_opens_nothing">%1$s n’ouvre rien</string>
+
+    <string name="gesture_action_drawer">tiroir d’applis</string>
+    <string name="gesture_action_quick_settings">réglages rapides</string>
+    <string name="gesture_action_pages">pages</string>
+    <string name="gesture_action_lock">verrouiller l’écran</string>
+    <string name="gesture_action_recents">applis récentes</string>
+    <string name="gesture_action_linux_label">lancer : %1$s</string>
+    <string name="gesture_action_terminal_label">terminal : %1$s</string>
+    <string name="gesture_action_agent_label">demander : %1$s</string>
+
+    <string name="gesture_ask_app">une appli…</string>
+    <string name="gesture_ask_linux">une commande Linux…</string>
+    <string name="gesture_ask_terminal">une commande dans un terminal…</string>
+    <string name="gesture_ask_agent">un prompt pour l’agent…</string>
+    <string name="gesture_linux_title">commande pour %1$s</string>
+    <string name="gesture_linux_hint">tourne dans Linux sans fenêtre à elle ; une appli graphique qu’elle lance s’ouvre comme d’habitude</string>
+    <string name="gesture_terminal_title">commande de terminal pour %1$s</string>
+    <string name="gesture_terminal_hint">s’ouvre dans son propre terminal, qui se ferme quand la commande se termine : ajoute ; exec bash pour le garder ouvert</string>
+    <string name="gesture_agent_title">prompt pour %1$s</string>
+    <string name="gesture_agent_hint">envoyé à l’agent de code par défaut, comme le fait la barre</string>
+    <string name="gesture_save">enregistrer</string>
+    <string name="gesture_pick_app_title">appli pour %1$s</string>
+    <string name="gesture_search_apps">chercher des applis</string>
+    <string name="gesture_app_android">android</string>
+    <string name="gesture_app_linux">linux</string>
+    <string name="gesture_no_apps">aucune appli ne correspond</string>
+    <string name="gesture_hint_more">le double appui marche sur un espace vide ; les balayages à deux doigts et les pincements partout sur les pages de l’accueil. style.toml accepte la même chose sous [gestures], pour les agents aussi : defaults.toml liste toutes les actions</string>
+
+    <string name="gesture_panel_missing">%1$s n’est pas un panneau qui fonctionne</string>
+    <string name="gesture_app_missing">%1$s n’est pas installée</string>
+    <string name="gesture_needs_accessibility">active le service d’accessibilité pour ça</string>
+
+    <string name="gesture_accessibility_off">verrouiller l’écran et les applis récentes ont besoin du service d’accessibilité, qui est désactivé</string>
+    <string name="gesture_accessibility_turn_on">activer</string>
+    <string name="gesture_accessibility_title">service d’accessibilité</string>
+    <string name="gesture_accessibility_on">● activé : verrouiller l’écran et les applis récentes fonctionnent</string>
+    <string name="gesture_accessibility_is_off">○ désactivé</string>
+    <string name="gesture_accessibility_what">Android ne laisse une appli verrouiller l’écran ou afficher les applis récentes que via un service d’accessibilité. OmaLauncher++ en a un qui fait juste ça : quand tu fais un geste réglé pour verrouiller l’écran ou pour les applis récentes, il le demande à Android, comme le feraient le bouton marche/arrêt ou le bouton des applis récentes.</string>
+    <string name="gesture_accessibility_not">Il ne demande aucun événement à Android et ne peut lire ni ce qui est à l’écran ni ce que tu tapes. Android avertira que les services d’accessibilité peuvent voir et contrôler ton écran : c’est ce qu’un service pourrait demander, pas ce que celui-ci fait. Il reste désactivé jusqu’à ce que tu l’actives, et tu peux le désactiver là-bas à tout moment.</string>
+    <string name="gesture_accessibility_steps">Pour l’activer, ouvre les paramètres d’accessibilité, trouve OmaLauncher++ gestures parmi les applis installées et active-le. Si Android dit que c’est un paramètre restreint, ouvre les infos de l’appli, touche ⋮, autorise les paramètres restreints et réessaie.</string>
+    <string name="gesture_accessibility_open">ouvrir les paramètres d’accessibilité</string>
+    <string name="gesture_accessibility_app_info">infos de l’appli</string>
+    <string name="gesture_accessibility_done">terminé</string>
+    <string name="gesture_accessibility_label">OmaLauncher++ gestures</string>
+    <string name="gesture_accessibility_description">Permet aux gestes de l’accueil de verrouiller l’écran et d’afficher les applis récentes, et rien d’autre. Il ne lit rien à l’écran et ne voit rien de ce que tu tapes.</string>
+</resources>

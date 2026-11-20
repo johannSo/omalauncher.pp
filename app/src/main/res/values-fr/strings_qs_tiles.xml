@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="qs_tiles_linux">Linux</string>
+    <string name="qs_tiles_terminal">Terminal</string>
+    <string name="qs_tiles_ask">Demander à l’agent</string>
+    <string name="qs_tiles_not_installed">pas installé</string>
+    <string name="qs_tiles_installing">installation…</string>
+    <string name="qs_tiles_failed">échec de l’installation</string>
+    <string name="qs_tiles_removing">suppression…</string>
+    <string name="qs_tiles_off">éteint</string>
+    <string name="qs_tiles_starting">démarrage…</string>
+    <string name="qs_tiles_running">en cours</string>
+    <string name="qs_tiles_stopping">arrêt…</string>
+    <string name="qs_tiles_starts_linux">démarre Linux</string>
+    <string name="qs_tiles_needs_linux">installer Linux</string>
+    <string name="qs_tiles_starting_linux">Démarrage de Linux…</string>
+    <string name="qs_tiles_shut_down_title">éteindre linux ?</string>
+    <string name="qs_tiles_shut_down_body">Ferme les applis Linux et les terminaux, et arrête les agents qui y travaillent ; les fichiers et les paquets restent. Il reste éteint, même après un redémarrage, jusqu’à ce que tu le redémarres.</string>
+    <string name="qs_tiles_title">tuiles des réglages rapides</string>
+    <string name="qs_tiles_subtitle">linux, terminal et demander à l’agent dans les réglages rapides d’android</string>
+    <string name="qs_tiles_linux_about">Indique si Linux tourne. Un appui le démarre ou l’éteint ; un appui long ouvre paramètres › linux.</string>
+    <string name="qs_tiles_terminal_about">Ouvre un terminal, en démarrant d’abord Linux s’il est éteint.</string>
+    <string name="qs_tiles_ask_about">Ouvre l’accueil avec la barre prête pour un prompt à ton agent.</string>
+    <string name="qs_tiles_add">ajouter</string>
+    <string name="qs_tiles_added">ajoutée aux réglages rapides</string>
+    <string name="qs_tiles_already_added">déjà dans les réglages rapides</string>
+    <string name="qs_tiles_add_failed">android ne l’a pas ajoutée ; ajoute-la depuis le mode modification du volet</string>
+    <string name="qs_tiles_ask_opens">demander à l’agent ouvre</string>
+    <string name="qs_tiles_ask_type">clavier</string>
+    <string name="qs_tiles_ask_voice">voix</string>
+    <string name="qs_tiles_ask_no_mic">le micro n’est pas autorisé, donc ça ouvre le clavier</string>
+    <string name="qs_tiles_hint">Ou tire le volet complètement vers le bas, touche le crayon et fais glisser les tuiles.</string>
+</resources>

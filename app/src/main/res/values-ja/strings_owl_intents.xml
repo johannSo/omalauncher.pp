@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="owl_intents_setting">ほかのアプリからの値</string>
+    <string name="owl_intents_setting_off">オフ：ウィジェットの表示内容をほかのアプリから設定することはできません</string>
+    <string name="owl_intents_setting_on">オン：Tasker などのアプリが、値を受け取るウィジェットに値を設定できます</string>
+    <string name="owl_intents_allow">許可</string>
+    <string name="owl_intents_deny">オフ</string>
+</resources>

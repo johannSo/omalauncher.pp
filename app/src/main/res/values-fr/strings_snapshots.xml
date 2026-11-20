@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="snapshots_title">instantanés</string>
+    <string name="snapshots_row_none">aucun pour l’instant · annule une mise à jour qui a cassé quelque chose</string>
+    <plurals name="snapshots_row">
+        <item quantity="one">%d instantané où revenir</item>
+        <item quantity="many">%d instantanés où revenir</item>
+        <item quantity="other">%d instantanés où revenir</item>
+    </plurals>
+    <string name="snapshots_body">Un instantané garde le système Linux tel qu’il est : ses paquets et tout ce qui est dans /etc, /usr, /var et /opt. En restaurer un annule une mise à jour qui a cassé quelque chose. /root et /home, tes propres fichiers, restent comme ils sont sauf si tu choisis autrement. Les instantanés partagent ce qui n’a pas changé entre eux, donc celui pris après une mise à jour ne prend que la place de ce qu’elle a changé.</string>
+    <string name="snapshots_storage">%1$s libres · les instantanés utilisent %2$s</string>
+    <string name="snapshots_take">prendre un instantané</string>
+    <string name="snapshots_low_space">stockage presque plein : l’instantané avant une mise à jour est sauté quand il n’y a pas la place</string>
+    <string name="snapshots_list">instantanés</string>
+    <string name="snapshots_none">aucun pour l’instant</string>
+    <string name="snapshots_options">options</string>
+    <string name="snapshots_option_before_update">avant les mises à jour</string>
+    <string name="snapshots_option_on">instantané</string>
+    <string name="snapshots_option_off">rien</string>
+    <string name="snapshots_option_keep">garder</string>
+    <string name="snapshots_option_keep_hint">les plus récents ; le prochain instantané supprime les plus anciens</string>
+    <string name="snapshots_option_home">/root, /home</string>
+    <string name="snapshots_option_home_in">dans les instantanés</string>
+    <string name="snapshots_option_home_out">laissés de côté</string>
+    <string name="snapshots_reason_update">avant une mise à jour</string>
+    <string name="snapshots_reason_manual">pris à la main</string>
+    <string name="snapshots_details">%1$s · %2$s à lui · système de %3$s</string>
+    <string name="snapshots_restore">restaurer</string>
+    <string name="snapshots_delete">supprimer</string>
+    <string name="snapshots_restore_ask">ramener linux à cet instantané ?</string>
+    <string name="snapshots_restore_body">Linux s’éteint, revient à son état d’alors et redémarre : les paquets installés ou mis à jour depuis reviennent en arrière aussi. /root et /home restent comme ils sont.</string>
+    <string name="snapshots_restore_body_home">Linux s’éteint, revient à son état d’alors et redémarre : les paquets installés ou mis à jour depuis reviennent en arrière aussi, tout comme /root et /home. Les fichiers modifiés là depuis sont perdus.</string>
+    <string name="snapshots_restore_home">/root, /home</string>
+    <string name="snapshots_restore_home_keep">garder</string>
+    <string name="snapshots_restore_home_back">revenir en arrière</string>
+    <string name="snapshots_delete_ask">supprimer cet instantané ?</string>
+    <string name="snapshots_job_taking">prise d’un instantané</string>
+    <string name="snapshots_job_restoring">restauration d’un instantané</string>
+    <string name="snapshots_step_scanning">lecture du système…</string>
+    <string name="snapshots_step_storing">%1$s sur %2$s stockés</string>
+    <string name="snapshots_step_saving">enregistrement…</string>
+    <string name="snapshots_step_unpacking">%1$d fichiers sur %2$d</string>
+    <string name="snapshots_step_swapping">mise en place…</string>
+    <string name="snapshots_no_room">pas d’instantané : il faut %1$s libres, et il y en a %2$s</string>
+    <string name="snapshots_no_room_restore">pas assez de stockage pour restaurer : il faut %1$s libres, et il y en a %2$s</string>
+    <string name="snapshots_ran_out">le stockage est presque plein, donc l’instantané s’est arrêté</string>
+    <string name="snapshots_gone">cet instantané n’existe plus</string>
+    <string name="snapshots_damaged">un fichier d’instantané est endommagé (%1$s) ; rien n’a été modifié</string>
+</resources>

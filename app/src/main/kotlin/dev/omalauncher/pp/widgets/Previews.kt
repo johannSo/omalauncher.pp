@@ -29,6 +29,7 @@ import dev.omalauncher.pp.ui.home.PanelPreview
 import dev.omalauncher.pp.ui.home.WidgetScreenPanel
 import dev.omalauncher.pp.widgets.lang.OwlKind
 import dev.omalauncher.pp.ui.home.WidgetTile
+import dev.omalauncher.pp.ui.home.StripPreview
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import kotlinx.coroutines.Dispatchers
@@ -92,6 +93,7 @@ internal class Previews(
                 OwlKind.App -> OwlAppWindow(spec, instance)
                 OwlKind.Panel -> PanelPreview(instance)
                 OwlKind.Keybar -> KeybarPreview(instance)
+                OwlKind.Strip -> StripPreview(instance)
                 else -> WidgetScreenPanel(spec, instance, onDismiss = {})
             }
         }

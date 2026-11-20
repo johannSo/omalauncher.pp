@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="owl_data_allow_location">pour montrer où tu es, autorise la position dans les autorisations</string>
+    <string name="owl_data_allow_steps">pour compter tes pas, autorise l’activité physique dans les autorisations</string>
+</resources>

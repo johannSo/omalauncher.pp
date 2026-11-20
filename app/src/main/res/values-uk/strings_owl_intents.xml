@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="owl_intents_setting">значення з інших додатків</string>
+    <string name="owl_intents_setting_off">вимк: жоден додаток не може змінювати те, що показують віджети</string>
+    <string name="owl_intents_setting_on">увімк: tasker та інші додатки можуть задавати значення у віджетах, які їх приймають</string>
+    <string name="owl_intents_allow">дозволити</string>
+    <string name="owl_intents_deny">вимк</string>
+</resources>
