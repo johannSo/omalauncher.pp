@@ -4,6 +4,59 @@ The most important changes in each release. From 1.0.0 on they're OmaLauncher++'
 dated when they were released on GitHub. The ones before are Omalauncher's, dated
 when they were uploaded to Play.
 
+## 2.6.0 (versionCode 41) – 2026-11-20
+
+The first stable release since 2.5.0: everything from the 2.6.0 betas below, and Omalauncher 1.6.0 to
+1.8.0.
+
+- OmaLauncher++'s own text comes in French, Japanese and Ukrainian too, with the launcher.
+- Widgets that need Linux say so while it's shut down, with their button to start it. Omalauncher
+  1.7.0's own way to stop Linux isn't taken over: OmaLauncher++ keeps its shut down in settings ›
+  linux and the quick settings tile.
+
+### From Omalauncher 1.8.0
+
+- The app drawer starts with an app store tile: the store is now a widget store and an app store,
+  with the top five apps you haven't installed as big screenshots (`launcher("store:apps")`, owl 25).
+- Voice can listen with Parakeet, speech recognition running on the phone itself (670 MB download
+  in the voice settings, 25 European languages). It sends on a tap on the orb by default, shows
+  what you say as a draft you can erase, takes "always" as an approval answer, shows Hermes'
+  questions with their choices, and stops saying "one moment" while the agent works. The orb is the
+  theme's accent in every state and tells them apart by how it moves.
+- The launcher comes in French.
+- A tap on a community theme opens its preview: its terminal colors, light or dark, its wallpapers
+  large and zoomable, and about how much it downloads.
+- Widgets can show the battery of the Bluetooth headphones or speaker media plays on (owl 25).
+- Fix: a widget with a scrolling Row inside another scrolling Row no longer takes the launcher down.
+
+### From Omalauncher 1.7.0
+
+- Files, text and links can be shared to Linux from other Android apps: the share sheet lists it
+  while Linux is installed, and what's shared is saved in ~/Downloads.
+- The recent apps strip above the prompt bar is strip.owl (owl 24), yours to change like the drawer
+  and the key bar: pinned apps, bigger icons, apps left out. Swiping up from it opens the drawer.
+- The launcher comes in Japanese and Ukrainian.
+- Voice: what you say or type while the agent is still writing stays below what it wrote so far,
+  and Hermes without a provider gets a log in button.
+- Hermes reviewing a shared widget has only its file tools, and installing or updating it no longer
+  leaves 140 to 600 MB of downloads behind.
+- The key bars tick lightly under a finger.
+
+### From Omalauncher 1.6.0
+
+- Hermes is in the coding agents list: it installs with its own installer (about 2.5 GB), starts
+  with --yolo like on Omarchy, updates with the system update, and can be talked to on the Voice
+  screen.
+- Linux: programs that hard link files work (uv, pnpm, cp -al, git clone --local failed with
+  "Operation not permitted"), replacing a hard-linked file no longer destroys its other copies,
+  and a program in one window can talk to its own background process started from another.
+- The Omarchy themes download is 79 MB instead of 180, and an interrupted download picks up where
+  it stopped.
+- Our widgets animate at half their rate while battery saver is on; a tap or a game in play stays
+  smooth.
+- Fix: a widget with a scrolling Column inside another scrolling Column no longer takes the
+  launcher down.
+
 ## 2.6.0-beta.3 (versionCode 40) – 2026-11-15
 
 - Fixes: omalauncher-mcp no longer stays behind spinning a CPU core after the agent that started it
